@@ -105,10 +105,50 @@ func Benchmark_Circle_FromThreePoints(b *testing.B) {
 	}
 }
 
-func TestCircleFuzzyEqual(t *testing.T) {
+type circleFuzzyEqualData struct {
+	c1, c2 Circle
+	equal  bool
+}
 
+var circleFuzzyEqualValues = []circleFuzzyEqualData{
+	{Circle{Vector2D{}, 1}, Circle{Vector2D{}, 1}, true},
+	{Circle{Vector2D{1, 1}, 1}, Circle{Vector2D{1 + 1e-13, 1}, 1}, true},
+	{Circle{Vector2D{1, 1}, 1}, Circle{Vector2D{1 + 1e-12, 1}, 1}, false},
+	{Circle{Vector2D{1, 1}, 1}, Circle{Vector2D{1, 1 + 1e-13}, 1}, true},
+	{Circle{Vector2D{1, 1}, 1}, Circle{Vector2D{1, 1 + 1e-12}, 1}, false},
+	{Circle{Vector2D{1, 1}, 1}, Circle{Vector2D{1, 1}, 1 + 1e-13}, true},
+	{Circle{Vector2D{1, 1}, 1}, Circle{Vector2D{1, 1}, 1 + 1e-12}, false},
+}
+
+func testCircleFuzzyEqual(d circleFuzzyEqualData, t *testing.T) {
+	if d.c1.FuzzyEqual(&d.c2) != d.equal {
+		t.Error("Circle.FuzzyEqual", d.c1, d.c2, d.equal)
+	}
+}
+
+func TestCircleFuzzyEqual(t *testing.T) {
+	for _, v := range circleFuzzyEqualValues {
+		testCircleFuzzyEqual(v, t)
+	}
+}
+
+type circlePerimeterData struct {
+	c          Circle
+	permimeter float64
+}
+
+var circlePermimeterValues = []circlePerimeterData{
+	{Circle{Vector2D{}, 1}, 2 * math.Pi},
+}
+
+func testCirclePerimeter(d circlePerimeterData, t *testing.T) {
+	if d.c.Perimeter() != d.permimeter {
+		t.Error("Circle.Perimeter", d.c, d.permimeter)
+	}
 }
 
 func TestCirclePreimeter(t *testing.T) {
-
+	for _, v := range circlePermimeterValues {
+		testCirclePerimeter(v, t)
+	}
 }
