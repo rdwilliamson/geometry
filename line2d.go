@@ -17,8 +17,8 @@ func (l Line2D) Angle() float64 {
 // From Dan Sunday,
 // http://softsurfer.com/Archive/algorithm_0102/algorithm_0102.htm
 func (l Line2D) DistanceToPoint(p Point2D, segment bool) float64 {
-	v := l.ToVector2D()
-	w := p.Minus(l.P1).ToVector2D()
+	v := l.ToVector()
+	w := p.Minus(l.P1)
 	c1 := DotProduct2D(w, v)
 	if segment && c1 <= 0 {
 		return p.DistanceTo(l.P1)
@@ -28,7 +28,7 @@ func (l Line2D) DistanceToPoint(p Point2D, segment bool) float64 {
 		return p.DistanceTo(l.P2)
 	}
 	b := c1 / c2
-	a := l.P1.Plus(v.Scaled(b).ToPoint2D())
+	a := l.P1.Plus(v.Scaled(b))
 	return p.DistanceTo(a)
 }
 
@@ -44,7 +44,7 @@ func (l1 Line2D) Intersection(l2 Line2D) (Point2D, bool) {
 	denominator = 1.0 / denominator
 	c := l1.P1.Minus(l2.P1)
 	A := (b.Y*c.X - b.X*c.Y) * denominator
-	intersection := l1.P1.Plus(a.Times(A))
+	intersection := l1.P1.Plus(a.Scaled(A))
 	if A < 0.0 || A > 1.0 {
 		return intersection, false
 	}
@@ -84,6 +84,6 @@ func (l Line2D) String() string {
 	return fmt.Sprintf("{%v %v}", l.P1, l.P2)
 }
 
-func (l Line2D) ToVector2D() Vector2D {
-	return Vector2D{l.P2.X - l.P1.X, l.P2.Y - l.P1.Y}
+func (l Line2D) ToVector() Point2D {
+	return Point2D{l.P2.X - l.P1.X, l.P2.Y - l.P1.Y}
 }
