@@ -17,6 +17,6 @@ func (v Vector2D) String() string {
 	return fmt.Sprintf("(%g, %g)", v.X, v.Y)
 }
 
-func DotProduct2D(v1, v2 *Vector2D) float64 {
+func DotProduct2D(v1, v2 Vector2D) float64 {
 	return v1.X*v2.X + v1.Y*v2.Y
 }
