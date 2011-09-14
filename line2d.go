@@ -80,6 +80,10 @@ func (l Line2D) Length() float64 {
 	return math.Sqrt(dx*dx + dy*dy)
 }
 
+func (l Line2D) Midpoint() Point2D {
+	return Point2D{(l.P1.X + l.P2.X) * 0.5, (l.P1.Y + l.P2.Y) * 0.5}
+}
+
 func (l Line2D) String() string {
 	return fmt.Sprintf("{%v %v}", l.P1, l.P2)
 }
