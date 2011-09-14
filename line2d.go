@@ -14,6 +14,13 @@ func (l Line2D) Angle() float64 {
 	return math.Atan(dy / dx)
 }
 
+// Angular difference between the line l and a line with endpoints at line l's
+// midpoint and point p.
+func (l Line2D) AngularDistanceToPoint(p Point2D) float64 {
+	rl := Line2D{l.Midpoint(), p}
+	return rl.Angle() - l.Angle()
+}
+
 // From Dan Sunday,
 // http://softsurfer.com/Archive/algorithm_0102/algorithm_0102.htm
 func (l Line2D) DistanceToPoint(p Point2D, segment bool) float64 {
@@ -30,6 +37,20 @@ func (l Line2D) DistanceToPoint(p Point2D, segment bool) float64 {
 	b := c1 / c2
 	a := l.P1.Plus(v.Scaled(b))
 	return p.DistanceTo(a)
+}
+
+// Distance of (either) end point of line l to a line with endpoints at line
+// l's midpoint and point p.
+func (l Line2D) EndpointDistanceToPoint(p Point2D) float64 {
+	rl := Line2D{l.Midpoint(), p}
+	return rl.DistanceToPoint(l.P1, false)
+}
+
+func (l Line2D) EndpointDistanceToPoint2(p Point2D) float64 {
+	mp := l.Midpoint()
+	t := Line2D{mp, p}.Angle() - l.Angle()
+	a := Line2D{mp, l.P1}.Length()
+	return a * math.Tan(t)
 }
 
 // Returns the intersection point and if said point occures on both lines.
@@ -78,6 +99,10 @@ func (l1 Line2D) Intersects(l2 Line2D) bool {
 func (l Line2D) Length() float64 {
 	dx, dy := l.P2.X-l.P1.X, l.P2.Y-l.P1.Y
 	return math.Sqrt(dx*dx + dy*dy)
+}
+
+func (l Line2D) Midpoint() Point2D {
+	return Point2D{(l.P1.X + l.P2.X) * 0.5, (l.P1.Y + l.P2.Y) * 0.5}
 }
 
 func (l Line2D) String() string {
