@@ -18,7 +18,11 @@ func (l Line2D) Angle() float64 {
 // midpoint and point p.
 func (l Line2D) AngularDistanceToPoint(p Point2D) float64 {
 	rl := Line2D{l.Midpoint(), p}
-	return rl.Angle() - l.Angle()
+	a := math.Fabs(rl.Angle() - l.Angle())
+	if a > math.Pi * 0.5 {
+		a = math.Pi - a
+	}
+	return a
 }
 
 // From Dan Sunday,
