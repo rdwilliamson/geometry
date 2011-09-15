@@ -10,7 +10,7 @@ type Line2D struct {
 }
 
 func (l Line2D) Angle() float64 {
-	dx, dy := l.P2.X-l.P1.X, l.P2.Y-l.P1.Y
+	dx, dy := l.DxDy()
 	return math.Atan(dy / dx)
 }
 
@@ -30,6 +30,18 @@ func (l Line2D) DistanceToPoint(p Point2D, segment bool) float64 {
 	b := c1 / c2
 	a := l.P1.Plus(v.Scaled(b))
 	return p.DistanceTo(a)
+}
+
+func (l Line2D) Dx() float64 {
+	return l.P2.X - l.P1.X
+}
+
+func (l Line2D) DxDy() (float64, float64) {
+	return l.P2.X - l.P1.X, l.P2.Y - l.P1.Y
+}
+
+func (l Line2D) Dy() float64 {
+	return l.P2.Y - l.P1.Y
 }
 
 // Returns the intersection point and if said point occures on both lines.
@@ -76,7 +88,7 @@ func (l1 Line2D) Intersects(l2 Line2D) bool {
 }
 
 func (l Line2D) Length() float64 {
-	dx, dy := l.P2.X-l.P1.X, l.P2.Y-l.P1.Y
+	dx, dy := l.DxDy()
 	return math.Sqrt(dx*dx + dy*dy)
 }
 
