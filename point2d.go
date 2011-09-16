@@ -14,6 +14,11 @@ func (p1 Point2D) DistanceTo(p2 Point2D) float64 {
 	return math.Sqrt(dx*dx + dy*dy)
 }
 
+func (p1 Point2D) DistanceToSquared(p2 Point2D) float64 {
+	dx, dy := p2.X-p1.X, p2.Y-p1.Y
+	return dx*dx + dy*dy
+}
+
 func (p1 Point2D) Plus(p2 Point2D) Point2D {
 	return Point2D{p1.X + p2.X, p1.Y + p2.Y}
 }
