@@ -10,8 +10,19 @@ type Line2D struct {
 }
 
 func (l Line2D) Angle() float64 {
-	dx, dy := l.DxDy()
+	dx, dy := l.P2.X-l.P1.X, l.P2.Y-l.P1.Y
 	return math.Atan(dy / dx)
+}
+
+// Angular difference between the line l and a line with endpoints at line l's
+// midpoint and point p.
+func (l Line2D) AngularDistanceThroughPoint(p Point2D) float64 {
+	rl := Line2D{l.Midpoint(), p}
+	a := math.Fabs(rl.Angle() - l.Angle())
+	if a > math.Pi*0.5 {
+		a = math.Pi - a
+	}
+	return a
 }
 
 // From Dan Sunday,
@@ -44,7 +55,20 @@ func (l Line2D) Dy() float64 {
 	return l.P2.Y - l.P1.Y
 }
 
-// Returns the intersection point and if said point occures on both lines.
+// Distance that each endpoint moves when l is rotated around it's midpoint so
+// that it passes through p.
+func (l Line2D) EndpointDistanceSquaredThroughPoint(p Point2D) float64 {
+	rl := Line2D{l.Midpoint(), p}
+	s := math.Sqrt(l.LengthSquared() * 0.25 / rl.LengthSquared())
+	rp := Point2D{rl.P1.X + s*rl.Dx(), rl.P1.Y + s*rl.Dy()}
+	d := rp.DistanceToSquared(l.P1)
+	if td := rp.DistanceToSquared(l.P2); td < d {
+		d = td
+	}
+	return d
+}
+
+// Returns the intersection point and if said point occurs on both lines.
 // From Graphics Gems III, Faster Line Segment Intersection.
 func (l1 Line2D) Intersection(l2 Line2D) (Point2D, bool) {
 	a := l1.P2.Minus(l1.P1)
@@ -88,8 +112,13 @@ func (l1 Line2D) Intersects(l2 Line2D) bool {
 }
 
 func (l Line2D) Length() float64 {
-	dx, dy := l.DxDy()
+	dx, dy := l.P2.X-l.P1.X, l.P2.Y-l.P1.Y
 	return math.Sqrt(dx*dx + dy*dy)
+}
+
+func (l Line2D) LengthSquared() float64 {
+	dx, dy := l.P2.X-l.P1.X, l.P2.Y-l.P1.Y
+	return dx*dx + dy*dy
 }
 
 func (l Line2D) Midpoint() Point2D {
