@@ -125,6 +125,20 @@ func (l Line2D) Midpoint() Point2D {
 	return Point2D{(l.P1.X + l.P2.X) * 0.5, (l.P1.Y + l.P2.Y) * 0.5}
 }
 
+// Rotates a line around its midpoint
+func (l Line2D) Rotated(t float64) Line2D {
+	m := Point2D{(l.P1.X + l.P2.X) * 0.5, (l.P1.Y + l.P2.Y) * 0.5}
+	x1 := l.P1.X - m.X
+	y1 := l.P1.Y - m.Y
+	x2 := l.P2.X - m.X
+	y2 := l.P2.Y - m.Y
+	cos := math.Cos(t)
+	sin := math.Sin(t)
+	return Line2D{
+		Point2D{x1*cos - y1*sin + m.X, x1*sin + y1*cos + m.Y},
+		Point2D{x2*cos - y2*sin + m.X, x2*sin + y2*cos + m.Y}}
+}
+
 func (l Line2D) String() string {
 	return fmt.Sprintf("{%v %v}", l.P1, l.P2)
 }
