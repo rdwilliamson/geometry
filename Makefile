@@ -1,6 +1,6 @@
 include $(GOROOT)/src/Make.inc
 
-TARG=snippets
+TARG=geometry
 
 GOFILES=\
 	line2d.go\
