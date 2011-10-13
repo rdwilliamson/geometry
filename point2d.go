@@ -9,12 +9,12 @@ type Point2D struct {
 	X, Y float64
 }
 
-func (p1 Point2D) DistanceTo(p2 Point2D) float64 {
+func (p1 Point2D) DistTo(p2 Point2D) float64 {
 	dx, dy := p2.X-p1.X, p2.Y-p1.Y
 	return math.Sqrt(dx*dx + dy*dy)
 }
 
-func (p1 Point2D) DistanceToSquared(p2 Point2D) float64 {
+func (p1 Point2D) DistToSq(p2 Point2D) float64 {
 	dx, dy := p2.X-p1.X, p2.Y-p1.Y
 	return dx*dx + dy*dy
 }
@@ -23,7 +23,7 @@ func (p Point2D) Length() float64 {
 	return math.Sqrt(p.X*p.X + p.Y*p.Y)
 }
 
-func (p Point2D) LengthSquared() float64 {
+func (p Point2D) LengthSq() float64 {
 	return p.X*p.X + p.Y*p.Y
 }
 

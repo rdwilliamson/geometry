@@ -32,15 +32,15 @@ func (l Line2D) LinDistPt(p Point2D, segment bool) float64 {
 	w := p.Minus(l.P1)
 	c1 := DotProduct2D(w, v)
 	if segment && c1 <= 0 {
-		return p.DistanceTo(l.P1)
+		return p.DistTo(l.P1)
 	}
 	c2 := DotProduct2D(v, v)
 	if segment && c2 <= c1 {
-		return p.DistanceTo(l.P2)
+		return p.DistTo(l.P2)
 	}
 	b := c1 / c2
 	a := l.P1.Plus(v.Scaled(b))
-	return p.DistanceTo(a)
+	return p.DistTo(a)
 }
 
 func (l Line2D) Dx() float64 {
@@ -61,8 +61,8 @@ func (l Line2D) EndPtDistSqPt(p Point2D) float64 {
 	rl := Line2D{l.Midpoint(), p}
 	s := math.Sqrt(l.LengthSquared() * 0.25 / rl.LengthSquared())
 	rp := Point2D{rl.P1.X + s*rl.Dx(), rl.P1.Y + s*rl.Dy()}
-	d := rp.DistanceToSquared(l.P1)
-	if td := rp.DistanceToSquared(l.P2); td < d {
+	d := rp.DistToSq(l.P1)
+	if td := rp.DistToSq(l.P2); td < d {
 		d = td
 	}
 	return d
