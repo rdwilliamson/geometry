@@ -16,7 +16,7 @@ func (l Line2D) Angle() float64 {
 
 // Angular difference between the line l and a line with endpoints at line l's
 // midpoint and point p.
-func (l Line2D) AngularDistanceThroughPoint(p Point2D) float64 {
+func (l Line2D) AngDistPt(p Point2D) float64 {
 	rl := Line2D{l.Midpoint(), p}
 	a := math.Fabs(rl.Angle() - l.Angle())
 	if a > math.Pi*0.5 {
@@ -27,7 +27,7 @@ func (l Line2D) AngularDistanceThroughPoint(p Point2D) float64 {
 
 // From Dan Sunday,
 // http://softsurfer.com/Archive/algorithm_0102/algorithm_0102.htm
-func (l Line2D) DistanceToPoint(p Point2D, segment bool) float64 {
+func (l Line2D) LinDistPt(p Point2D, segment bool) float64 {
 	v := l.ToVector()
 	w := p.Minus(l.P1)
 	c1 := DotProduct2D(w, v)
@@ -57,7 +57,7 @@ func (l Line2D) Dy() float64 {
 
 // Distance that each endpoint moves when l is rotated around it's midpoint so
 // that it passes through p.
-func (l Line2D) EndpointDistanceSquaredThroughPoint(p Point2D) float64 {
+func (l Line2D) EndPtDistSqPt(p Point2D) float64 {
 	rl := Line2D{l.Midpoint(), p}
 	s := math.Sqrt(l.LengthSquared() * 0.25 / rl.LengthSquared())
 	rp := Point2D{rl.P1.X + s*rl.Dx(), rl.P1.Y + s*rl.Dy()}
