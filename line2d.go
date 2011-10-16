@@ -59,7 +59,7 @@ func (l Line2D) Dy() float64 {
 // that it passes through p.
 func (l Line2D) EndPtDistSqPt(p Point2D) float64 {
 	rl := Line2D{l.Midpoint(), p}
-	s := math.Sqrt(l.LengthSquared() * 0.25 / rl.LengthSquared())
+	s := math.Sqrt(l.LengthSq() * 0.25 / rl.LengthSq())
 	rp := Point2D{rl.P1.X + s*rl.Dx(), rl.P1.Y + s*rl.Dy()}
 	d := rp.DistToSq(l.P1)
 	if td := rp.DistToSq(l.P2); td < d {
@@ -116,7 +116,7 @@ func (l Line2D) Length() float64 {
 	return math.Sqrt(dx*dx + dy*dy)
 }
 
-func (l Line2D) LengthSquared() float64 {
+func (l Line2D) LengthSq() float64 {
 	dx, dy := l.P2.X-l.P1.X, l.P2.Y-l.P1.Y
 	return dx*dx + dy*dy
 }
