@@ -5,17 +5,21 @@ import (
 	"math"
 )
 
+// Line2D represents a 2D line by two points on the line. Whether it is a
+// segment or infinite will depend on method parameters.
 type Line2D struct {
 	P1, P2 Point2D
 }
 
+// Angle calculate the line's angle from P1 to P2. Returns radians in the
+// interval [-pi/2 pi/2].
 func (l Line2D) Angle() float64 {
 	dx, dy := l.P2.X-l.P1.X, l.P2.Y-l.P1.Y
 	return math.Atan(dy / dx)
 }
 
-// Angular difference between the line l and a line with endpoints at line l's
-// midpoint and point p.
+// How far the line would have to be rotated around its midpoint to pass
+// through the point. Returns radians in the interval [0 pi/2].
 func (l Line2D) AngDistPt(p Point2D) float64 {
 	rl := Line2D{l.Midpoint(), p}
 	a := math.Fabs(rl.Angle() - l.Angle())
@@ -25,6 +29,7 @@ func (l Line2D) AngDistPt(p Point2D) float64 {
 	return a
 }
 
+// Linear distance from the line (segment) to a point.
 // From Dan Sunday,
 // http://softsurfer.com/Archive/algorithm_0102/algorithm_0102.htm
 func (l Line2D) LinDistPt(p Point2D, segment bool) float64 {
@@ -43,32 +48,18 @@ func (l Line2D) LinDistPt(p Point2D, segment bool) float64 {
 	return p.DistTo(a)
 }
 
+// Dx returns the line's horizontal distance.
 func (l Line2D) Dx() float64 {
 	return l.P2.X - l.P1.X
 }
 
-func (l Line2D) DxDy() (float64, float64) {
-	return l.P2.X - l.P1.X, l.P2.Y - l.P1.Y
-}
-
+// Dy returns the line's vertical distance.
 func (l Line2D) Dy() float64 {
 	return l.P2.Y - l.P1.Y
 }
 
-// Distance that each endpoint moves when l is rotated around it's midpoint so
-// that it passes through p.
-func (l Line2D) EndPtDistSqPt(p Point2D) float64 {
-	rl := Line2D{l.Midpoint(), p}
-	s := math.Sqrt(l.LengthSq() * 0.25 / rl.LengthSq())
-	rp := Point2D{rl.P1.X + s*rl.Dx(), rl.P1.Y + s*rl.Dy()}
-	d := rp.DistToSq(l.P1)
-	if td := rp.DistToSq(l.P2); td < d {
-		d = td
-	}
-	return d
-}
-
-// Returns the intersection point and if said point occurs on both lines.
+// Intersection calculates the intersection of two lines and whether or not the
+// intersection occurred on both lines.
 // From Graphics Gems III, Faster Line Segment Intersection.
 func (l1 Line2D) Intersection(l2 Line2D) (Point2D, bool) {
 	a := l1.P2.Minus(l1.P1)
@@ -91,6 +82,7 @@ func (l1 Line2D) Intersection(l2 Line2D) (Point2D, bool) {
 	return intersection, true
 }
 
+// Intersects determines if two line segments intersect.
 // From Graphics Gems III, Faster Line Segment Intersection.
 func (l1 Line2D) Intersects(l2 Line2D) bool {
 	a := l1.P2.Minus(l1.P1)
@@ -111,21 +103,24 @@ func (l1 Line2D) Intersects(l2 Line2D) bool {
 	return true
 }
 
+// Length returns the length of the line.
 func (l Line2D) Length() float64 {
 	dx, dy := l.P2.X-l.P1.X, l.P2.Y-l.P1.Y
 	return math.Sqrt(dx*dx + dy*dy)
 }
 
+// LengthSq returns the squared length of the line.
 func (l Line2D) LengthSq() float64 {
 	dx, dy := l.P2.X-l.P1.X, l.P2.Y-l.P1.Y
 	return dx*dx + dy*dy
 }
 
+// Midpoint returns the midpoint of the line.
 func (l Line2D) Midpoint() Point2D {
 	return Point2D{(l.P1.X + l.P2.X) * 0.5, (l.P1.Y + l.P2.Y) * 0.5}
 }
 
-// Rotates a line around its midpoint
+// Rotated rotates a line around its midpoint in radians.
 func (l Line2D) Rotated(t float64) Line2D {
 	m := Point2D{(l.P1.X + l.P2.X) * 0.5, (l.P1.Y + l.P2.Y) * 0.5}
 	x1 := l.P1.X - m.X
@@ -143,6 +138,7 @@ func (l Line2D) String() string {
 	return fmt.Sprintf("{%v %v}", l.P1, l.P2)
 }
 
+// ToVector converts the line into a vector from P1 to P2.
 func (l Line2D) ToVector() Point2D {
 	return Point2D{l.P2.X - l.P1.X, l.P2.Y - l.P1.Y}
 }
