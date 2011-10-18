@@ -1,7 +1,6 @@
 package geometry
 
 import (
-	"fmt"
 	"math"
 )
 
@@ -132,10 +131,6 @@ func (l Line2D) Rotated(t float64) Line2D {
 	return Line2D{
 		Point2D{x1*cos - y1*sin + m.X, x1*sin + y1*cos + m.Y},
 		Point2D{x2*cos - y2*sin + m.X, x2*sin + y2*cos + m.Y}}
-}
-
-func (l Line2D) String() string {
-	return fmt.Sprintf("{%v %v}", l.P1, l.P2)
 }
 
 // ToVector converts the line into a vector from P1 to P2.

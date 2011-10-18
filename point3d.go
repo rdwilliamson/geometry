@@ -1,7 +1,6 @@
 package geometry
 
 import (
-	"fmt"
 	"math"
 )
 
@@ -31,10 +30,6 @@ func (p Point3D) Normalized() Point3D {
 // Scaled returns the scaled vector.
 func (p Point3D) Scaled(s float64) Point3D {
 	return Point3D{p.X * s, p.Y * s, p.Z * s}
-}
-
-func (p Point3D) String() string {
-	return fmt.Sprintf("(%g, %g, %g)", p.X, p.Y, p.Z)
 }
 
 // ToPoint2D returns a 2D copy of the point throwing away the z value.
