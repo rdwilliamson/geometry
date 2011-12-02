@@ -21,7 +21,7 @@ func (l Line2D) Angle() float64 {
 // through the point. Returns radians in the interval [0 pi/2].
 func (l Line2D) AngDistPt(p Point2D) float64 {
 	rl := Line2D{l.Midpoint(), p}
-	a := math.Fabs(rl.Angle() - l.Angle())
+	a := math.Abs(rl.Angle() - l.Angle())
 	if a > math.Pi*0.5 {
 		a = math.Pi - a
 	}
