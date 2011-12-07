@@ -30,7 +30,7 @@ func (l LineSeg2D) AngDistPt(p Point2D) float64 {
 // Linear distance from the line (segment) to a point.
 // From Dan Sunday,
 // http://softsurfer.com/Archive/algorithm_0102/algorithm_0102.htm
-func (l LineSeg2D) PointDistance(p Point2D, segment bool) float64 {
+func (l LineSeg2D) LinDistPt(p Point2D, segment bool) float64 {
 	v := l.ToVector()
 	w := p.Minus(l.P1)
 	c1 := DotProduct2D(w, v)
