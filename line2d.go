@@ -4,23 +4,23 @@ import (
 	"math"
 )
 
-// Line2D represents a 2D line by two points on the line. Whether it is a
+// LineSeg2D represents a 2D line by two points on the line. Whether it is a
 // segment or infinite will depend on method parameters.
-type Line2D struct {
+type LineSeg2D struct {
 	P1, P2 Point2D
 }
 
 // Angle calculate the line's angle from P1 to P2. Returns radians in the
 // interval [-pi/2 pi/2].
-func (l Line2D) Angle() float64 {
+func (l LineSeg2D) Angle() float64 {
 	dx, dy := l.P2.X-l.P1.X, l.P2.Y-l.P1.Y
 	return math.Atan(dy / dx)
 }
 
 // How far the line would have to be rotated around its midpoint to pass
 // through the point. Returns radians in the interval [0 pi/2].
-func (l Line2D) AngDistPt(p Point2D) float64 {
-	rl := Line2D{l.Midpoint(), p}
+func (l LineSeg2D) AngDistPt(p Point2D) float64 {
+	rl := LineSeg2D{l.Midpoint(), p}
 	a := math.Abs(rl.Angle() - l.Angle())
 	if a > math.Pi*0.5 {
 		a = math.Pi - a
@@ -31,7 +31,7 @@ func (l Line2D) AngDistPt(p Point2D) float64 {
 // Linear distance from the line (segment) to a point.
 // From Dan Sunday,
 // http://softsurfer.com/Archive/algorithm_0102/algorithm_0102.htm
-func (l Line2D) LinDistPt(p Point2D, segment bool) float64 {
+func (l LineSeg2D) LinDistPt(p Point2D, segment bool) float64 {
 	v := l.ToVector()
 	w := p.Minus(l.P1)
 	c1 := DotProduct2D(w, v)
@@ -48,24 +48,25 @@ func (l Line2D) LinDistPt(p Point2D, segment bool) float64 {
 }
 
 // Dx returns the line's horizontal distance.
-func (l Line2D) Dx() float64 {
+func (l LineSeg2D) Dx() float64 {
 	return l.P2.X - l.P1.X
 }
 
 // Dy returns the line's vertical distance.
-func (l Line2D) Dy() float64 {
+func (l LineSeg2D) Dy() float64 {
 	return l.P2.Y - l.P1.Y
 }
 
 // Intersection calculates the intersection of two lines and whether or not the
 // intersection occurred on both lines.
 // From Graphics Gems III, Faster Line Segment Intersection.
-func (l1 Line2D) Intersection(l2 Line2D) (Point2D, bool) {
+func (l1 LineSeg2D) Intersection(l2 LineSeg2D) (Point2D, bool) {
 	a := l1.P2.Minus(l1.P1)
 	b := l2.P1.Minus(l2.P2)
 	denominator := a.Y*b.X - a.X*b.Y
 	if denominator == 0.0 {
-		return Point2D{math.Inf(1), math.Inf(1)}, false
+		// TODO determine where on line at infinity they intersect
+		return Point2D{math.Inf(1), math.Inf(1), 0}, false
 	}
 	denominator = 1.0 / denominator
 	c := l1.P1.Minus(l2.P1)
@@ -83,7 +84,7 @@ func (l1 Line2D) Intersection(l2 Line2D) (Point2D, bool) {
 
 // Intersects determines if two line segments intersect.
 // From Graphics Gems III, Faster Line Segment Intersection.
-func (l1 Line2D) Intersects(l2 Line2D) bool {
+func (l1 LineSeg2D) Intersects(l2 LineSeg2D) bool {
 	a := l1.P2.Minus(l1.P1)
 	b := l2.P1.Minus(l2.P2)
 	denominator := a.Y*b.X - a.X*b.Y
@@ -103,37 +104,39 @@ func (l1 Line2D) Intersects(l2 Line2D) bool {
 }
 
 // Length returns the length of the line.
-func (l Line2D) Length() float64 {
-	dx, dy := l.P2.X-l.P1.X, l.P2.Y-l.P1.Y
+func (l LineSeg2D) Length() float64 {
+	dx := l.P2.X-l.P1.X
+	dy := l.P2.Y-l.P1.Y
 	return math.Sqrt(dx*dx + dy*dy)
 }
 
 // LengthSq returns the squared length of the line.
-func (l Line2D) LengthSq() float64 {
-	dx, dy := l.P2.X-l.P1.X, l.P2.Y-l.P1.Y
+func (l LineSeg2D) LengthSq() float64 {
+	dx := l.P2.X-l.P1.X
+	dy := l.P2.Y-l.P1.Y
 	return dx*dx + dy*dy
 }
 
 // Midpoint returns the midpoint of the line.
-func (l Line2D) Midpoint() Point2D {
-	return Point2D{(l.P1.X + l.P2.X) * 0.5, (l.P1.Y + l.P2.Y) * 0.5}
+func (l LineSeg2D) Midpoint() Point2D {
+	return Point2D{(l.P1.X + l.P2.X) * 0.5, (l.P1.Y + l.P2.Y) * 0.5, 1}
 }
 
 // Rotated rotates a line around its midpoint in radians.
-func (l Line2D) Rotated(t float64) Line2D {
-	m := Point2D{(l.P1.X + l.P2.X) * 0.5, (l.P1.Y + l.P2.Y) * 0.5}
+func (l LineSeg2D) Rotated(t float64) LineSeg2D {
+	m := l.Midpoint()
 	x1 := l.P1.X - m.X
 	y1 := l.P1.Y - m.Y
 	x2 := l.P2.X - m.X
 	y2 := l.P2.Y - m.Y
 	cos := math.Cos(t)
 	sin := math.Sin(t)
-	return Line2D{
-		Point2D{x1*cos - y1*sin + m.X, x1*sin + y1*cos + m.Y},
-		Point2D{x2*cos - y2*sin + m.X, x2*sin + y2*cos + m.Y}}
+	return LineSeg2D{
+		Point2D{x1*cos - y1*sin + m.X, x1*sin + y1*cos + m.Y, 1},
+		Point2D{x2*cos - y2*sin + m.X, x2*sin + y2*cos + m.Y, 1}}
 }
 
 // ToVector converts the line into a vector from P1 to P2.
-func (l Line2D) ToVector() Point2D {
-	return Point2D{l.P2.X - l.P1.X, l.P2.Y - l.P1.Y}
+func (l LineSeg2D) ToVector() Point2D {
+	return Point2D{l.P2.X - l.P1.X, l.P2.Y - l.P1.Y, 1}
 }
