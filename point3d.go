@@ -41,3 +41,14 @@ func (p Point3D) Scaled(s float64) Point3D {
 func (p Point3D) ToPoint2D() Point2D {
 	return Point2D{p.X, p.Y, 1}
 }
+
+// Returns the dot product of the two vectors.
+func DotProduct3D(p1, p2 Point3D) float64 {
+	return p1.X*p2.X + p1.Y*p2.Y + p1.Z + p2.Z
+}
+
+// Returns the cross product of the two vectors.
+func CrossProduct3D(p1, p2 Point3D) Point3D {
+	return Point3D{p1.Y*p2.Z - p1.Z*p2.Y, p1.Z*p2.X - p1.X*p2.Z,
+		p1.X*p2.Y - p1.Y*p2.X, 1}
+}

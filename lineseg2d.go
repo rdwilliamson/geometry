@@ -104,15 +104,15 @@ func (l1 LineSeg2D) Intersects(l2 LineSeg2D) bool {
 
 // Length returns the length of the line.
 func (l LineSeg2D) Length() float64 {
-	dx := l.P2.X-l.P1.X
-	dy := l.P2.Y-l.P1.Y
+	dx := l.P2.X - l.P1.X
+	dy := l.P2.Y - l.P1.Y
 	return math.Sqrt(dx*dx + dy*dy)
 }
 
 // LengthSq returns the squared length of the line.
 func (l LineSeg2D) LengthSq() float64 {
-	dx := l.P2.X-l.P1.X
-	dy := l.P2.Y-l.P1.Y
+	dx := l.P2.X - l.P1.X
+	dy := l.P2.Y - l.P1.Y
 	return dx*dx + dy*dy
 }
 

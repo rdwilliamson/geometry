@@ -29,8 +29,8 @@ func (p1 Point2D) DistTo(p2 Point2D) float64 {
 	}
 	p1 = p1.Normalized()
 	p2 = p2.Normalized()
-	dx := p2.X-p1.X
-	dy := p2.Y-p1.Y
+	dx := p2.X - p1.X
+	dy := p2.Y - p1.Y
 	return math.Sqrt(dx*dx + dy*dy)
 }
 
@@ -41,8 +41,8 @@ func (p1 Point2D) DistToSq(p2 Point2D) float64 {
 	}
 	p1 = p1.Normalized()
 	p2 = p2.Normalized()
-	dx := p2.X-p1.X
-	dy := p2.Y-p1.Y
+	dx := p2.X - p1.X
+	dy := p2.Y - p1.Y
 	return dx*dx + dy*dy
 }
 
