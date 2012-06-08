@@ -12,6 +12,10 @@ func DotProduct2D64(v1, v2 Vector2D64) float64 {
 	return v1.X*v2.X + v1.Y*v2.Y
 }
 
+func (v Vector2D64) ToLine2D64() Line2D64 {
+	return Line2D64{Point2D64{}, Point2D64(v)}
+}
+
 func (v1 Vector2D64) Plus(v2 Vector2D64) Vector2D64 {
 	return Vector2D64{v1.X + v2.X, v1.Y + v2.Y}
 }
