@@ -6,6 +6,14 @@ import (
 	"math"
 )
 
+// NEW BEGIN
+// ideally this won't include any floating point stuff
+
+// type Point2D struct {
+// 	X, Y int
+// }
+// NEW END
+
 // Point2D can represent either a homogeneous 2D point or a 2D vector.
 type Point2D struct {
 	X, Y, W float64
