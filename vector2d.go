@@ -70,11 +70,17 @@ func (v Vector2D) LengthSquared() float64 {
 }
 
 func (v Vector2D) Normalized() Vector2D {
+	if v.X == 0 && v.Y == 0 {
+		return v
+	}
 	l := 1 / math.Sqrt(v.X*v.X+v.Y*v.Y)
 	return Vector2D{v.X * l, v.Y * l}
 }
 
 func (v *Vector2D) Normalize() {
+	if v.X == 0 && v.Y == 0 {
+		return
+	}
 	l := 1 / math.Sqrt(v.X*v.X+v.Y*v.Y)
 	v.X *= l
 	v.Y *= l
