@@ -42,14 +42,6 @@ func TestPoint2DCore(t *testing.T) {
 	if !p.Equal(Point2D{1, 1}) {
 		t.Error("Point2D.Subtract")
 	}
-	p = p.Scaled(2.0)
-	if !p.Equal(Point2D{2, 2}) {
-		t.Error("Point2D.Scaled")
-	}
-	p.Scale(0.5)
-	if !p.Equal(Point2D{1, 1}) {
-		t.Error("Point2D.Scale")
-	}
 }
 
 func TestPoint2DFuzzyEqual(t *testing.T) {
