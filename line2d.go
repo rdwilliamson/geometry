@@ -10,19 +10,7 @@ type Line2D struct {
 
 // http://softsurfer.com/Archive/algorithm_0102/algorithm_0102.htm
 func LinePointDistance2D64(l Line2D, p Point2D, segment bool) float64 {
-	v := l.ToVector2D()
-	w := Vector2D(p).Minus(Vector2D(l.P1))
-	c1 := DotProduct2D(w, v)
-	if segment && c1 <= 0 {
-		return Vector2D(l.P1.Minus(p)).Length()
-	}
-	c2 := DotProduct2D(v, v)
-	if segment && c2 <= c1 {
-		return Vector2D(l.P2.Minus(p)).Length()
-	}
-	b := c1 / c2
-	a := l.P1.Plus(Point2D(v.Scaled(b)))
-	return Vector2D(a.Minus(p)).Length()
+	return 0
 }
 
 func (l Line2D) ToVector2D() Vector2D {
