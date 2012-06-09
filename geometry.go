@@ -8,13 +8,16 @@ func Abs32(a float32) float32 {
 	if a < 0 {
 		return -a
 	}
-	if a == 0 {
-		return 0
-	}
 	return a
 }
 
 func Min32(a, b float32) float32 {
+	if math.IsInf(float64(a), -1) || math.IsInf(float64(b), -1) {
+		return float32(math.Inf(-1))
+	}
+	if math.IsNaN(float64(a)) || math.IsNaN(float64(b)) {
+		return float32(math.NaN())
+	}
 	if a < b {
 		return a
 	}

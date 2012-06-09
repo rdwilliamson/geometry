@@ -79,3 +79,16 @@ func (v *Vector2D64) Normalize() {
 	v.X *= l
 	v.Y *= l
 }
+
+func (v1 Vector2D64) ScalarProjectionOnto(v2 Vector2D64) float64 {
+	return (v1.X*v2.X + v1.Y*v2.Y) / (v2.X*v2.X + v2.Y*v2.Y)
+}
+
+func (v1 Vector2D64) VectorProjectionOnto(v2 Vector2D64) Vector2D64 {
+	s := (v1.X*v2.X + v1.Y*v2.Y) / (v2.X*v2.X + v2.Y*v2.Y)
+	return Vector2D64{v2.X * s, v2.Y * s}
+}
+
+func (v1 Vector2D64) FuzzyEqual(v2 Vector2D64) bool {
+	return FuzzyEqual64(v1.X, v2.X) && FuzzyEqual64(v1.Y, v2.Y)
+}
