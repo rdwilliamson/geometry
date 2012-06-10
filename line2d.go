@@ -9,8 +9,19 @@ type Line2D struct {
 }
 
 // http://softsurfer.com/Archive/algorithm_0102/algorithm_0102.htm
-func LinePointDistance2D64(l Line2D, p Point2D, segment bool) float64 {
-	return 0
+func LinePointDistance2D(l Line2D, p Point2D, segment bool) float64 {
+	v := l.P2.Minus(l.P1)
+	w := p.Minus(l.P1)
+	c1 := DotProduct2D(Vector2D(v), Vector2D(w))
+	if segment && c1 <= 0 {
+		return PointDistance2D(p, l.P1)
+	}
+	c2 := DotProduct2D(Vector2D(v), Vector2D(v))
+	if segment && c2 <= c1 {
+		return PointDistance2D(p, l.P2)
+	}
+	pp := l.P1.Plus(Point2D(Vector2D(v).Scaled(c1 / c2)))
+	return PointDistance2D(p, pp)
 }
 
 func (l Line2D) ToVector2D() Vector2D {
@@ -26,9 +37,7 @@ func (l Line2D) Dy() float64 {
 }
 
 func (l Line2D) Length() float64 {
-	dx := l.P2.X - l.P1.X
-	dy := l.P2.Y - l.P1.Y
-	return math.Sqrt(dx*dx + dy*dy)
+	return math.Hypot(l.P2.X-l.P1.X, l.P2.Y-l.P1.Y)
 }
 
 func (l Line2D) LengthSquared() float64 {
@@ -42,5 +51,5 @@ func (l Line2D) Midpoint() Point2D {
 }
 
 func (l Line2D) Angle() float64 {
-	return math.Atan((l.P2.Y - l.P1.Y) / (l.P2.X - l.P1.X))
+	return math.Atan2(l.P2.Y-l.P1.Y, l.P2.X-l.P1.X)
 }
