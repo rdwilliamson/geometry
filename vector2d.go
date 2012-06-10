@@ -102,3 +102,7 @@ func (v1 Vector2D) Equal(v2 Vector2D) bool {
 func (v1 Vector2D) FuzzyEqual(v2 Vector2D) bool {
 	return FuzzyEqual(v1.X, v2.X) && FuzzyEqual(v1.Y, v2.Y)
 }
+
+func (v Vector2D) Angle() float64 {
+	return math.Atan2(v.Y, v.X)
+}

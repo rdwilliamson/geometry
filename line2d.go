@@ -65,3 +65,8 @@ func (l Line2D) Midpoint() Point2D {
 func (l Line2D) Angle() float64 {
 	return math.Atan2(l.P2.Y-l.P1.Y, l.P2.X-l.P1.X)
 }
+
+// Returns a normal vector with the same length as the line.
+func (l Line2D) Normal() Vector2D {
+	return Vector2D{l.P2.Y - l.P1.Y, l.P1.X - l.P2.X}
+}
