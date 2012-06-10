@@ -58,6 +58,14 @@ func TestVector2DCore(t *testing.T) {
 	if !v.Equal(Vector2D{1, 1}) {
 		t.Error("Vector2D.Divide")
 	}
+	v = v.Scaled(2)
+	if !v.Equal(Vector2D{2, 2}) {
+		t.Error("Vector2D.Scaled")
+	}
+	v.Scale(0.5)
+	if !v.Equal(Vector2D{1, 1}) {
+		t.Error("Vector2D.Scale")
+	}
 }
 func TestVector2DFuzzyEqual(t *testing.T) {
 	v1 := Vector2D{1.0, 1.0}
@@ -97,6 +105,14 @@ func TestVector2DNormalize(t *testing.T) {
 	v = Vector2D{15, 20}
 	v.Normalize()
 	if !v.Equal(Vector2D{15.0 / 25.0, 20.0 / 25.0}) {
+		t.Error("Vector2D.Normalize")
+	}
+	v = Vector2D{0, 0}
+	if !v.Normalized().Equal(Vector2D{0, 0}) {
+		t.Error("Vector2D.Normalized")
+	}
+	v.Normalize()
+	if !v.Equal(Vector2D{0, 0}) {
 		t.Error("Vector2D.Normalize")
 	}
 }
