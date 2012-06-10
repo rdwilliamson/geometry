@@ -1,4 +1,7 @@
 // Geometry package implementing points, vectors, lines, planes, and triangles.
+//
+// Angles are in radians with zero being the positive x axis and positive
+// corresponding to the counter-clockwise direction.
 package geometry
 
 import (

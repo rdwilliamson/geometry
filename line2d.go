@@ -60,7 +60,7 @@ func (l Line2D) Midpoint() Point2D {
 	return Point2D{(l.P1.X + l.P2.X) * 0.5, (l.P1.Y + l.P2.Y) * 0.5}
 }
 
-// Returns the angle of the line from -Pi to Pi.
+// Returns the angle of the line.
 func (l Line2D) Angle() float64 {
 	return math.Atan2(l.P2.Y-l.P1.Y, l.P2.X-l.P1.X)
 }
