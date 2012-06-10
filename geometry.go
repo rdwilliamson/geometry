@@ -21,8 +21,8 @@ func Clamp(a, min, max float64) float64 {
 	return a
 }
 
-// Linear interpolation between x and y. With a == 0 coresponding to x and a ==
-// 1 coresponding to y.
+// Linear interpolation between x and y. With a == 0 corresponding to x and
+// a == 1 corresponding to y.
 func Mix(x, y, a float64) float64 {
 	return x*(1-a) + y*a
 }
