@@ -19,14 +19,13 @@ func LinePointDistance2D(l Line2D, p Point2D, segment bool) float64 {
 	w := p.Minus(l.P1)
 	c1 := DotProduct2D(Vector2D(v), Vector2D(w))
 	if segment && c1 <= 0 {
-		return PointDistance2D(p, l.P1)
+		return p.DistanceTo(l.P1)
 	}
 	c2 := DotProduct2D(Vector2D(v), Vector2D(v))
 	if segment && c2 <= c1 {
-		return PointDistance2D(p, l.P2)
+		return p.DistanceTo(l.P2)
 	}
-	pp := l.P1.Plus(Point2D(Vector2D(v).Scaled(c1 / c2)))
-	return PointDistance2D(p, pp)
+	return p.DistanceTo(l.P1.Plus(Point2D(Vector2D(v).Scaled(c1 / c2))))
 }
 
 // Converts the line to a vector from the first point to the second.
