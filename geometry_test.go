@@ -16,19 +16,15 @@ func TestFuzzyEqual(t *testing.T) {
 	n2 := n1 + 0.000000000001
 	n3 := n1 + 0.0000000000001
 	if n1 == n2 {
-		t.Fatal("geometry.FuzzyEqual: n1 == n1 + 0.000000000001")
+		t.Fatal("geometry.FuzzyEqual")
 	}
 	if n1 == n3 {
-		t.Fatal("geometry.FuzzyEqual: n1 == n1 + 0.0000000000001")
+		t.Fatal("geometry.FuzzyEqual")
 	}
-	want := false
-	got := FuzzyEqual(n1, n2)
-	if want != got {
-		t.Error("geometry.FuzzyEqual: wanted", want, "got", got)
+	if FuzzyEqual(n1, n2) {
+		t.Error("geometry.FuzzyEqual")
 	}
-	want = true
-	got = FuzzyEqual(n1, n3)
-	if want != got {
-		t.Error("geometry.FuzzyEqual: wanted", want, "got", got)
+	if !FuzzyEqual(n1, n3) {
+		t.Error("geometry.FuzzyEqual")
 	}
 }

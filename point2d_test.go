@@ -7,20 +7,16 @@ import (
 func TestPointDistance2D(t *testing.T) {
 	p1 := Point2D{-2, 1}
 	p2 := Point2D{1, 5}
-	want := 5.0
-	got := p1.DistanceTo(p2)
-	if want != got {
-		t.Error("Point2D.DistanceTo: wanted", want, "got", got)
+	if p1.DistanceTo(p2) != 5 {
+		t.Error("Point2D.DistanceTo")
 	}
 }
 
 func TestPointDistanceSquared2D(t *testing.T) {
 	p1 := Point2D{-2, 1}
 	p2 := Point2D{1, 5}
-	want := 25.0
-	got := p1.SquaredDistanceTo(p2)
-	if want != got {
-		t.Error("Point2D.SquaredDistanceTo: wanted", want, "got", got)
+	if p1.SquaredDistanceTo(p2) != 25 {
+		t.Error("Point2D.SquaredDistanceTo")
 	}
 }
 
