@@ -86,3 +86,12 @@ func TestLine2DNormal(t *testing.T) {
 		t.Error("Line2D.Normal")
 	}
 }
+
+func TestLine2DIntersection(t *testing.T) {
+	l1 := Line2D{Point2D{0, 0}, Point2D{1, 1}}
+	l2 := Line2D{Point2D{0, 1}, Point2D{1, 0}}
+	p, seg := l1.Intersection(l2)
+	if !p.Equal(Point2D{math.Sqrt2, math.Sqrt2}) || !seg {
+		t.Fatal("Line2D.Intersection", p, seg)
+	}
+}

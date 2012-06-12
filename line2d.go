@@ -69,3 +69,26 @@ func (l Line2D) Angle() float64 {
 func (l Line2D) Normal() Vector2D {
 	return Vector2D{l.P2.Y - l.P1.Y, l.P1.X - l.P2.X}
 }
+
+// Calculates the intersection point of two lines and determines if it occurred
+// on both.
+func (l1 Line2D) Intersection(l2 Line2D) (Point2D, bool) {
+	a := l1.ToVector2D()
+	b := l2.ToVector2D()
+	denom := a.Y*b.X - a.X*b.Y
+	if denom == 0.0 {
+		return Point2D{math.Inf(1), math.Inf(1)}, false
+	}
+	denom = 1 / denom
+	c := l1.P1.Minus(l2.P1)
+	A := (b.Y*c.X - b.X*c.Y) * denom
+	inter := l1.P1.Plus(Point2D(a.Scaled(A)))
+	if A < 0 || A > 1 {
+		return inter, false
+	}
+	B := (a.X*c.Y - a.Y*c.X) * denom
+	if B < 0 || B > 1 {
+		return inter, false
+	}
+	return inter, true
+}
