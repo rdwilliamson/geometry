@@ -1,5 +1,9 @@
 package geometry
 
+import (
+	"math"
+)
+
 // 3D Vector.
 type Vector3D struct {
 	X, Y, Z float64
@@ -83,4 +87,45 @@ func (v *Vector3D) Scale(s float64) {
 	v.X *= s
 	v.Y *= s
 	v.Z *= s
+}
+
+// Returns the length of the vector.
+func (v Vector3D) Length() float64 {
+	return math.Sqrt(v.X*v.X + v.Y*v.Y + v.Z*v.Z)
+}
+
+// Returns the squared length of the vector.
+func (v Vector3D) LengthSquared() float64 {
+	return v.X*v.X + v.Y*v.Y + v.Z*v.Z
+}
+
+// Returns a normalized vector. The zero vector remains unchanged.
+func (v Vector3D) Normalized() Vector3D {
+	if v.X == 0 && v.Y == 0 && v.Z == 0 {
+		return v
+	}
+	l := 1 / math.Sqrt(v.X*v.X+v.Y*v.Y+v.Z*v.Z)
+	return Vector3D{v.X * l, v.Y * l, v.Z * l}
+}
+
+// Normalizes the vector. The zero vector remains unchanged.
+func (v *Vector3D) Normalize() {
+	if v.X == 0 && v.Y == 0 && v.Z == 0 {
+		return
+	}
+	l := 1 / math.Sqrt(v.X*v.X+v.Y*v.Y+v.Z*v.Z)
+	v.X *= l
+	v.Y *= l
+	v.Z *= l
+}
+
+// Returns the scalar projection.
+func (v1 Vector3D) ScalarProjectionOnto(v2 Vector3D) float64 {
+	return (v1.X*v2.X + v1.Y*v2.Y + v1.Z*v2.Z) / math.Sqrt(v2.X*v2.X+v2.Y*v2.Y+v2.Z*v2.Z)
+}
+
+// Returns the vector projection.
+func (v1 Vector3D) VectorProjectionOnto(v2 Vector3D) Vector3D {
+	s := (v1.X*v2.X + v1.Y*v2.Y + v1.Z*v2.Z) / (v2.X*v2.X + v2.Y*v2.Y + v2.Z*v2.Z)
+	return Vector3D{v2.X * s, v2.Y * s, v2.Z * s}
 }

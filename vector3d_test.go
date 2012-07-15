@@ -1,6 +1,7 @@
 package geometry
 
 import (
+	"math"
 	"testing"
 )
 
@@ -80,5 +81,52 @@ func TestVector3DScale(t *testing.T) {
 	v.Scale(0.5)
 	if !v.Equal(Vector3D{1, 1, 1}) {
 		t.Error("Vector3D.Scale")
+	}
+}
+
+func TestVector3DLength(t *testing.T) {
+	v := Vector3D{-6, 3, -1}
+	if v.Length() != math.Sqrt(46) {
+		t.Error("Vector3D.Length")
+	}
+	if v.LengthSquared() != 46 {
+		t.Error("Vector3D.LengthSquared")
+	}
+}
+
+func TestVector3DNormalize(t *testing.T) {
+	v := Vector3D{-6, 3, -1}
+	v = v.Normalized()
+	if !v.Equal(Vector3D{-6 / math.Sqrt(46), 3 / math.Sqrt(46), -1 / math.Sqrt(46)}) {
+		t.Error("Vector3D.Normalized")
+	}
+	v = Vector3D{-6, 3, -1}
+	v.Normalize()
+	if !v.Equal(Vector3D{-6 / math.Sqrt(46), 3 / math.Sqrt(46), -1 / math.Sqrt(46)}) {
+		t.Error("Vector3D.Normalize")
+	}
+	v = Vector3D{0, 0, 0}
+	if !v.Normalized().Equal(Vector3D{0, 0, 0}) {
+		t.Error("Vector3D.Normalized")
+	}
+	v.Normalize()
+	if !v.Equal(Vector3D{0, 0, 0}) {
+		t.Error("Vector3D.Normalize")
+	}
+}
+
+func TestScalarProjectionOnto3D(t *testing.T) {
+	v1 := Vector3D{-3, 2, -4}
+	v2 := Vector3D{2, -5, 1}
+	if v1.ScalarProjectionOnto(v2) != -20/math.Sqrt(30) {
+		t.Error("Vector3D.ScalarProjectionOnto")
+	}
+}
+
+func TestVectorProjectionOnto3D(t *testing.T) {
+	v1 := Vector3D{-3, 2, -4}
+	v2 := Vector3D{2, -5, 1}
+	if !v1.VectorProjectionOnto(v2).FuzzyEqual(Vector3D{-4.0 / 3.0, 10.0 / 3.0, -2.0 / 3.0}) {
+		t.Error("Vector3D.VectorProjectionOnto")
 	}
 }

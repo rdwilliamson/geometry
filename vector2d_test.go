@@ -137,7 +137,7 @@ func TestVector2DNormalize(t *testing.T) {
 	v := Vector2D{15, 20}
 	v = v.Normalized()
 	if !v.Equal(Vector2D{15.0 / 25.0, 20.0 / 25.0}) {
-		t.Error("Vector2D.Normalized", v)
+		t.Error("Vector2D.Normalized")
 	}
 	v = Vector2D{15, 20}
 	v.Normalize()
