@@ -1,4 +1,4 @@
-// Package geometry contains gemoetric primitives.
+// Package geometry contains geometric primitives.
 //
 // Angles are in radians.
 package geometry
