@@ -123,3 +123,23 @@ func (v1 Vector2D) Equal(v2 Vector2D) bool {
 func (v1 Vector2D) FuzzyEqual(v2 Vector2D) bool {
 	return FuzzyEqual(v1.X, v2.X) && FuzzyEqual(v1.Y, v2.Y)
 }
+
+// Returns the angle between two vectors.
+func (v1 Vector2D) AngleBetween(v2 Vector2D) float64 {
+	// return math.Abs(math.Atan2(v1.Y, v1.X) - math.Atan2(v2.Y, v2.X))
+	dot := v1.X*v2.X + v1.Y*v2.Y
+	v1l := math.Sqrt(v1.X*v1.X + v1.Y*v1.Y)
+	v2l := math.Sqrt(v2.X*v2.X + v2.Y*v2.Y)
+	return math.Acos(dot / (v1l * v2l))
+}
+
+func (v1 Vector2D) AngleBetween_1(v2 Vector2D) float64 {
+	return math.Abs(math.Atan2(v1.Y, v1.X) - math.Atan2(v2.Y, v2.X))
+}
+
+func (v1 Vector2D) AngleBetween_2(v2 Vector2D) float64 {
+	dot := v1.X*v2.X + v1.Y*v2.Y
+	v1l := math.Sqrt(v1.X*v1.X + v1.Y*v1.Y)
+	v2l := math.Sqrt(v2.X*v2.X + v2.Y*v2.Y)
+	return math.Acos(dot / (v1l * v2l))
+}
