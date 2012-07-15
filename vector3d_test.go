@@ -34,3 +34,51 @@ func TestVector3DFuzzyEqual(t *testing.T) {
 		t.Error("Vector3D.FuzzyEqual")
 	}
 }
+
+func TestVector3DCore(t *testing.T) {
+	v := Vector3D{0, 0, 0}
+	v = v.Plus(Vector3D{1, 2, 3})
+	if !v.Equal(Vector3D{1, 2, 3}) {
+		t.Error("Vector3D.Plus")
+	}
+	v.Add(Vector3D{3, 2, 1})
+	if !v.Equal(Vector3D{4, 4, 4}) {
+		t.Error("Vector3D.Add")
+	}
+	v = v.Minus(Vector3D{1, 2, 3})
+	if !v.Equal(Vector3D{3, 2, 1}) {
+		t.Error("Vector3D.Minus")
+	}
+	v.Subtract(Vector3D{2, 1, 0})
+	if !v.Equal(Vector3D{1, 1, 1}) {
+		t.Error("Vector3D.Subtract")
+	}
+	v = v.Times(Vector3D{2, 2, 2})
+	if !v.Equal(Vector3D{2, 2, 2}) {
+		t.Error("Vector3D.Times")
+	}
+	v.Multiply(Vector3D{0.5, 0.5, 0.5})
+	if !v.Equal(Vector3D{1, 1, 1}) {
+		t.Error("Vector3D.Multiply")
+	}
+	v = v.Divided(Vector3D{0.5, 0.5, 0.5})
+	if !v.Equal(Vector3D{2, 2, 2}) {
+		t.Error("Vector3D.Divided")
+	}
+	v.Divide(Vector3D{2, 2, 2})
+	if !v.Equal(Vector3D{1, 1, 1}) {
+		t.Error("Vector3D.Divide")
+	}
+}
+
+func TestVector3DScale(t *testing.T) {
+	v := Vector3D{1, 1, 1}
+	v = v.Scaled(2)
+	if !v.Equal(Vector3D{2, 2, 2}) {
+		t.Error("Vector3D.Scaled")
+	}
+	v.Scale(0.5)
+	if !v.Equal(Vector3D{1, 1, 1}) {
+		t.Error("Vector3D.Scale")
+	}
+}

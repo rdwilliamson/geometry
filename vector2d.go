@@ -64,14 +64,14 @@ func (v1 *Vector2D) Divide(v2 Vector2D) {
 }
 
 // Returns the scaled vector.
-func (p Vector2D) Scaled(s float64) Vector2D {
-	return Vector2D{p.X * s, p.Y * s}
+func (v Vector2D) Scaled(s float64) Vector2D {
+	return Vector2D{v.X * s, v.Y * s}
 }
 
 // Scales the vector.
-func (p *Vector2D) Scale(s float64) {
-	p.X *= s
-	p.Y *= s
+func (v *Vector2D) Scale(s float64) {
+	v.X *= s
+	v.Y *= s
 }
 
 // Returns the length of the vector.
