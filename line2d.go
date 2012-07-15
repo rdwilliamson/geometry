@@ -71,24 +71,25 @@ func (l Line2D) Normal() Vector2D {
 }
 
 // Calculates the intersection point of two lines and determines if it occurred
-// on both.
+// on both. From Graphics Gems III, Faster Line Segment Intersection.
 func (l1 Line2D) Intersection(l2 Line2D) (Point2D, bool) {
-	a := l1.ToVector2D()
-	b := l2.ToVector2D()
-	denom := a.Y*b.X - a.X*b.Y
-	if denom == 0.0 {
+	a := l1.P2.Minus(l1.P1)
+	b := l2.P1.Minus(l2.P2)
+	denominator := a.Y*b.X - a.X*b.Y
+	if denominator == 0.0 {
+		// TODO determine where on line at infinity they intersect
 		return Point2D{math.Inf(1), math.Inf(1)}, false
 	}
-	denom = 1 / denom
+	denominator = 1.0 / denominator
 	c := l1.P1.Minus(l2.P1)
-	A := (b.Y*c.X - b.X*c.Y) * denom
-	inter := l1.P1.Plus(Point2D(a.Scaled(A)))
-	if A < 0 || A > 1 {
-		return inter, false
+	A := (b.Y*c.X - b.X*c.Y) * denominator
+	intersection := l1.P1.Plus(Point2D{a.X * A, a.Y * A})
+	if A < 0.0 || A > 1.0 {
+		return intersection, false
 	}
-	B := (a.X*c.Y - a.Y*c.X) * denom
-	if B < 0 || B > 1 {
-		return inter, false
+	B := (a.X*c.Y - a.Y*c.X) * denominator
+	if B < 0.0 || B > 1.0 {
+		return intersection, false
 	}
-	return inter, true
+	return intersection, true
 }
