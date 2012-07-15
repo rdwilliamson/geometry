@@ -82,7 +82,8 @@ func TestLinePointDistance2D(t *testing.T) {
 func TestLine2DNormal(t *testing.T) {
 	l := Line2D{Point2D{0, 0}, Point2D{2, 1}}
 	n := l.Normal()
-	if l.Length() != n.Length() || math.Abs(l.Angle()-n.Angle()) != math.Pi/2 {
+	na := math.Atan2(n.Y, n.X)
+	if l.Length() != n.Length() || math.Abs(l.Angle()-na) != math.Pi/2 {
 		t.Error("Line2D.Normal")
 	}
 }

@@ -1,7 +1,6 @@
 package geometry
 
 import (
-	"math"
 	"testing"
 )
 
@@ -66,41 +65,6 @@ func TestVector2DScale(t *testing.T) {
 	v.Scale(0.5)
 	if !v.Equal(Vector2D{1, 1}) {
 		t.Error("Vector2D.Scale")
-	}
-}
-
-func TestVector2DAngle(t *testing.T) {
-	v := Vector2D{1, 1}
-	if v.Angle() != math.Pi/4 {
-		t.Error("Vector2D.Angle")
-	}
-	v = Vector2D{-1, 1}
-	if v.Angle() != 3*math.Pi/4 {
-		t.Error("Vector2D.Angle")
-	}
-	v = Vector2D{-1, -1}
-	if v.Angle() != -3*math.Pi/4 {
-		t.Error("Vector2D.Angle")
-	}
-	v = Vector2D{1, -1}
-	if v.Angle() != -math.Pi/4 {
-		t.Error("Vector2D.Angle")
-	}
-	v = Vector2D{1, 0}
-	if v.Angle() != 0 {
-		t.Error("Vector2D.Angle")
-	}
-	v = Vector2D{0, 1}
-	if v.Angle() != math.Pi/2 {
-		t.Error("Vector2D.Angle")
-	}
-	v = Vector2D{-1, 0}
-	if v.Angle() != math.Pi {
-		t.Error("Vector2D.Angle")
-	}
-	v = Vector2D{0, -1}
-	if v.Angle() != -math.Pi/2 {
-		t.Error("Vector2D.Angle")
 	}
 }
 
