@@ -48,7 +48,6 @@ func (p1 Point2D) DistanceTo(p2 Point2D) float64 {
 
 // Returns the squared distance between the two points.
 func (p1 Point2D) SquaredDistanceTo(p2 Point2D) float64 {
-	dx := p2.X - p1.X
-	dy := p2.Y - p1.Y
+	dx, dy := p2.X-p1.X, p2.Y-p1.Y
 	return dx*dx + dy*dy
 }
