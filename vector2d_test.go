@@ -128,26 +128,10 @@ func TestDotProduct2D(t *testing.T) {
 func TestAngleBetween2D(t *testing.T) {
 	v1 := Vector2D{1, 0}
 	v2 := Vector2D{1, 1}
-	if !FuzzyEqual(v1.AngleBetween(v2), math.Pi/4) {
+	if v1.AngleBetween(v2) != math.Pi/4 {
 		t.Error("Vector2D.AngleBetween")
 	}
-	if !FuzzyEqual(v2.AngleBetween(v1), math.Pi/4) {
+	if v2.AngleBetween(v1) != math.Pi/4 {
 		t.Error("Vector2D.AngleBetween")
-	}
-}
-
-func BenchmarkAngleBetween2D_1(b *testing.B) {
-	v1 := Vector2D{1, 0}
-	v2 := Vector2D{1, 1}
-	for i := 0; i < b.N; i++ {
-		v1.AngleBetween_1(v2)
-	}
-}
-
-func BenchmarkAngleBetween2D_2(b *testing.B) {
-	v1 := Vector2D{1, 0}
-	v2 := Vector2D{1, 1}
-	for i := 0; i < b.N; i++ {
-		v1.AngleBetween_2(v2)
 	}
 }

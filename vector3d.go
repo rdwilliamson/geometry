@@ -129,3 +129,11 @@ func (v1 Vector3D) VectorProjectionOnto(v2 Vector3D) Vector3D {
 	s := (v1.X*v2.X + v1.Y*v2.Y + v1.Z*v2.Z) / (v2.X*v2.X + v2.Y*v2.Y + v2.Z*v2.Z)
 	return Vector3D{v2.X * s, v2.Y * s, v2.Z * s}
 }
+
+// Returns the angle between two vectors.
+func (v1 Vector3D) AngleBetween(v2 Vector3D) float64 {
+	dot := v1.X*v2.X + v1.Y*v2.Y + v1.Z*v2.Z
+	v1l := math.Sqrt(v1.X*v1.X + v1.Y*v1.Y + v1.Z*v1.Z)
+	v2l := math.Sqrt(v2.X*v2.X + v2.Y*v2.Y + v2.Z*v2.Z)
+	return math.Acos(dot / (v1l * v2l))
+}

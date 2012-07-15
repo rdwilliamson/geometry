@@ -130,3 +130,14 @@ func TestVectorProjectionOnto3D(t *testing.T) {
 		t.Error("Vector3D.VectorProjectionOnto")
 	}
 }
+
+func TestAngleBetween3D(t *testing.T) {
+	v1 := Vector3D{1, 0, 0}
+	v2 := Vector3D{1, 1, 0}
+	if !FuzzyEqual(v1.AngleBetween(v2), math.Pi/4) {
+		t.Error("Vector3D.AngleBetween")
+	}
+	if !FuzzyEqual(v2.AngleBetween(v1), math.Pi/4) {
+		t.Error("Vector3D.AngleBetween")
+	}
+}
