@@ -10,8 +10,8 @@ type Point2D struct {
 }
 
 // Returns a copy of the point.
-func (p *Point2D) Copy() *Point2D {
-	return &Point2D{p.X, p.Y}
+func (p *Point2D) Copy() Point2D {
+	return Point2D{p.X, p.Y}
 }
 
 // Add a point.

@@ -18,10 +18,24 @@ func TestLine2DCore(t *testing.T) {
 	}
 }
 
+func Benchmark_Line2D_ToVector2D(b *testing.B) {
+	l := Line2D{Point2D{1, 1}, Point2D{4, 5}}
+	for i := 0; i < b.N; i++ {
+		l.ToVector2D()
+	}
+}
+
 func TestMidpoint2D(t *testing.T) {
 	l := Line2D{Point2D{0, 0}, Point2D{1, 1}}
 	if m := l.Midpoint(); !m.Equal(&Point2D{0.5, 0.5}) {
 		t.Error("Line2D.Midpoint")
+	}
+}
+
+func Benchmark_Line2D_Midpoint(b *testing.B) {
+	l := Line2D{Point2D{1, 1}, Point2D{4, 5}}
+	for i := 0; i < b.N; i++ {
+		l.Midpoint()
 	}
 }
 
@@ -35,12 +49,10 @@ func TestLine2DNormal(t *testing.T) {
 	}
 }
 
-func TestLine2DIntersection(t *testing.T) {
-	l1 := Line2D{Point2D{0, 0}, Point2D{1, 1}}
-	l2 := Line2D{Point2D{0, 1}, Point2D{1, 0}}
-	p, _ := l1.Intersection(&l2)
-	if !p.Equal(&Point2D{0.5, 0.5}) {
-		t.Error("Line2D.Intersection")
+func Benchmark_Line2D_Normal(b *testing.B) {
+	l := Line2D{Point2D{1, 1}, Point2D{4, 5}}
+	for i := 0; i < b.N; i++ {
+		l.Normal()
 	}
 }
 
@@ -57,7 +69,7 @@ func TestLineSegmentPointDistance2D(t *testing.T) {
 	}
 }
 
-func BenchmarkLineSegmentPointDistance2D_P1(b *testing.B) {
+func Benchmark_Line2D_SegmentPointDistance_P1(b *testing.B) {
 	l := &Line2D{Point2D{1, 1}, Point2D{2, 1}}
 	p1 := &Point2D{0, 0}
 	for i := 0; i < b.N; i++ {
@@ -65,7 +77,7 @@ func BenchmarkLineSegmentPointDistance2D_P1(b *testing.B) {
 	}
 }
 
-func BenchmarkLineSegmentPointDistance2D_P2(b *testing.B) {
+func Benchmark_Line2D_SegmentPointDistance_P2(b *testing.B) {
 	l := &Line2D{Point2D{1, 1}, Point2D{2, 1}}
 	p2 := &Point2D{1.5, 0}
 	for i := 0; i < b.N; i++ {
@@ -73,7 +85,7 @@ func BenchmarkLineSegmentPointDistance2D_P2(b *testing.B) {
 	}
 }
 
-func BenchmarkLineSegmentPointDistance2D_P3(b *testing.B) {
+func Benchmark_Line2D_SegmentPointDistance_P3(b *testing.B) {
 	l := &Line2D{Point2D{1, 1}, Point2D{2, 1}}
 	p3 := &Point2D{3, 0}
 	for i := 0; i < b.N; i++ {
@@ -94,7 +106,7 @@ func TestLinePointDistance2D(t *testing.T) {
 	}
 }
 
-func BenchmarkLinePointDistance2D_P1(b *testing.B) {
+func Benchmark_Line2D_PointDistance2D(b *testing.B) {
 	l := &Line2D{Point2D{1, 1}, Point2D{2, 1}}
 	p1 := &Point2D{0, 0}
 	for i := 0; i < b.N; i++ {
@@ -102,18 +114,44 @@ func BenchmarkLinePointDistance2D_P1(b *testing.B) {
 	}
 }
 
-func BenchmarkLinePointDistance2D_P2(b *testing.B) {
-	l := &Line2D{Point2D{1, 1}, Point2D{2, 1}}
-	p2 := &Point2D{1.5, 0}
-	for i := 0; i < b.N; i++ {
-		LinePointDistance2D(l, p2)
+func TestLine2DSegmentIntersection(t *testing.T) {
+	l1 := Line2D{Point2D{0, 0}, Point2D{1, 1}}
+	l2 := Line2D{Point2D{0, 1}, Point2D{1, 0}}
+	p, seg := l1.SegmentIntersection(&l2)
+	if !p.Equal(&Point2D{0.5, 0.5}) || !seg {
+		t.Error("Line2D.SegmentIntersection")
 	}
 }
 
-func BenchmarkLinePointDistance2D_P3(b *testing.B) {
-	l := &Line2D{Point2D{1, 1}, Point2D{2, 1}}
-	p3 := &Point2D{3, 0}
+func Benchmark_Line2D_SegmentIntersection_1(b *testing.B) {
+	l1 := &Line2D{Point2D{0, 0}, Point2D{1, 1}}
+	l2 := &Line2D{Point2D{0, 1}, Point2D{1, 0}}
 	for i := 0; i < b.N; i++ {
-		LinePointDistance2D(l, p3)
+		l1.SegmentIntersection(l2)
+	}
+}
+
+func Benchmark_Line2D_SegmentIntersection_2(b *testing.B) {
+	l1 := &Line2D{Point2D{0.5, 0.5}, Point2D{1, 1}}
+	l2 := &Line2D{Point2D{0, 0}, Point2D{1, 0}}
+	for i := 0; i < b.N; i++ {
+		l1.SegmentIntersection(l2)
+	}
+}
+
+func TestLine2DIntersection(t *testing.T) {
+	l1 := &Line2D{Point2D{0, 0}, Point2D{1, 1}}
+	l2 := &Line2D{Point2D{0, 1}, Point2D{1, 0}}
+	p := l1.Intersection(l2)
+	if !p.Equal(&Point2D{0.5, 0.5}) {
+		t.Error("Line2D.Intersection", p)
+	}
+}
+
+func Benchmark_Line2D_Intersection(b *testing.B) {
+	l1 := &Line2D{Point2D{0, 0}, Point2D{1, 1}}
+	l2 := &Line2D{Point2D{0, 1}, Point2D{1, 0}}
+	for i := 0; i < b.N; i++ {
+		l1.Intersection(l2)
 	}
 }
