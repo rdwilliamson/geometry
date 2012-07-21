@@ -97,32 +97,9 @@ func Benchmark_Point2D_Equal_2(b *testing.B) {
 	}
 }
 
-func Benchmark_Point2D_FuzzyEqual_1(b *testing.B) {
-	// x values are not equal so no need to check y
-	p1, p2 := &Point2D{1, 1}, &Point2D{2, 1}
+func Benchmark_Point2D_FuzzyEqual(b *testing.B) {
+	p1, p2 := &Point2D{1, 1}, &Point2D{2, 3}
 	for i := 0; i < b.N; i++ {
 		p1.FuzzyEqual(p2)
-	}
-}
-
-func Benchmark_Point2D_FuzzyEqual_2(b *testing.B) {
-	p1, p2 := &Point2D{1, 1}, &Point2D{1, 1}
-	for i := 0; i < b.N; i++ {
-		p1.FuzzyEqual(p2)
-	}
-}
-
-func Benchmark_Point2D_FuzzyEqual2_1(b *testing.B) {
-	// x values are not equal so no need to check y
-	p1, p2 := &Point2D{1, 1}, &Point2D{2, 1}
-	for i := 0; i < b.N; i++ {
-		p1.FuzzyEqual2(p2)
-	}
-}
-
-func Benchmark_Point2D_FuzzyEqual2_2(b *testing.B) {
-	p1, p2 := &Point2D{1, 1}, &Point2D{1, 1}
-	for i := 0; i < b.N; i++ {
-		p1.FuzzyEqual2(p2)
 	}
 }

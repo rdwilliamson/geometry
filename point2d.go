@@ -33,12 +33,8 @@ func (p1 *Point2D) Equal(p2 *Point2D) bool {
 
 // Returns true if the two points are very close.
 func (p1 *Point2D) FuzzyEqual(p2 *Point2D) bool {
-	return FuzzyEqual(p1.X, p2.X) && FuzzyEqual(p1.Y, p2.Y)
-}
-
-func (p1 *Point2D) FuzzyEqual2(p2 *Point2D) bool {
-	return math.Abs(p2.X-p1.X) <= 0.000000000001*math.Min(math.Abs(p2.X), math.Abs(p1.X)) &&
-		math.Abs(p2.Y-p1.Y) <= 0.000000000001*math.Min(math.Abs(p2.Y), math.Abs(p1.Y))
+	dx, dy := p2.X-p1.X, p2.Y-p1.Y
+	return dx*dx+dy*dy < 0.000000000001*0.000000000001
 }
 
 // Returns the distance between the two points.
