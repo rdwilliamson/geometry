@@ -78,11 +78,33 @@ func TestVector2DLength(t *testing.T) {
 	}
 }
 
+func Benchmark_Vector2D_Length(b *testing.B) {
+	v := Vector2D{1, 2}
+	for i := 0; i < b.N; i++ {
+		v.Length()
+	}
+}
+
+func Benchmark_Vector2D_LengthSquared(b *testing.B) {
+	v := Vector2D{1, 2}
+	for i := 0; i < b.N; i++ {
+		v.LengthSquared()
+	}
+}
+
 func TestScalarProjectionOnto2D(t *testing.T) {
 	v1 := &Vector2D{2, 3}
 	v2 := &Vector2D{2, 1}
 	if v1.ScalarProjection(v2) != 7.0/5.0 {
 		t.Error("Vector2D.ScalarProjection")
+	}
+}
+
+func Benchmark_Vector2D_ScalarProjection(b *testing.B) {
+	v1 := &Vector2D{2, 3}
+	v2 := &Vector2D{2, 1}
+	for i := 0; i < b.N; i++ {
+		v1.ScalarProjection(v2)
 	}
 }
 
@@ -92,6 +114,14 @@ func TestVectorProjectionOnto2D(t *testing.T) {
 	v1.ProjectedOnto(v2)
 	if !v1.Equal(&Vector2D{2.8, 1.4}) {
 		t.Error("Vector2D.ProjectedOnto")
+	}
+}
+
+func Benchmark_Vector2D_ProjectedOnto(b *testing.B) {
+	v1 := &Vector2D{2, 3}
+	v2 := &Vector2D{2, 1}
+	for i := 0; i < b.N; i++ {
+		v1.ProjectedOnto(v2)
 	}
 }
 
@@ -114,6 +144,30 @@ func TestVector2DFuzzyEqual(t *testing.T) {
 	}
 }
 
+func Benchmark_Vector2D_Equal_1(b *testing.B) {
+	v1 := &Vector2D{2, 3}
+	v2 := &Vector2D{2, 1}
+	for i := 0; i < b.N; i++ {
+		v1.Equal(v2)
+	}
+}
+
+func Benchmark_Vector2D_Equal_2(b *testing.B) {
+	v1 := &Vector2D{2, 3}
+	v2 := &Vector2D{4, 1}
+	for i := 0; i < b.N; i++ {
+		v1.Equal(v2)
+	}
+}
+
+func Benchmark_Vector2D_FuzzyEqual(b *testing.B) {
+	v1 := &Vector2D{2, 3}
+	v2 := &Vector2D{4, 1}
+	for i := 0; i < b.N; i++ {
+		v1.FuzzyEqual(v2)
+	}
+}
+
 func TestVector2DNormalize(t *testing.T) {
 	v := Vector2D{15, 20}
 	if v.Normalize(); !v.Equal(&Vector2D{15.0 / 25.0, 20.0 / 25.0}) {
@@ -125,19 +179,50 @@ func TestVector2DNormalize(t *testing.T) {
 	}
 }
 
+func Benchmark_Vector2D_Normalize(b *testing.B) {
+	v := &Vector2D{2, 3}
+	for i := 0; i < b.N; i++ {
+		v.Normalize()
+	}
+}
+
 func TestDotProduct2D(t *testing.T) {
 	if DotProduct2D(&Vector2D{2, 4}, &Vector2D{1, 5}) != 22 {
 		t.Error("DotProduct2D")
 	}
 }
 
+func Benchmark_Vector2D_DotProduct(b *testing.B) {
+	v1 := &Vector2D{2, 3}
+	v2 := &Vector2D{4, 1}
+	for i := 0; i < b.N; i++ {
+		DotProduct2D(v1, v2)
+	}
+}
+
 func TestAngleBetween2D(t *testing.T) {
 	v1 := &Vector2D{1, 0}
 	v2 := &Vector2D{1, 1}
-	if v1.AngleBetween(v2) != math.Pi/4 {
+	if !FuzzyEqual(v1.AngleBetween(v2), math.Pi/4) {
 		t.Error("Vector2D.AngleBetween")
 	}
-	if v2.AngleBetween(v1) != math.Pi/4 {
+	if !FuzzyEqual(v1.CosAngleBetween(v2), math.Cos(math.Pi/4)) {
 		t.Error("Vector2D.AngleBetween")
+	}
+}
+
+func Benchmark_Vector2D_AngleBetween(b *testing.B) {
+	v1 := &Vector2D{2, 3}
+	v2 := &Vector2D{4, 1}
+	for i := 0; i < b.N; i++ {
+		v1.AngleBetween(v2)
+	}
+}
+
+func Benchmark_Vector2D_CosAngleBetween(b *testing.B) {
+	v1 := &Vector2D{2, 3}
+	v2 := &Vector2D{4, 1}
+	for i := 0; i < b.N; i++ {
+		v1.CosAngleBetween(v2)
 	}
 }

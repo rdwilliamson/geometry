@@ -59,7 +59,7 @@ func (v *Vector2D) Normalize() {
 	if v.X == 0 && v.Y == 0 {
 		return
 	}
-	l := 1 / math.Hypot(v.X, v.Y)
+	l := 1 / math.Sqrt(v.X*v.X+v.Y*v.Y)
 	v.X *= l
 	v.Y *= l
 }
@@ -71,7 +71,8 @@ func (v1 *Vector2D) Equal(v2 *Vector2D) bool {
 
 // Returns true if the two vectors are close.
 func (v1 *Vector2D) FuzzyEqual(v2 *Vector2D) bool {
-	return FuzzyEqual(v1.X, v2.X) && FuzzyEqual(v1.Y, v2.Y)
+	dx, dy := v2.X-v1.X, v2.Y-v1.Y
+	return dx*dx+dy*dy < 0.000000000001*0.000000000001
 }
 
 // Returns the scalar projection.
@@ -87,7 +88,12 @@ func (v1 *Vector2D) ProjectedOnto(v2 *Vector2D) {
 
 // Returns the angle between two vectors.
 func (v1 *Vector2D) AngleBetween(v2 *Vector2D) float64 {
-	return math.Abs(math.Atan2(v1.Y, v1.X) - math.Atan2(v2.Y, v2.X))
+	return math.Acos((v1.X*v2.X + v1.Y*v2.Y) / math.Sqrt((v1.X*v1.X+v1.Y*v1.Y)*(v2.X*v2.X+v2.Y*v2.Y)))
+}
+
+// Returns the cos of the angle between two vectors.
+func (v1 *Vector2D) CosAngleBetween(v2 *Vector2D) float64 {
+	return (v1.X*v2.X + v1.Y*v2.Y) / math.Sqrt((v1.X*v1.X+v1.Y*v1.Y)*(v2.X*v2.X+v2.Y*v2.Y))
 }
 
 // Returns the dot product of two vectors.
