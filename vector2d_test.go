@@ -25,11 +25,46 @@ func TestVector2DCore(t *testing.T) {
 	}
 }
 
+func Benchmark_Vector2D_Add(b *testing.B) {
+	v1, v2 := &Vector2D{1, 1}, &Vector2D{2, 1}
+	for i := 0; i < b.N; i++ {
+		v1.Add(v2)
+	}
+}
+
+func Benchmark_Vector2D_Subtract(b *testing.B) {
+	v1, v2 := &Vector2D{1, 1}, &Vector2D{2, 1}
+	for i := 0; i < b.N; i++ {
+		v1.Subtract(v2)
+	}
+}
+
+func Benchmark_Vector2D_Multiply(b *testing.B) {
+	v1, v2 := &Vector2D{1, 1}, &Vector2D{2, 1}
+	for i := 0; i < b.N; i++ {
+		v1.Multiply(v2)
+	}
+}
+
+func Benchmark_Vector2D_Divide(b *testing.B) {
+	v1, v2 := &Vector2D{1, 1}, &Vector2D{2, 1}
+	for i := 0; i < b.N; i++ {
+		v1.Divide(v2)
+	}
+}
+
 func TestVector2DScale(t *testing.T) {
 	v := Vector2D{2, 2}
 	v.Scale(0.5)
 	if !v.Equal(&Vector2D{1, 1}) {
 		t.Error("Vector2D.Scale")
+	}
+}
+
+func Benchmark_Vector2D_Scale(b *testing.B) {
+	v := &Vector2D{1, 1}
+	for i := 0; i < b.N; i++ {
+		v.Scale(1.5)
 	}
 }
 
