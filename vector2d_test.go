@@ -5,23 +5,6 @@ import (
 	"testing"
 )
 
-func TestScalarProjectionOnto2D(t *testing.T) {
-	v1 := &Vector2D{2, 3}
-	v2 := &Vector2D{2, 1}
-	if v1.ScalarProjection(v2) != 7.0/5.0 {
-		t.Error("Vector2D.ScalarProjection")
-	}
-}
-
-func TestVectorProjectionOnto2D(t *testing.T) {
-	v1 := &Vector2D{2, 3}
-	v2 := &Vector2D{2, 1}
-	v1.ProjectedOnto(v2)
-	if !v1.Equal(&Vector2D{2.8, 1.4}) {
-		t.Error("Vector2D.ProjectedOnto")
-	}
-}
-
 func TestVector2DCore(t *testing.T) {
 	v := Vector2D{0, 0}
 	v.Add(&Vector2D{2, 1})
@@ -50,6 +33,33 @@ func TestVector2DScale(t *testing.T) {
 	}
 }
 
+func TestVector2DLength(t *testing.T) {
+	v := Vector2D{3, 4}
+	if v.Length() != 5 {
+		t.Error("Vector2D.Length")
+	}
+	if v.LengthSquared() != 25 {
+		t.Error("Vector2D.LengthSquared")
+	}
+}
+
+func TestScalarProjectionOnto2D(t *testing.T) {
+	v1 := &Vector2D{2, 3}
+	v2 := &Vector2D{2, 1}
+	if v1.ScalarProjection(v2) != 7.0/5.0 {
+		t.Error("Vector2D.ScalarProjection")
+	}
+}
+
+func TestVectorProjectionOnto2D(t *testing.T) {
+	v1 := &Vector2D{2, 3}
+	v2 := &Vector2D{2, 1}
+	v1.ProjectedOnto(v2)
+	if !v1.Equal(&Vector2D{2.8, 1.4}) {
+		t.Error("Vector2D.ProjectedOnto")
+	}
+}
+
 func TestVector2DFuzzyEqual(t *testing.T) {
 	v1 := &Vector2D{1.0, 1.0}
 	v2 := &Vector2D{1.0, 1.0}
@@ -66,16 +76,6 @@ func TestVector2DFuzzyEqual(t *testing.T) {
 	}
 	if v1.FuzzyEqual(v2) {
 		t.Error("Vector2D.FuzzyEqual")
-	}
-}
-
-func TestVector2DLength(t *testing.T) {
-	v := Vector2D{3, 4}
-	if v.Length() != 5 {
-		t.Error("Vector2D.Length")
-	}
-	if v.LengthSquared() != 25 {
-		t.Error("Vector2D.LengthSquared")
 	}
 }
 
