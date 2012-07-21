@@ -60,12 +60,12 @@ func (v *Vector3D) LengthSquared() float64 {
 }
 
 // Returns the dot product of two vectors.
-func DotProduct3D(v1, v2 *Vector3D) float64 {
+func (v1 *Vector3D) DotProduct(v2 *Vector3D) float64 {
 	return v1.X*v2.X + v1.Y*v2.Y + v1.Z*v2.Z
 }
 
 // Returns the cross product of two vectors.
-func CrossProduct3D(v1, v2 *Vector3D) Vector3D {
+func (v1 *Vector3D) CrossProduct(v2 *Vector3D) Vector3D {
 	return Vector3D{v1.Y*v2.Z - v1.Z*v2.Y, v1.Z*v2.X - v1.X*v2.Z, v1.X*v2.Y - v1.Y*v2.X}
 }
 

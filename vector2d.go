@@ -102,6 +102,6 @@ func (v1 *Vector2D) CosAngleBetween(v2 *Vector2D) float64 {
 }
 
 // Returns the dot product of two vectors.
-func DotProduct2D(v1, v2 *Vector2D) float64 {
+func (v1 *Vector2D) DotProduct(v2 *Vector2D) float64 {
 	return v1.X*v2.X + v1.Y*v2.Y
 }

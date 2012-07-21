@@ -46,7 +46,7 @@ func (l *Line2D) Normal() Vector2D {
 
 // Return the distance between a point and a line segment. See
 // http://softsurfer.com/Archive/algorithm_0102/algorithm_0102.htm
-func LineSegmentPointDistance2D(l *Line2D, p *Point2D) float64 {
+func (l *Line2D) SegmentPointDistance(p *Point2D) float64 {
 	ldx, ldy := l.P2.X-l.P1.X, l.P2.Y-l.P1.Y
 	c1 := ldx*(p.X-l.P1.X) + ldy*(p.Y-l.P1.Y)
 	if c1 <= 0 {
@@ -65,7 +65,7 @@ func LineSegmentPointDistance2D(l *Line2D, p *Point2D) float64 {
 
 // Returns the distance between a point and a line. See
 // http://softsurfer.com/Archive/algorithm_0102/algorithm_0102.htm
-func LinePointDistance2D(l *Line2D, p *Point2D) float64 {
+func (l *Line2D) PointDistance(p *Point2D) float64 {
 	ldx, ldy := l.P2.X-l.P1.X, l.P2.Y-l.P1.Y
 	u := (ldx*(p.X-l.P1.X) + ldy*(p.Y-l.P1.Y)) / (ldx*ldx + ldy*ldy)
 	x, y := p.X-(l.P1.X+ldx*u), p.Y-(l.P1.Y+ldy*u)

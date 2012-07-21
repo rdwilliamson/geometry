@@ -187,7 +187,9 @@ func Benchmark_Vector2D_Normalize(b *testing.B) {
 }
 
 func TestDotProduct2D(t *testing.T) {
-	if DotProduct2D(&Vector2D{2, 4}, &Vector2D{1, 5}) != 22 {
+	v1 := &Vector2D{2, 4}
+	v2 := &Vector2D{1, 5}
+	if v1.DotProduct(v2) != 22 {
 		t.Error("DotProduct2D")
 	}
 }
@@ -196,7 +198,7 @@ func Benchmark_Vector2D_DotProduct(b *testing.B) {
 	v1 := &Vector2D{2, 3}
 	v2 := &Vector2D{4, 1}
 	for i := 0; i < b.N; i++ {
-		DotProduct2D(v1, v2)
+		v1.DotProduct(v2)
 	}
 }
 

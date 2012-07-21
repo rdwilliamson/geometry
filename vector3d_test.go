@@ -58,7 +58,9 @@ func Benchmark_Vector3D_Divide(b *testing.B) {
 }
 
 func TestDotProduct3D(t *testing.T) {
-	if DotProduct3D(&Vector3D{1, 2, 3}, &Vector3D{4, 5, 6}) != 32 {
+	v1 := &Vector3D{1, 2, 3}
+	v2 := &Vector3D{4, 5, 6}
+	if v1.DotProduct(v2) != 32 {
 		t.Error("DotProduct3D")
 	}
 }
@@ -67,12 +69,14 @@ func Benchmark_Vector3D_DotProduct(b *testing.B) {
 	v1 := &Vector3D{3, 4, 5}
 	v2 := &Vector3D{6, 2, 3}
 	for i := 0; i < b.N; i++ {
-		DotProduct3D(v1, v2)
+		v1.DotProduct(v2)
 	}
 }
 
 func TestCrossProduct3D(t *testing.T) {
-	if v := CrossProduct3D(&Vector3D{1, 2, 3}, &Vector3D{4, 5, 6}); !v.Equal(&Vector3D{-3, 6, -3}) {
+	v1 := &Vector3D{1, 2, 3}
+	v2 := &Vector3D{4, 5, 6}
+	if v := v1.CrossProduct(v2); !v.Equal(&Vector3D{-3, 6, -3}) {
 		t.Error("CrossProduct3D")
 	}
 }
@@ -81,7 +85,7 @@ func Benchmark_Vector3D_CrossProduct(b *testing.B) {
 	v1 := &Vector3D{3, 4, 5}
 	v2 := &Vector3D{6, 2, 3}
 	for i := 0; i < b.N; i++ {
-		CrossProduct3D(v1, v2)
+		v1.CrossProduct(v2)
 	}
 }
 
