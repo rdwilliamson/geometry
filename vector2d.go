@@ -10,8 +10,8 @@ type Vector2D struct {
 }
 
 // Converts the vector to a line from the origin.
-func (v *Vector2D) ToLine2D() Line2D {
-	return Line2D{Point2D{0, 0}, Point2D(*v)}
+func (v *Vector2D) ToLine2D() *Line2D {
+	return &Line2D{Point2D{0, 0}, Point2D(*v)}
 }
 
 // Add a vector.
