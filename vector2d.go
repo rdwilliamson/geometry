@@ -9,8 +9,9 @@ type Vector2D struct {
 	X, Y float64
 }
 
+// Returns a copy of the point.
 func (v *Vector2D) Copy() Vector2D {
-	return Vector2D{v.X, v.Y}
+	return *v
 }
 
 // Converts the vector to a line from the origin.
