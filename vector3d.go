@@ -76,7 +76,8 @@ func (v1 *Vector3D) Equal(v2 *Vector3D) bool {
 
 // Returns true if the two vectors are close.
 func (v1 *Vector3D) FuzzyEqual(v2 *Vector3D) bool {
-	return FuzzyEqual(v1.X, v2.X) && FuzzyEqual(v1.Y, v2.Y) && FuzzyEqual(v1.Z, v2.Z)
+	dx, dy, dz := v2.X-v1.X, v2.Y-v1.Y, v2.Z-v1.Z
+	return dx*dx+dy*dy+dz*dz < 0.000000000001*0.000000000001
 }
 
 // Normalizes the vector. The zero vector remains unchanged.
@@ -91,7 +92,7 @@ func (v *Vector3D) Normalize() {
 }
 
 // Returns the scalar projection.
-func (v1 *Vector3D) ScalarProjectionOnto(v2 *Vector3D) float64 {
+func (v1 *Vector3D) ScalarProjection(v2 *Vector3D) float64 {
 	return (v1.X*v2.X + v1.Y*v2.Y + v1.Z*v2.Z) / math.Sqrt(v2.X*v2.X+v2.Y*v2.Y+v2.Z*v2.Z)
 }
 
@@ -104,7 +105,15 @@ func (v1 *Vector3D) ProjectedOnto(v2 *Vector3D) Vector3D {
 // Returns the angle between two vectors.
 func (v1 *Vector3D) AngleBetween(v2 *Vector3D) float64 {
 	dot := v1.X*v2.X + v1.Y*v2.Y + v1.Z*v2.Z
-	v1l := math.Sqrt(v1.X*v1.X + v1.Y*v1.Y + v1.Z*v1.Z)
-	v2l := math.Sqrt(v2.X*v2.X + v2.Y*v2.Y + v2.Z*v2.Z)
-	return math.Acos(dot / (v1l * v2l))
+	v1d := (v1.X*v1.X + v1.Y*v1.Y + v1.Z*v1.Z)
+	v2d := (v2.X*v2.X + v2.Y*v2.Y + v2.Z*v2.Z)
+	return math.Acos(dot / math.Sqrt(v1d*v2d))
+}
+
+// Returns the cos of the angle between two vectors.
+func (v1 *Vector3D) CosAngleBetween(v2 *Vector3D) float64 {
+	dot := v1.X*v2.X + v1.Y*v2.Y + v1.Z*v2.Z
+	v1d := (v1.X*v1.X + v1.Y*v1.Y + v1.Z*v1.Z)
+	v2d := (v2.X*v2.X + v2.Y*v2.Y + v2.Z*v2.Z)
+	return dot / math.Sqrt(v1d*v2d)
 }

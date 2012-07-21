@@ -62,7 +62,7 @@ func Benchmark_Point3D_Equal_1(b *testing.B) {
 
 func Benchmark_Point3D_Equal_2(b *testing.B) {
 	p1 := &Point3D{0, 1, 2}
-	p2 := &Point3D{0, 1, 3}
+	p2 := &Point3D{0, 2, 3}
 	for i := 0; i < b.N; i++ {
 		p1.Equal(p2)
 	}
@@ -70,7 +70,7 @@ func Benchmark_Point3D_Equal_2(b *testing.B) {
 
 func Benchmark_Point3D_Equal_3(b *testing.B) {
 	p1 := &Point3D{0, 1, 2}
-	p2 := &Point3D{0, 3, 3}
+	p2 := &Point3D{1, 3, 3}
 	for i := 0; i < b.N; i++ {
 		p1.Equal(p2)
 	}
