@@ -36,9 +36,15 @@ func (p1 *Point2D) FuzzyEqual(p2 *Point2D) bool {
 	return FuzzyEqual(p1.X, p2.X) && FuzzyEqual(p1.Y, p2.Y)
 }
 
+func (p1 *Point2D) FuzzyEqual2(p2 *Point2D) bool {
+	return math.Abs(p2.X-p1.X) <= 0.000000000001*math.Min(math.Abs(p2.X), math.Abs(p1.X)) &&
+		math.Abs(p2.Y-p1.Y) <= 0.000000000001*math.Min(math.Abs(p2.Y), math.Abs(p1.Y))
+}
+
 // Returns the distance between the two points.
 func (p1 *Point2D) DistanceTo(p2 *Point2D) float64 {
-	return math.Hypot(p2.X-p1.X, p2.Y-p1.Y)
+	dx, dy := p2.X-p1.X, p2.Y-p1.Y
+	return math.Sqrt(dx*dx + dy*dy)
 }
 
 // Returns the squared distance between the two points.
