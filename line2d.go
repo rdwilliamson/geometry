@@ -44,6 +44,17 @@ func (l *Line2D) Normal() Vector2D {
 	return Vector2D{l.P2.Y - l.P1.Y, l.P1.X - l.P2.X}
 }
 
+// Returns true if the lines are equal.
+func (l1 *Line2D) Equal(l2 *Line2D) bool {
+	return (l1.P1 == l2.P1 && l1.P2 == l2.P2) || (l1.P1 == l2.P2 && l1.P2 == l2.P1)
+}
+
+// Returns true if the line are very close.
+func (l1 *Line2D) FuzzyEqual(l2 *Line2D) bool {
+	return (l1.P1.FuzzyEqual(&l2.P1) && l1.P2.FuzzyEqual(&l2.P2)) ||
+		(l1.P1.FuzzyEqual(&l2.P2) && l1.P2.FuzzyEqual(&l2.P1))
+}
+
 // Return the distance between a point and a line segment. See
 // http://softsurfer.com/Archive/algorithm_0102/algorithm_0102.htm
 func (l *Line2D) SegmentPointDistance(p *Point2D) float64 {

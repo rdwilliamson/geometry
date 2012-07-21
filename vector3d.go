@@ -71,7 +71,7 @@ func (v1 *Vector3D) CrossProduct(v2 *Vector3D) Vector3D {
 
 // Returns true if the two vectors are the same.
 func (v1 *Vector3D) Equal(v2 *Vector3D) bool {
-	return v1.X == v2.X && v1.Y == v2.Y && v1.Z == v2.Z
+	return *v1 == *v2
 }
 
 // Returns true if the two vectors are close.

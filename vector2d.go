@@ -71,7 +71,7 @@ func (v *Vector2D) Normalize() {
 
 // Returns true if the two vectors are the same.
 func (v1 *Vector2D) Equal(v2 *Vector2D) bool {
-	return v1.X == v2.X && v1.Y == v2.Y
+	return *v1 == *v2
 }
 
 // Returns true if the two vectors are close.

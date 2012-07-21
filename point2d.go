@@ -28,7 +28,7 @@ func (p1 *Point2D) Subtract(p2 *Point2D) {
 
 // Returns true if the two points are the same.
 func (p1 *Point2D) Equal(p2 *Point2D) bool {
-	return p1.X == p2.X && p1.Y == p2.Y
+	return *p1 == *p2
 }
 
 // Returns true if the two points are very close.

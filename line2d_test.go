@@ -144,7 +144,7 @@ func TestLine2DIntersection(t *testing.T) {
 	l2 := &Line2D{Point2D{0, 1}, Point2D{1, 0}}
 	p := l1.Intersection(l2)
 	if !p.Equal(&Point2D{0.5, 0.5}) {
-		t.Error("Line2D.Intersection", p)
+		t.Error("Line2D.Intersection")
 	}
 }
 
@@ -153,5 +153,42 @@ func Benchmark_Line2D_Intersection(b *testing.B) {
 	l2 := &Line2D{Point2D{0, 1}, Point2D{1, 0}}
 	for i := 0; i < b.N; i++ {
 		l1.Intersection(l2)
+	}
+}
+
+func TestLine2DEqual(t *testing.T) {
+	l1 := &Line2D{Point2D{0, 0}, Point2D{1, 1}}
+	l2 := &Line2D{Point2D{1, 1}, Point2D{0, 0}}
+	if !l1.Equal(l2) || !l1.Equal(l1) {
+		t.Error("Line2D.Equal")
+	}
+}
+
+func Benchmark_Line2D_Equal(b *testing.B) {
+	l1 := &Line2D{Point2D{0, 0}, Point2D{1, 1}}
+	l2 := &Line2D{Point2D{0, 1}, Point2D{1, 0}}
+	for i := 0; i < b.N; i++ {
+		l1.Equal(l2)
+	}
+}
+
+func TestLine2DFuzzyEqual(t *testing.T) {
+	l1 := &Line2D{Point2D{0, 0}, Point2D{1, 1}}
+	l2 := &Line2D{Point2D{1, 1}, Point2D{0, 0}}
+	l1.P1.X += 0.0000000000001
+	if !l1.FuzzyEqual(l2) || !l1.FuzzyEqual(l1) {
+		t.Error("Line2D.FuzzyEqual")
+	}
+	l2.P1.X += 0.000000000001
+	if l1.FuzzyEqual(l2) || !l1.FuzzyEqual(l1) {
+		t.Error("Line2D.FuzzyEqual")
+	}
+}
+
+func Benchmark_Line2D_FuzzyEqual(b *testing.B) {
+	l1 := &Line2D{Point2D{0, 0}, Point2D{1, 1}}
+	l2 := &Line2D{Point2D{0, 1}, Point2D{1, 0}}
+	for i := 0; i < b.N; i++ {
+		l1.FuzzyEqual(l2)
 	}
 }
