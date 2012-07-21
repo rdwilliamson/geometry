@@ -52,6 +52,14 @@ func LineSegmentPointDistance2D(l *Line2D, p *Point2D) float64 {
 	return math.Hypot(p.X-(l.P1.X+ldx*c1), p.Y-(l.P1.Y+ldy*c1))
 }
 
+// Find the distance between a point and a line. See
+// http://softsurfer.com/Archive/algorithm_0102/algorithm_0102.htm
+func LinePointDistance2D(l *Line2D, p *Point2D) float64 {
+	ldx, ldy := l.P2.X-l.P1.X, l.P2.Y-l.P1.Y
+	u := (ldx*(p.X-l.P1.X) + ldy*(p.Y-l.P1.Y)) / (ldx*ldx + ldy*ldy)
+	return math.Hypot(p.X-(l.P1.X+ldx*u), p.Y-(l.P1.Y+ldy*u))
+}
+
 // Calculates the intersection point of two lines and determines if it occurred
 // on both. From Graphics Gems III, Faster Line Segment Intersection.
 // TODO break into seperate functions

@@ -57,24 +57,63 @@ func TestLineSegmentPointDistance2D(t *testing.T) {
 	}
 }
 
-func BenchmarkLinePointDistance2D_P1(b *testing.B) {
+func BenchmarkLineSegmentPointDistance2D_P1(b *testing.B) {
 	l := &Line2D{Point2D{1, 1}, Point2D{2, 1}}
 	p1 := &Point2D{0, 0}
 	for i := 0; i < b.N; i++ {
 		LineSegmentPointDistance2D(l, p1)
 	}
 }
-func BenchmarkLinePointDistance2D_P2(b *testing.B) {
+
+func BenchmarkLineSegmentPointDistance2D_P2(b *testing.B) {
 	l := &Line2D{Point2D{1, 1}, Point2D{2, 1}}
 	p2 := &Point2D{1.5, 0}
 	for i := 0; i < b.N; i++ {
 		LineSegmentPointDistance2D(l, p2)
 	}
 }
-func BenchmarkLinePointDistance2D_P3(b *testing.B) {
+
+func BenchmarkLineSegmentPointDistance2D_P3(b *testing.B) {
 	l := &Line2D{Point2D{1, 1}, Point2D{2, 1}}
 	p3 := &Point2D{3, 0}
 	for i := 0; i < b.N; i++ {
 		LineSegmentPointDistance2D(l, p3)
+	}
+}
+
+func TestLinePointDistance2D(t *testing.T) {
+	l := &Line2D{Point2D{1, 1}, Point2D{2, 1}}
+	if LinePointDistance2D(l, &Point2D{0, 0}) != 1 {
+		t.Error("LinePointDistance2D")
+	}
+	if LinePointDistance2D(l, &Point2D{1.5, 0}) != 1 {
+		t.Error("LinePointDistance2D")
+	}
+	if LinePointDistance2D(l, &Point2D{3, 0}) != 1 {
+		t.Error("LinePointDistance2D")
+	}
+}
+
+func BenchmarkLinePointDistance2D_P1(b *testing.B) {
+	l := &Line2D{Point2D{1, 1}, Point2D{2, 1}}
+	p1 := &Point2D{0, 0}
+	for i := 0; i < b.N; i++ {
+		LinePointDistance2D(l, p1)
+	}
+}
+
+func BenchmarkLinePointDistance2D_P2(b *testing.B) {
+	l := &Line2D{Point2D{1, 1}, Point2D{2, 1}}
+	p2 := &Point2D{1.5, 0}
+	for i := 0; i < b.N; i++ {
+		LinePointDistance2D(l, p2)
+	}
+}
+
+func BenchmarkLinePointDistance2D_P3(b *testing.B) {
+	l := &Line2D{Point2D{1, 1}, Point2D{2, 1}}
+	p3 := &Point2D{3, 0}
+	for i := 0; i < b.N; i++ {
+		LinePointDistance2D(l, p3)
 	}
 }
