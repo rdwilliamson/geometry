@@ -6,72 +6,53 @@ import (
 )
 
 func TestScalarProjectionOnto2D(t *testing.T) {
-	v1 := Vector2D{2, 3}
-	v2 := Vector2D{2, 1}
-	if v1.ScalarProjectionOnto(v2) != 7.0/5.0 {
-		t.Error("Vector2D.ScalarProjectionOnto")
+	v1 := &Vector2D{2, 3}
+	v2 := &Vector2D{2, 1}
+	if v1.ScalarProjection(v2) != 7.0/5.0 {
+		t.Error("Vector2D.ScalarProjection")
 	}
 }
 
 func TestVectorProjectionOnto2D(t *testing.T) {
-	v1 := Vector2D{2, 3}
-	v2 := Vector2D{2, 1}
-	if !v1.VectorProjectionOnto(v2).Equal(Vector2D{2.8, 1.4}) {
-		t.Error("Vector2D.VectorProjectionOnto")
+	v1 := &Vector2D{2, 3}
+	v2 := &Vector2D{2, 1}
+	v1.ProjectedOnto(v2)
+	if !v1.Equal(&Vector2D{2.8, 1.4}) {
+		t.Error("Vector2D.ProjectedOnto")
 	}
 }
 
 func TestVector2DCore(t *testing.T) {
 	v := Vector2D{0, 0}
-	v = v.Plus(Vector2D{1, 2})
-	if !v.Equal(Vector2D{1, 2}) {
-		t.Error("Vector2D.Plus")
-	}
-	v.Add(Vector2D{2, 1})
-	if !v.Equal(Vector2D{3, 3}) {
+	v.Add(&Vector2D{2, 1})
+	if !v.Equal(&Vector2D{2, 1}) {
 		t.Error("Vector2D.Add")
 	}
-	v = v.Minus(Vector2D{1, 2})
-	if !v.Equal(Vector2D{2, 1}) {
-		t.Error("Vector2D.Minus")
-	}
-	v.Subtract(Vector2D{1, 0})
-	if !v.Equal(Vector2D{1, 1}) {
+	v.Subtract(&Vector2D{1, 0})
+	if !v.Equal(&Vector2D{1, 1}) {
 		t.Error("Vector2D.Subtract")
 	}
-	v = v.Times(Vector2D{2, 2})
-	if !v.Equal(Vector2D{2, 2}) {
-		t.Error("Vector2D.Times")
-	}
-	v.Multiply(Vector2D{0.5, 0.5})
-	if !v.Equal(Vector2D{1, 1}) {
+	v.Multiply(&Vector2D{0.5, 0.5})
+	if !v.Equal(&Vector2D{0.5, 0.5}) {
 		t.Error("Vector2D.Multiply")
 	}
-	v = v.Divided(Vector2D{0.5, 0.5})
-	if !v.Equal(Vector2D{2, 2}) {
-		t.Error("Vector2D.Divided")
-	}
-	v.Divide(Vector2D{2, 2})
-	if !v.Equal(Vector2D{1, 1}) {
+	v.Divide(&Vector2D{2, 2})
+	if !v.Equal(&Vector2D{0.25, 0.25}) {
 		t.Error("Vector2D.Divide")
 	}
 }
 
 func TestVector2DScale(t *testing.T) {
-	v := Vector2D{1, 1}
-	v = v.Scaled(2)
-	if !v.Equal(Vector2D{2, 2}) {
-		t.Error("Vector2D.Scaled")
-	}
+	v := Vector2D{2, 2}
 	v.Scale(0.5)
-	if !v.Equal(Vector2D{1, 1}) {
+	if !v.Equal(&Vector2D{1, 1}) {
 		t.Error("Vector2D.Scale")
 	}
 }
 
 func TestVector2DFuzzyEqual(t *testing.T) {
-	v1 := Vector2D{1.0, 1.0}
-	v2 := v1
+	v1 := &Vector2D{1.0, 1.0}
+	v2 := &Vector2D{1.0, 1.0}
 	v2.X += 0.0000000000001
 	if v1.Equal(v2) {
 		t.Error("Vector2D.Equal")
@@ -100,34 +81,24 @@ func TestVector2DLength(t *testing.T) {
 
 func TestVector2DNormalize(t *testing.T) {
 	v := Vector2D{15, 20}
-	v = v.Normalized()
-	if !v.Equal(Vector2D{15.0 / 25.0, 20.0 / 25.0}) {
-		t.Error("Vector2D.Normalized")
-	}
-	v = Vector2D{15, 20}
-	v.Normalize()
-	if !v.Equal(Vector2D{15.0 / 25.0, 20.0 / 25.0}) {
+	if v.Normalize(); !v.Equal(&Vector2D{15.0 / 25.0, 20.0 / 25.0}) {
 		t.Error("Vector2D.Normalize")
 	}
 	v = Vector2D{0, 0}
-	if !v.Normalized().Equal(Vector2D{0, 0}) {
-		t.Error("Vector2D.Normalized")
-	}
-	v.Normalize()
-	if !v.Equal(Vector2D{0, 0}) {
+	if v.Normalize(); !v.Equal(&Vector2D{0, 0}) {
 		t.Error("Vector2D.Normalize")
 	}
 }
 
 func TestDotProduct2D(t *testing.T) {
-	if DotProduct2D(Vector2D{2, 4}, Vector2D{1, 5}) != 22 {
+	if DotProduct2D(&Vector2D{2, 4}, &Vector2D{1, 5}) != 22 {
 		t.Error("DotProduct2D")
 	}
 }
 
 func TestAngleBetween2D(t *testing.T) {
-	v1 := Vector2D{1, 0}
-	v2 := Vector2D{1, 1}
+	v1 := &Vector2D{1, 0}
+	v2 := &Vector2D{1, 1}
 	if v1.AngleBetween(v2) != math.Pi/4 {
 		t.Error("Vector2D.AngleBetween")
 	}
