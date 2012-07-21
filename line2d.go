@@ -36,6 +36,22 @@ func (l *Line2D) Normal() *Vector2D {
 	return &Vector2D{l.P2.Y - l.P1.Y, l.P1.X - l.P2.X}
 }
 
+// Find the distance between a point and a line segment. See
+// http://softsurfer.com/Archive/algorithm_0102/algorithm_0102.htm
+func LineSegmentPointDistance2D(l *Line2D, p *Point2D) float64 {
+	ldx, ldy := l.P2.X-l.P1.X, l.P2.Y-l.P1.Y
+	c1 := ldx*(p.X-l.P1.X) + ldy*(p.Y-l.P1.Y)
+	if c1 <= 0 {
+		return math.Hypot(p.X-l.P1.X, p.Y-l.P1.Y)
+	}
+	c2 := ldx*ldx + ldy*ldy
+	if c2 <= c1 {
+		return math.Hypot(p.X-l.P2.X, p.Y-l.P2.Y)
+	}
+	c1 /= c2
+	return math.Hypot(p.X-(l.P1.X+ldx*c1), p.Y-(l.P1.Y+ldy*c1))
+}
+
 // Calculates the intersection point of two lines and determines if it occurred
 // on both. From Graphics Gems III, Faster Line Segment Intersection.
 // TODO break into seperate functions
@@ -61,40 +77,4 @@ func (l1 *Line2D) Intersection(l2 *Line2D) (*Point2D, bool) {
 		return intersection, false
 	}
 	return intersection, true
-}
-
-// Find the distance between a point and a line segment. See
-// http://softsurfer.com/Archive/algorithm_0102/algorithm_0102.htm
-func LineSegmentPointDistance2D(l *Line2D, p *Point2D) float64 {
-	v := l.P2.Copy()
-	v.Subtract(&l.P1)
-	w := p.Copy()
-	w.Subtract(&l.P1)
-	c1 := DotProduct2D((*Vector2D)(v), (*Vector2D)(w))
-	if c1 <= 0 {
-		return p.DistanceTo(&l.P1)
-	}
-	c2 := DotProduct2D((*Vector2D)(v), (*Vector2D)(v))
-	if c2 <= c1 {
-		return p.DistanceTo(&l.P2)
-	}
-	r := l.P1.Copy()
-	sp := v.Copy()
-	(*Vector2D)(sp).Scale(c1 / c2)
-	r.Add(sp)
-	return p.DistanceTo(r)
-}
-
-func LineSegmentPointDistance2D_2(l *Line2D, p *Point2D) float64 {
-	ldx, ldy := l.P2.X-l.P1.X, l.P2.Y-l.P1.Y
-	c1 := ldx*(p.X-l.P1.X) + ldy*(p.Y-l.P1.Y)
-	if c1 <= 0 {
-		return math.Hypot(p.X-l.P1.X, p.Y-l.P1.Y)
-	}
-	c2 := ldx*ldx + ldy*ldy
-	if c2 <= c1 {
-		return math.Hypot(p.X-l.P2.X, p.Y-l.P2.Y)
-	}
-	c1 /= c2
-	return math.Hypot(p.X-(l.P1.X+ldx*c1), p.Y-(l.P1.Y+ldy*c1))
 }
