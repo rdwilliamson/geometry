@@ -1,8 +1,8 @@
 package geometry
 
 import (
-	"testing"
 	"math"
+	"testing"
 )
 
 func TestLine3DToVector(t *testing.T) {
@@ -95,5 +95,28 @@ func Benchmark_Line3D_FuzzyEqual(b *testing.B) {
 	l2 := &Line3D{Point3D{1, 1, 1}, Point3D{1, 2, 3}}
 	for i := 0; i < b.N; i++ {
 		l1.FuzzyEqual(l2)
+	}
+}
+
+func TestLine3DLineBetween(t *testing.T) {
+	l1 := &Line3D{Point3D{1, 2, 1}, Point3D{3, 3, 3}}
+	l2 := &Line3D{Point3D{1, 2, 1}, Point3D{1, 2, 3}}
+	lb := &Line3D{Point3D{1, 2, 1}, Point3D{1, 2, 1}}
+	if l := l1.LineBetween(l2); !l.Equal(lb) {
+		t.Error("Line3D.LineBetween", l)
+	}
+	l1 = &Line3D{Point3D{1, 2, 1}, Point3D{5, 4, 5}}
+	l2 = &Line3D{Point3D{5, 6, 1}, Point3D{1, 4, 5}}
+	lb = &Line3D{Point3D{3.4, 3.2, 3.4}, Point3D{2.6, 4.8, 3.4}}
+	if l := l1.LineBetween(l2); !l.FuzzyEqual(lb) {
+		t.Error("Line3D.LineBetween")
+	}
+}
+
+func Benchmark_Line3D_LineBetween(b *testing.B) {
+	l1 := &Line3D{Point3D{1, 2, 1}, Point3D{5, 4, 5}}
+	l2 := &Line3D{Point3D{5, 6, 1}, Point3D{1, 4, 5}}
+	for i := 0; i < b.N; i++ {
+		l1.LineBetween(l2)
 	}
 }

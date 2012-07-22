@@ -49,3 +49,20 @@ func (l1 *Line3D) FuzzyEqual(l2 *Line3D) bool {
 	return dx1*dx1+dy1*dy1+dz1*dz1 < 0.000000000001*0.000000000001 &&
 		dx2*dx2+dy2*dy2+dz2*dz2 < 0.000000000001*0.000000000001
 }
+
+// Returns the shortest line between two lines. See
+// http://local.wasp.uwa.edu.au/~pbourke/geometry/lineline3d/
+func (l1 *Line3D) LineBetween(l2 *Line3D) Line3D {
+	l1dx, l1dy, l1dz := l1.P2.X-l1.P1.X, l1.P2.Y-l1.P1.Y, l1.P2.Z-l1.P1.Z
+	l2dx, l2dy, l2dz := l2.P2.X-l2.P1.X, l2.P2.Y-l2.P1.Y, l2.P2.Z-l2.P1.Z
+	p1dx, p1dy, p1dz := l1.P1.X-l2.P1.X, l1.P1.Y-l2.P1.Y, l1.P1.Z-l2.P1.Z
+	d1343 := p1dx*l2dx + p1dy*l2dy + p1dz*l2dz
+	d4321 := l2dx*l1dx + l2dy*l1dy + l2dz*l1dz
+	d1321 := p1dx*l1dx + p1dy*l1dy + p1dz*l1dz
+	d4343 := l2dx*l2dx + l2dy*l2dy + l2dz*l2dz
+	d2121 := l1dx*l1dx + l1dy*l1dy + l1dz*l2dz
+	mua := (d1343*d4321 - d1321*d4343) / (d2121*d4343 - d4321*d4321)
+	mub := (d1343 + mua*d4321) / d4343
+	return Line3D{Point3D{l1dx*mua + l1.P1.X, l1dy*mua + l1.P1.Y, l1dz*mua + l1.P1.Z},
+		Point3D{l2dx*mub + l2.P1.X, l2dy*mub + l2.P1.Y, l2dz*mub + l2.P1.Z}}
+}
