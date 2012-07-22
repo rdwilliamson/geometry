@@ -9,11 +9,6 @@ type Point3D struct {
 	X, Y, Z float64
 }
 
-// Returns a copy of the point.
-func (p *Point3D) Copy() Point3D {
-	return *p
-}
-
 // Add a point.
 func (p1 *Point3D) Add(p2 *Point3D) {
 	p1.X += p2.X

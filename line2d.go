@@ -9,11 +9,6 @@ type Line2D struct {
 	P1, P2 Point2D
 }
 
-// Returns a copy of the line.
-func (l *Line2D) Copy() Line2D {
-	return *l
-}
-
 // Converts the line to a vector from the first point to the second.
 func (l *Line2D) ToVector2D() Vector2D {
 	return Vector2D{l.P2.X - l.P1.X, l.P2.Y - l.P1.X}

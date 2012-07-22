@@ -9,11 +9,6 @@ type Point2D struct {
 	X, Y float64
 }
 
-// Returns a copy of the point.
-func (p *Point2D) Copy() Point2D {
-	return *p
-}
-
 // Add a point.
 func (p1 *Point2D) Add(p2 *Point2D) {
 	p1.X += p2.X

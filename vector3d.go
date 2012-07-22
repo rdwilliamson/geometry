@@ -9,11 +9,6 @@ type Vector3D struct {
 	X, Y, Z float64
 }
 
-// Returns a copy of the vector.
-func (v *Vector3D) Copy() Vector3D {
-	return *v
-}
-
 // Add a vector.
 func (v1 *Vector3D) Add(v2 *Vector3D) {
 	v1.X += v2.X
