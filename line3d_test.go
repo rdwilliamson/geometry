@@ -98,6 +98,22 @@ func Benchmark_Line3D_FuzzyEqual(b *testing.B) {
 	}
 }
 
+func TestLine3DPointDistance(t *testing.T) {
+	l := Line3D{Point3D{0, 0, 0}, Point3D{1, 0, 0}}
+	p := &Point3D{0, 1, 0}
+	if l.PointDistance(p) != 1 {
+		t.Error("Line3D.PointDistance")
+	}
+}
+
+func Benchmark_Line3D_PointDistance(b *testing.B) {
+	l := Line3D{Point3D{0, 0, 0}, Point3D{1, 0, 0}}
+	p := &Point3D{0, 1, 0}
+	for i := 0; i < b.N; i++ {
+		l.PointDistance(p)
+	}
+}
+
 func TestLine3DLineBetween(t *testing.T) {
 	l1 := &Line3D{Point3D{1, 2, 1}, Point3D{3, 3, 3}}
 	l2 := &Line3D{Point3D{1, 2, 1}, Point3D{1, 2, 3}}

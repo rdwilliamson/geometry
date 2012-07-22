@@ -50,6 +50,14 @@ func (l1 *Line3D) FuzzyEqual(l2 *Line3D) bool {
 		dx2*dx2+dy2*dy2+dz2*dz2 < 0.000000000001*0.000000000001
 }
 
+// Returns the distance between a point and a line.
+func (l *Line3D) PointDistance(p *Point3D) float64 {
+	ldx, ldy, ldz := l.P2.X-l.P1.X, l.P2.Y-l.P1.Y, l.P2.Z-l.P1.Z
+	u := (ldx*(p.X-l.P1.X) + ldy*(p.Y-l.P1.Y) + ldz*(p.Z-l.P1.Z)) / (ldx*ldx + ldy*ldy + ldz*ldz)
+	x, y, z := p.X-(l.P1.X+ldx*u), p.Y-(l.P1.Y+ldy*u), p.Z-(l.P1.Z+ldz*u)
+	return math.Sqrt(x*x + y*y + z*z)
+}
+
 // Returns the shortest line between two lines. See
 // http://local.wasp.uwa.edu.au/~pbourke/geometry/lineline3d/
 func (l1 *Line3D) LineBetween(l2 *Line3D) Line3D {
