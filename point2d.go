@@ -1,46 +1,51 @@
 package geometry
 
-import (
-	"math"
-)
+import "math"
 
-// A 2D point.
+// A Point2D represents a 64 bit precision 2D point.
 type Point2D struct {
 	X, Y float64
 }
 
-// Sets r to the piecewise sum of p1 and p2 and returns r.
-func (r *Point2D) Add(p1, p2 *Point2D) *Point2D {
-	r.X = p1.X + p2.X
-	r.Y = p1.Y + p2.Y
-	return r
+// Add sets z to the piecewise sum a+b and returns z.
+func (z *Point2D) Add(a, b *Point2D) *Point2D {
+	z.X = a.X + b.X
+	z.Y = a.Y + b.Y
+	return z
 }
 
-// Subtract a point.
-func (p1 *Point2D) Subtract(p2 *Point2D) {
-	p1.X -= p2.X
-	p1.Y -= p2.Y
-}
-
-// Returns true if the two points are the same.
-func (p1 *Point2D) Equal(p2 *Point2D) bool {
-	return *p1 == *p2
-}
-
-// Returns true if the two points are very close.
-func (p1 *Point2D) FuzzyEqual(p2 *Point2D) bool {
-	dx, dy := p2.X-p1.X, p2.Y-p1.Y
-	return dx*dx+dy*dy < 0.000000000001*0.000000000001
-}
-
-// Returns the distance between the two points.
-func (p1 *Point2D) DistanceTo(p2 *Point2D) float64 {
-	dx, dy := p2.X-p1.X, p2.Y-p1.Y
+// Dist calculates and returns the distance between a and b.
+func (a *Point2D) Dist(b *Point2D) float64 {
+	dx, dy := b.X-a.X, b.Y-a.Y
 	return math.Sqrt(dx*dx + dy*dy)
 }
 
-// Returns the squared distance between the two points.
-func (p1 *Point2D) SquaredDistanceTo(p2 *Point2D) float64 {
-	dx, dy := p2.X-p1.X, p2.Y-p1.Y
+// Equal compares a and b and returns a boolean indicating if they are equal.
+func (a *Point2D) Equal(b *Point2D) bool {
+	return *a == *b
+}
+
+// Equal compares a and b and returns a boolean indicating if they are very close.
+func (a *Point2D) FuzzyEqual(b *Point2D) bool {
+	dx, dy := b.X-a.X, b.Y-a.Y
+	return dx*dx+dy*dy < 0.000000000001*0.000000000001
+}
+
+// Set sets z to x and returns z.
+func (z *Point2D) Set(x *Point2D) *Point2D {
+	*z = *x
+	return z
+}
+
+// SqDist calculates and returns the squared distance between a and b.
+func (a *Point2D) SqDist(b *Point2D) float64 {
+	dx, dy := b.X-a.X, b.Y-a.Y
 	return dx*dx + dy*dy
+}
+
+// Sets z to the piecewise difference a-b and returns z;
+func (z *Point2D) Sub(a, b *Point2D) *Point2D {
+	z.X = a.X - b.X
+	z.Y = a.Y - b.Y
+	return z
 }

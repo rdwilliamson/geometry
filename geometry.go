@@ -1,6 +1,7 @@
 // Package geometry contains geometric primitives.
 //
-// Angles are in radians.
+// It is safe for the output of methods to overlap with input.
+// All angles are in radians.
 package geometry
 
 import (
