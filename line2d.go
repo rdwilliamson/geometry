@@ -10,22 +10,20 @@ type Line2D struct {
 }
 
 // Converts the line to a vector from the first point to the second.
-func (l *Line2D) ToVector2D() Vector2D {
+func (l *Line2D) ToVector() Vector2D {
 	return Vector2D{l.P2.X - l.P1.X, l.P2.Y - l.P1.X}
 }
 
 // Returns the length of the line.
 func (l *Line2D) Length() float64 {
-	// dx := l.P2.X - l.P1.X
-	// dy := l.P2.Y - l.P1.Y
-	// return math.Sqrt(dx*dx + dy*dy)
-	return math.Hypot(l.P2.X-l.P1.X, l.P2.Y-l.P1.Y)
+	dx := l.P2.X - l.P1.X
+	dy := l.P2.Y - l.P1.Y
+	return math.Sqrt(dx*dx + dy*dy)
 }
 
 // Returns the squared length of the line.
 func (l *Line2D) LengthSquared() float64 {
-	dx := l.P2.X - l.P1.X
-	dy := l.P2.Y - l.P1.Y
+	dx, dy := l.P2.X-l.P1.X, l.P2.Y-l.P1.Y
 	return dx*dx + dy*dy
 }
 
@@ -46,8 +44,16 @@ func (l1 *Line2D) Equal(l2 *Line2D) bool {
 
 // Returns true if the line are very close.
 func (l1 *Line2D) FuzzyEqual(l2 *Line2D) bool {
-	return (l1.P1.FuzzyEqual(&l2.P1) && l1.P2.FuzzyEqual(&l2.P2)) ||
-		(l1.P1.FuzzyEqual(&l2.P2) && l1.P2.FuzzyEqual(&l2.P1))
+	dx1, dy1 := l1.P1.X-l2.P1.X, l1.P1.Y-l2.P1.Y
+	dx2, dy2 := l1.P2.X-l2.P2.X, l1.P2.Y-l2.P2.Y
+	if dx1*dx1+dy1*dy1 < 0.000000000001*0.000000000001 &&
+		dx2*dx2+dy2*dy2 < 0.000000000001*0.000000000001 {
+		return true
+	}
+	dx1, dy1 = l1.P1.X-l2.P2.X, l1.P1.Y-l2.P2.Y
+	dx2, dy2 = l1.P2.X-l2.P1.X, l1.P2.Y-l2.P1.Y
+	return dx1*dx1+dy1*dy1 < 0.000000000001*0.000000000001 &&
+		dx2*dx2+dy2*dy2 < 0.000000000001*0.000000000001
 }
 
 // Return the distance between a point and a line segment. See

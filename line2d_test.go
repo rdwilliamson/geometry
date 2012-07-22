@@ -7,7 +7,7 @@ import (
 
 func TestLine2DCore(t *testing.T) {
 	l := Line2D{Point2D{1, 1}, Point2D{4, 5}}
-	if v := l.ToVector2D(); !v.Equal(&Vector2D{3, 4}) {
+	if v := l.ToVector(); !v.Equal(&Vector2D{3, 4}) {
 		t.Error("Line2D.ToVector2D")
 	}
 	if l.Length() != 5 {
@@ -18,10 +18,24 @@ func TestLine2DCore(t *testing.T) {
 	}
 }
 
+func Benchmark_Line2D_Length(b *testing.B) {
+	l := Line2D{Point2D{1, 1}, Point2D{4, 5}}
+	for i := 0; i < b.N; i++ {
+		l.Length()
+	}
+}
+
+func Benchmark_Line2D_LengthSquared(b *testing.B) {
+	l := Line2D{Point2D{1, 1}, Point2D{4, 5}}
+	for i := 0; i < b.N; i++ {
+		l.LengthSquared()
+	}
+}
+
 func Benchmark_Line2D_ToVector2D(b *testing.B) {
 	l := Line2D{Point2D{1, 1}, Point2D{4, 5}}
 	for i := 0; i < b.N; i++ {
-		l.ToVector2D()
+		l.ToVector()
 	}
 }
 
