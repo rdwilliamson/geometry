@@ -4,22 +4,29 @@ import (
 	"testing"
 )
 
-func TestPoint2DCore(t *testing.T) {
-	p := &Point2D{0, 0}
-	p.Add(&Point2D{2, 1})
-	if !p.Equal(&Point2D{2, 1}) {
+// func TestPoint2DCore(t *testing.T) {
+// 	p := &Point2D{0, 0}
+// 	p.Add(&Point2D{2, 1})
+// 	if !p.Equal(&Point2D{2, 1}) {
+// 		t.Error("Point2D.Add")
+// 	}
+// 	p.Subtract(&Point2D{1, 1})
+// 	if !p.Equal(&Point2D{1, 0}) {
+// 		t.Error("Point2D.Subtract")
+// 	}
+// }
+
+func TestPoint2DAdd(t *testing.T) {
+	r, p1, p2 := &Point2D{}, &Point2D{1, 2}, &Point2D{3, 4}
+	if !r.Add(p1, p2).Equal(&Point2D{4, 6}) {
 		t.Error("Point2D.Add")
-	}
-	p.Subtract(&Point2D{1, 1})
-	if !p.Equal(&Point2D{1, 0}) {
-		t.Error("Point2D.Subtract")
 	}
 }
 
 func Benchmark_Point2D_Add(b *testing.B) {
-	p1, p2 := &Point2D{1, 1}, &Point2D{2, 1}
+	r, p1, p2 := &Point2D{}, &Point2D{1, 2}, &Point2D{3, 4}
 	for i := 0; i < b.N; i++ {
-		p1.Add(p2)
+		r.Add(p1, p2)
 	}
 }
 

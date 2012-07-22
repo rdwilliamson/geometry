@@ -9,10 +9,11 @@ type Point2D struct {
 	X, Y float64
 }
 
-// Add a point.
-func (p1 *Point2D) Add(p2 *Point2D) {
-	p1.X += p2.X
-	p1.Y += p2.Y
+// Sets r to the piecewise sum of p1 and p2 and returns r.
+func (r *Point2D) Add(p1, p2 *Point2D) *Point2D {
+	r.X = p1.X + p2.X
+	r.Y = p1.Y + p2.Y
+	return r
 }
 
 // Subtract a point.
