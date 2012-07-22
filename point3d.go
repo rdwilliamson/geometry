@@ -4,7 +4,7 @@ import (
 	"math"
 )
 
-// 3D point.
+// A 3D point.
 type Point3D struct {
 	X, Y, Z float64
 }

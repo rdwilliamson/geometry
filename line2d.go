@@ -56,9 +56,9 @@ func (l1 *Line2D) FuzzyEqual(l2 *Line2D) bool {
 		dx2*dx2+dy2*dy2 < 0.000000000001*0.000000000001
 }
 
-// Return the distance between a point and a line segment. See
-// http://softsurfer.com/Archive/algorithm_0102/algorithm_0102.htm
+// Return the distance between a point and a line segment.
 func (l *Line2D) SegmentPointDistance(p *Point2D) float64 {
+	// http://softsurfer.com/Archive/algorithm_0102/algorithm_0102.htm
 	ldx, ldy := l.P2.X-l.P1.X, l.P2.Y-l.P1.Y
 	c1 := ldx*(p.X-l.P1.X) + ldy*(p.Y-l.P1.Y)
 	if c1 <= 0 {
@@ -75,27 +75,27 @@ func (l *Line2D) SegmentPointDistance(p *Point2D) float64 {
 	return math.Sqrt(x*x + y*y)
 }
 
-// Returns the distance between a point and a line. See
-// http://softsurfer.com/Archive/algorithm_0102/algorithm_0102.htm
+// Returns the distance between a point and a line.
 func (l *Line2D) PointDistance(p *Point2D) float64 {
+	// http://local.wasp.uwa.edu.au/~pbourke/geometry/pointline/
 	ldx, ldy := l.P2.X-l.P1.X, l.P2.Y-l.P1.Y
 	u := (ldx*(p.X-l.P1.X) + ldy*(p.Y-l.P1.Y)) / (ldx*ldx + ldy*ldy)
 	x, y := p.X-(l.P1.X+ldx*u), p.Y-(l.P1.Y+ldy*u)
 	return math.Sqrt(x*x + y*y)
 }
 
-// Returns the squared distance between a point and a line. See
-// http://softsurfer.com/Archive/algorithm_0102/algorithm_0102.htm
+// Returns the squared distance between a point and a line.
 func (l *Line2D) PointSquaredDistance(p *Point2D) float64 {
+	// http://local.wasp.uwa.edu.au/~pbourke/geometry/pointline/
 	ldx, ldy := l.P2.X-l.P1.X, l.P2.Y-l.P1.Y
 	u := (ldx*(p.X-l.P1.X) + ldy*(p.Y-l.P1.Y)) / (ldx*ldx + ldy*ldy)
 	x, y := p.X-(l.P1.X+ldx*u), p.Y-(l.P1.Y+ldy*u)
 	return x*x + y*y
 }
 
-// Returns the intersection of two lines. See
-// http://local.wasp.uwa.edu.au/~pbourke/geometry/lineline2d/
+// Returns the intersection of two lines.
 func (l1 *Line2D) Intersection(l2 *Line2D) Point2D {
+	// http://local.wasp.uwa.edu.au/~pbourke/geometry/lineline2d/
 	l1dx, l1dy := l1.P2.X-l1.P1.X, l1.P2.Y-l1.P1.Y
 	l2dx, l2dy := l2.P2.X-l2.P1.X, l2.P2.Y-l2.P1.Y
 	d := l2dy*l1dx - l2dx*l1dy
@@ -106,9 +106,9 @@ func (l1 *Line2D) Intersection(l2 *Line2D) Point2D {
 	return Point2D{l1.P1.X + ua*l1dx, l1.P1.Y + ua*l1dy}
 }
 
-// Returns the intersection of two lines and if the intersection occurs
-// between. See http://local.wasp.uwa.edu.au/~pbourke/geometry/lineline2d/
+// Returns the intersection of two lines and if the intersection occurs between.
 func (l1 *Line2D) SegmentIntersection(l2 *Line2D) (Point2D, bool) {
+	// http://local.wasp.uwa.edu.au/~pbourke/geometry/lineline2d/
 	l1dx, l1dy := l1.P2.X-l1.P1.X, l1.P2.Y-l1.P1.Y
 	l2dx, l2dy := l2.P2.X-l2.P1.X, l2.P2.Y-l2.P1.Y
 	d := l2dy*l1dx - l2dx*l1dy

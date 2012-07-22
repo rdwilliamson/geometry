@@ -4,7 +4,7 @@ import (
 	"math"
 )
 
-// 2D vector.
+// A 2D vector.
 type Vector2D struct {
 	X, Y float64
 }

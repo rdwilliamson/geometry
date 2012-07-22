@@ -4,7 +4,7 @@ import (
 	"math"
 )
 
-// 2D point.
+// A 2D point.
 type Point2D struct {
 	X, Y float64
 }

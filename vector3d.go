@@ -4,7 +4,7 @@ import (
 	"math"
 )
 
-// 3D Vector.
+// A 3D Vector.
 type Vector3D struct {
 	X, Y, Z float64
 }

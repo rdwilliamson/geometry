@@ -52,6 +52,7 @@ func (l1 *Line3D) FuzzyEqual(l2 *Line3D) bool {
 
 // Returns the distance between a point and a line.
 func (l *Line3D) PointDistance(p *Point3D) float64 {
+	// http://local.wasp.uwa.edu.au/~pbourke/geometry/pointline/
 	ldx, ldy, ldz := l.P2.X-l.P1.X, l.P2.Y-l.P1.Y, l.P2.Z-l.P1.Z
 	u := (ldx*(p.X-l.P1.X) + ldy*(p.Y-l.P1.Y) + ldz*(p.Z-l.P1.Z)) / (ldx*ldx + ldy*ldy + ldz*ldz)
 	x, y, z := p.X-(l.P1.X+ldx*u), p.Y-(l.P1.Y+ldy*u), p.Z-(l.P1.Z+ldz*u)
@@ -60,15 +61,16 @@ func (l *Line3D) PointDistance(p *Point3D) float64 {
 
 // Returns the squared distance between a point and a line.
 func (l *Line3D) PointSquaredDistance(p *Point3D) float64 {
+	// http://local.wasp.uwa.edu.au/~pbourke/geometry/pointline/
 	ldx, ldy, ldz := l.P2.X-l.P1.X, l.P2.Y-l.P1.Y, l.P2.Z-l.P1.Z
 	u := (ldx*(p.X-l.P1.X) + ldy*(p.Y-l.P1.Y) + ldz*(p.Z-l.P1.Z)) / (ldx*ldx + ldy*ldy + ldz*ldz)
 	x, y, z := p.X-(l.P1.X+ldx*u), p.Y-(l.P1.Y+ldy*u), p.Z-(l.P1.Z+ldz*u)
 	return x*x + y*y + z*z
 }
 
-// Returns the shortest line between two lines. See
-// http://local.wasp.uwa.edu.au/~pbourke/geometry/lineline3d/
+// Returns the shortest line between two lines.
 func (l1 *Line3D) LineBetween(l2 *Line3D) Line3D {
+	// http://local.wasp.uwa.edu.au/~pbourke/geometry/lineline3d/
 	l1dx, l1dy, l1dz := l1.P2.X-l1.P1.X, l1.P2.Y-l1.P1.Y, l1.P2.Z-l1.P1.Z
 	l2dx, l2dy, l2dz := l2.P2.X-l2.P1.X, l2.P2.Y-l2.P1.Y, l2.P2.Z-l2.P1.Z
 	p1dx, p1dy, p1dz := l1.P1.X-l2.P1.X, l1.P1.Y-l2.P1.Y, l1.P1.Z-l2.P1.Z
