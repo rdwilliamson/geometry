@@ -128,6 +128,21 @@ func Benchmark_Line2D_PointDistance(b *testing.B) {
 	}
 }
 
+func TestLine2DPointSquaredDistance(t *testing.T) {
+	l := &Line2D{Point2D{1, 1}, Point2D{2, 1}}
+	if l.PointSquaredDistance(&Point2D{1.5, 0}) != 1 {
+		t.Error("LinePointDistance")
+	}
+}
+
+func Benchmark_Line2D_PointSquaredDistance(b *testing.B) {
+	l := &Line2D{Point2D{1, 1}, Point2D{2, 1}}
+	p1 := &Point2D{0, 0}
+	for i := 0; i < b.N; i++ {
+		l.PointSquaredDistance(p1)
+	}
+}
+
 func TestLine2DSegmentIntersection(t *testing.T) {
 	l1 := Line2D{Point2D{0, 0}, Point2D{1, 1}}
 	l2 := Line2D{Point2D{0, 1}, Point2D{1, 0}}

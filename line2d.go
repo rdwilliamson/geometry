@@ -84,6 +84,15 @@ func (l *Line2D) PointDistance(p *Point2D) float64 {
 	return math.Sqrt(x*x + y*y)
 }
 
+// Returns the squared distance between a point and a line. See
+// http://softsurfer.com/Archive/algorithm_0102/algorithm_0102.htm
+func (l *Line2D) PointSquaredDistance(p *Point2D) float64 {
+	ldx, ldy := l.P2.X-l.P1.X, l.P2.Y-l.P1.Y
+	u := (ldx*(p.X-l.P1.X) + ldy*(p.Y-l.P1.Y)) / (ldx*ldx + ldy*ldy)
+	x, y := p.X-(l.P1.X+ldx*u), p.Y-(l.P1.Y+ldy*u)
+	return x*x + y*y
+}
+
 // Returns the intersection of two lines. See
 // http://local.wasp.uwa.edu.au/~pbourke/geometry/lineline2d/
 func (l1 *Line2D) Intersection(l2 *Line2D) Point2D {

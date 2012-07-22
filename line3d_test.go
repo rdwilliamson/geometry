@@ -114,6 +114,22 @@ func Benchmark_Line3D_PointDistance(b *testing.B) {
 	}
 }
 
+func TestLine3DPointSquaredDistance(t *testing.T) {
+	l := Line3D{Point3D{0, 0, 0}, Point3D{1, 0, 0}}
+	p := &Point3D{0, 1, 0}
+	if l.PointSquaredDistance(p) != 1 {
+		t.Error("Line3D.PointSquaredDistance")
+	}
+}
+
+func Benchmark_Line3D_PointSquaredDistance(b *testing.B) {
+	l := Line3D{Point3D{0, 0, 0}, Point3D{1, 0, 0}}
+	p := &Point3D{0, 1, 0}
+	for i := 0; i < b.N; i++ {
+		l.PointSquaredDistance(p)
+	}
+}
+
 func TestLine3DLineBetween(t *testing.T) {
 	l1 := &Line3D{Point3D{1, 2, 1}, Point3D{3, 3, 3}}
 	l2 := &Line3D{Point3D{1, 2, 1}, Point3D{1, 2, 3}}
