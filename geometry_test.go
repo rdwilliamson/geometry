@@ -1,15 +1,6 @@
 package geometry
 
-import (
-	"testing"
-)
-
-func TestConversions(t *testing.T) {
-	_ = Vector2D(Point2D{})
-	_ = Point2D(Vector2D{})
-	_ = Vector3D(Point3D{})
-	_ = Point3D(Vector3D{})
-}
+import "testing"
 
 func TestFuzzyEqual(t *testing.T) {
 	n1 := 1.0
