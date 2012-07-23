@@ -20,7 +20,7 @@ func (z *Vector2D) Add(a, b *Vector2D) *Vector2D {
 
 // AngleDif returns the angle between a and b.
 
-// CosAngleDif returns the cos of the angle between a and b.
+// AngleDifCos returns the cos of the angle between a and b.
 
 // Dist returns the distance between a and b.
 func (a *Vector2D) Dist(b *Vector2D) float64 {
@@ -69,13 +69,6 @@ func (z *Vector2D) Set(x *Vector2D) *Vector2D {
 // ScalarProj
 
 // Scale
-
-// SetLine sets z to the vector from l.P1 to l.P2 and returns z.
-
-// SetLineNorm sets z to the normal of l with magnitude equal to l's segment
-// length and 
-
-// SetMidpoint sets z to the midpoint of l and returns z.
 
 // Sets z to the piecewise difference a-b and returns z;
 func (z *Vector2D) Sub(a, b *Vector2D) *Vector2D {
