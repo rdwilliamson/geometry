@@ -13,23 +13,23 @@ type Line2D struct {
 // Should rays have P1 be the end point and P2 treated as a vector or P2 as a
 // point on the ray? I never use rays so I'm not sure which is more convenient.
 
-// AngDist returns the amount the line l would have to rotate about its
+// AngleDistance returns the amount the line l would have to rotate about its
 // midpoint (as if it were a segment) to pass through point p.
 
-// AngDistCos returns the cos of the amount the line l would have to rotate
-// about its midpoint (as if it were a segment) to pass through point p.
+// AngleCosDistance returns the cos of the amount the line l would have to
+// rotate about its midpoint (as if it were a segment) to pass through point p.
 
 // Equal
 // FuzzyEqual
-// Len returns the length of l as if is a line segment.
-// LenSq returns the length squared of l as if is a line segment.
+// Length returns the length of l as if is a line segment.
+// LengthSquared returns the length squared of l as if is a line segment.
 // Normal
-// PtDist
-// PtDistSq
-// SegEqual
-// SegFuzzyEqual
-// SegPtDist
-// SegPtDistSq
+// PointDistance
+// PointDistanceSquared
+// SegmentEqual
+// SegmentFuzzyEqual
+// SegmentPointDistance
+// SegmentPointDistanceSquared
 // Set
 
 // ToVector sets z to the vector from l.P1 to l.P2 and returns z.
@@ -39,22 +39,22 @@ func (l *Line2D) ToVector(z *Vector2D) *Vector2D {
 	return z
 }
 
-// Inter sets z to the intersection of l1 and l2 and returns z.
-func (l1 *Line2D) Inter(l2 *Line2D, z *Vector2D) *Vector2D {
+// Intersection sets z to the intersection of l1 and l2 and returns z.
+func (l1 *Line2D) Intersection(l2 *Line2D, z *Vector2D) *Vector2D {
 	return z
 }
 
-// MidPt sets z to the segment l's midpoint and returns z.
-func (l *Line2D) MidPt(z *Vector2D) *Vector2D {
+// Midpoint sets z to the segment l's midpoint and returns z.
+func (l *Line2D) Midpoint(z *Vector2D) *Vector2D {
 	z.X = (l.P2.X - l.P1.X) * 0.5
 	z.Y = (l.P2.Y - l.P1.Y) * 0.5
 	return z
 }
 
-// SegInter sets z to the intersection of l1 and l2 and returns a boolean
-// indicating if the intersection occured on l1 and l2 as if they were
+// SegmentIntersection sets z to the intersection of l1 and l2 and returns a
+// boolean indicating if the intersection occured on l1 and l2 as if they were
 // segments.
-func (l1 *Line2D) SegInter(l2 *Line2D, z *Vector2D) bool {
+func (l1 *Line2D) SegmentIntersection(l2 *Line2D, z *Vector2D) bool {
 	return false
 }
 

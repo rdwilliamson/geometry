@@ -28,31 +28,31 @@ func Benchmark_Vector2D_Add(b *testing.B) {
 	}
 }
 
-func TestVector2DDist(t *testing.T) {
+func TestVector2DDistance(t *testing.T) {
 	p1, p2 := &Vector2D{0, 0}, &Vector2D{1, 0}
-	if p1.Dist(p2) != 1 {
-		t.Error("Vector2D.Dist")
+	if p1.Distance(p2) != 1 {
+		t.Error("Vector2D.Distance")
 	}
 }
 
-func Benchmark_Vector2D_Dist(b *testing.B) {
+func Benchmark_Vector2D_Distance(b *testing.B) {
 	p1, p2 := &Vector2D{0, 0}, &Vector2D{1, 0}
 	for i := 0; i < b.N; i++ {
-		p1.Dist(p2)
+		p1.Distance(p2)
 	}
 }
 
-func TestVector2DDistSq(t *testing.T) {
+func TestVector2DDistanceSquared(t *testing.T) {
 	p1, p2 := &Vector2D{0, 0}, &Vector2D{1, 0}
-	if p1.DistSq(p2) != 1 {
-		t.Error("Vector2D.DistSq")
+	if p1.DistanceSquared(p2) != 1 {
+		t.Error("Vector2D.DistanceSquared")
 	}
 }
 
-func Benchmark_Vector2D_DistSq(b *testing.B) {
+func Benchmark_Vector2D_DistanceSquared(b *testing.B) {
 	p1, p2 := &Vector2D{0, 0}, &Vector2D{1, 0}
 	for i := 0; i < b.N; i++ {
-		p1.DistSq(p2)
+		p1.DistanceSquared(p2)
 	}
 }
 
@@ -106,16 +106,16 @@ func Benchmark_Vector2D_Set(b *testing.B) {
 	}
 }
 
-func TestVector2DSub(t *testing.T) {
+func TestVector2DSubtract(t *testing.T) {
 	r, p1, p2 := &Vector2D{0, 0}, &Vector2D{1, 2}, &Vector2D{3, 4}
-	if !r.Sub(p1, p2).Equal(&Vector2D{-2, -2}) {
-		t.Error("Vector2D.Sub")
+	if !r.Subtract(p1, p2).Equal(&Vector2D{-2, -2}) {
+		t.Error("Vector2D.Subtract")
 	}
 }
 
-func Benchmark_Vector2D_Sub(b *testing.B) {
+func Benchmark_Vector2D_Subtract(b *testing.B) {
 	r, p1, p2 := &Vector2D{0, 0}, &Vector2D{1, 2}, &Vector2D{3, 4}
 	for i := 0; i < b.N; i++ {
-		r.Sub(p1, p2)
+		r.Subtract(p1, p2)
 	}
 }
