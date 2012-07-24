@@ -48,8 +48,16 @@ func (a *Vector2D) DistanceSquared(b *Vector2D) float64 {
 }
 
 // Divide sets z to the piecewise quotient a/b and returns z.
+func (z *Vector2D) Divide(a, b *Vector2D) *Vector2D {
+	z.X = a.X / b.X
+	z.Y = a.Y / b.Y
+	return z
+}
 
-// DotProduct
+// DotProduct returns the dot product of a and b.
+func (a *Vector2D) DotProduct(b *Vector2D) float64 {
+	return a.X*b.X + a.Y*b.Y
+}
 
 // Equal compares a and b and returns a boolean indicating if they are equal.
 func (a *Vector2D) Equal(b *Vector2D) bool {
@@ -63,9 +71,15 @@ func (a *Vector2D) FuzzyEqual(b *Vector2D) bool {
 	return dx*dx+dy*dy < 0.000000000001*0.000000000001
 }
 
-// Magnitude returns the magnitude of the vector.
+// Magnitude returns the magnitude of a.
+func (a *Vector2D) Magnitude() float64 {
+	return math.Sqrt(a.X*a.X + a.Y*a.Y)
+}
 
-// MagnitudeSquared
+// MagnitudeSquared returns the squared magnitude of a.
+func (a *Vector2D) MagnitudeSquared() float64 {
+	return a.X*a.X + a.Y*a.Y
+}
 
 // Set sets z to x and returns z.
 func (z *Vector2D) Set(x *Vector2D) *Vector2D {
