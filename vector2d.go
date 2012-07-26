@@ -81,6 +81,29 @@ func (a *Vector2D) MagnitudeSquared() float64 {
 	return a.X*a.X + a.Y*a.Y
 }
 
+// Multiply sets z to the piecewise multiplication of a*b and returns z.
+func (z *Vector2D) Multiply(a, b *Vector2D) *Vector2D {
+	z.X = a.X * b.X
+	z.Y = a.Y * b.Y
+	return z
+}
+
+// Normalize sets z to a unit vector in the same direction as x and returns z.
+func (z *Vector2D) Normalize(x *Vector2D) *Vector2D {
+	l := 1 / math.Sqrt(x.X*x.X+x.Y*x.Y)
+	z.X = x.X * l
+	z.Y = x.Y * l
+	return z
+}
+
+// Projection sets z to the projection of a onto b and returns z.
+func (z *Vector2D) Projection(a, b *Vector2D) *Vector2D {
+	s := (a.X*b.X + a.Y*b.Y) / (b.X*b.X + b.Y*b.Y)
+	z.X = b.X * s
+	z.Y = b.Y * s
+	return z
+}
+
 // Set sets z to x and returns z.
 func (z *Vector2D) Set(x *Vector2D) *Vector2D {
 	z.X = x.X
@@ -88,15 +111,17 @@ func (z *Vector2D) Set(x *Vector2D) *Vector2D {
 	return z
 }
 
-// Multiply
+// ScalarProjection returns the scalar projection of a onto b.
+func (a *Vector2D) ScalarProjection(b *Vector2D) float64 {
+	return (a.X*b.X + a.Y*b.Y) / (b.X*b.X + b.Y*b.Y)
+}
 
-// Normalize
-
-// ProjectionOnto
-
-// ScalarProjection
-
-// Scale
+// Scale sets z to scalar multiplication n*x and returns z.
+func (z *Vector2D) Scale(x *Vector2D, n float64) *Vector2D {
+	z.X = x.X * n
+	z.Y = x.Y * n
+	return z
+}
 
 // Subtract Sets z to the piecewise difference a-b and returns z;
 func (z *Vector2D) Subtract(a, b *Vector2D) *Vector2D {

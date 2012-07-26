@@ -115,34 +115,6 @@ func Benchmark_Vector2D_DotProduct(b *testing.B) {
 	}
 }
 
-func TestVector2DMagnitude(t *testing.T) {
-	v := &Vector2D{3, 4}
-	if v.Magnitude() != 5 {
-		t.Error("Vector2D.Magnitude")
-	}
-}
-
-func Benchmark_Vector2D_Magnitude(b *testing.B) {
-	v := &Vector2D{3, 4}
-	for i := 0; i < b.N; i++ {
-		v.Magnitude()
-	}
-}
-
-func TestVector2DMagnitudeSquared(t *testing.T) {
-	v := &Vector2D{3, 4}
-	if v.MagnitudeSquared() != 25 {
-		t.Error("Vector2D.MagnitudeSquared")
-	}
-}
-
-func Benchmark_Vector2D_MagnitudeSquared(b *testing.B) {
-	v := &Vector2D{3, 4}
-	for i := 0; i < b.N; i++ {
-		v.MagnitudeSquared()
-	}
-}
-
 func TestVector2DEqual(t *testing.T) {
 	v1, v2 := &Vector2D{0, 0}, &Vector2D{1, 0}
 	if v1.Equal(v2) {
@@ -179,6 +151,76 @@ func Benchmark_Vector2D_FuzzyEqual(b *testing.B) {
 	}
 }
 
+func TestVector2DMagnitude(t *testing.T) {
+	v := &Vector2D{3, 4}
+	if v.Magnitude() != 5 {
+		t.Error("Vector2D.Magnitude")
+	}
+}
+
+func Benchmark_Vector2D_Magnitude(b *testing.B) {
+	v := &Vector2D{3, 4}
+	for i := 0; i < b.N; i++ {
+		v.Magnitude()
+	}
+}
+
+func TestVector2DMagnitudeSquared(t *testing.T) {
+	v := &Vector2D{3, 4}
+	if v.MagnitudeSquared() != 25 {
+		t.Error("Vector2D.MagnitudeSquared")
+	}
+}
+
+func Benchmark_Vector2D_MagnitudeSquared(b *testing.B) {
+	v := &Vector2D{3, 4}
+	for i := 0; i < b.N; i++ {
+		v.MagnitudeSquared()
+	}
+}
+
+func TestVector2DMultiply(t *testing.T) {
+	r, v1, v2 := &Vector2D{0, 0}, &Vector2D{1, 2}, &Vector2D{3, 4}
+	if !r.Multiply(v1, v2).Equal(&Vector2D{3, 8}) {
+		t.Error("Vector2D.Multiply")
+	}
+}
+
+func Benchmark_Vector2D_Multiply(b *testing.B) {
+	r, v1, v2 := &Vector2D{0, 0}, &Vector2D{1, 2}, &Vector2D{3, 4}
+	for i := 0; i < b.N; i++ {
+		r.Multiply(v1, v2)
+	}
+}
+
+func TestVector2DNormalize(t *testing.T) {
+	v1, v2 := &Vector2D{}, &Vector2D{3, 4}
+	if !v1.Normalize(v2).FuzzyEqual(&Vector2D{3.0 / 5.0, 4.0 / 5.0}) {
+		t.Error("Vector2D.Normalize")
+	}
+}
+
+func Benchmark_Vector2D_Normalize(b *testing.B) {
+	v1, v2 := &Vector2D{}, &Vector2D{3, 4}
+	for i := 0; i < b.N; i++ {
+		v1.Normalize(v2)
+	}
+}
+
+func TestVector2DProjection(t *testing.T) {
+	r, v1, v2 := &Vector2D{0, 0}, &Vector2D{2, 3}, &Vector2D{2, 1}
+	if !r.Projection(v1, v2).Equal(&Vector2D{2.8, 1.4}) {
+		t.Error("Vector2D.Projection", r)
+	}
+}
+
+func Benchmark_Vector2D_Projection(b *testing.B) {
+	r, v1, v2 := &Vector2D{0, 0}, &Vector2D{2, 3}, &Vector2D{2, 1}
+	for i := 0; i < b.N; i++ {
+		r.Projection(v1, v2)
+	}
+}
+
 func TestVector2DSet(t *testing.T) {
 	v1, v2 := &Vector2D{0, 0}, &Vector2D{1, 0}
 	if !v1.Set(v2).Equal(v2) {
@@ -190,6 +232,34 @@ func Benchmark_Vector2D_Set(b *testing.B) {
 	v1, v2 := &Vector2D{0, 0}, &Vector2D{1, 0}
 	for i := 0; i < b.N; i++ {
 		v1.Set(v2)
+	}
+}
+
+func TestVector2DScalarProjection(t *testing.T) {
+	v1, v2 := &Vector2D{2, 3}, &Vector2D{2, 1}
+	if v1.ScalarProjection(v2) != 7.0/5.0 {
+		t.Error("Vector2D.ScalarProjection")
+	}
+}
+
+func Benchmark_Vector2D_ScalarProjection(b *testing.B) {
+	v1, v2 := &Vector2D{2, 1}, &Vector2D{2, 3}
+	for i := 0; i < b.N; i++ {
+		v1.ScalarProjection(v2)
+	}
+}
+
+func TestVector2DScale(t *testing.T) {
+	v1, v2 := &Vector2D{}, &Vector2D{1, 2}
+	if !v1.Scale(v2, 2).FuzzyEqual(&Vector2D{2, 4}) {
+		t.Error("Vector2D.Scale")
+	}
+}
+
+func Benchmark_Vector2D_Scale(b *testing.B) {
+	v1, v2 := &Vector2D{}, &Vector2D{1, 2}
+	for i := 0; i < b.N; i++ {
+		v1.Scale(v2, 2)
 	}
 }
 
