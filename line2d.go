@@ -33,28 +33,28 @@ type Line2D struct {
 // Set
 
 // ToVector sets z to the vector from l.P1 to l.P2 and returns z.
-func (l *Line2D) ToVector(z *Vector2D) *Vector2D {
-	z.X = l.P2.X - l.P1.X
-	z.Y = l.P2.Y - l.P1.Y
+func (x *Line2D) ToVector(z *Vector2D) *Vector2D {
+	z.X = x.P2.X - x.P1.X
+	z.Y = x.P2.Y - x.P1.Y
 	return z
 }
 
 // Intersection sets z to the intersection of l1 and l2 and returns z.
-func (l1 *Line2D) Intersection(l2 *Line2D, z *Vector2D) *Vector2D {
+func (a *Line2D) Intersection(b *Line2D, z *Vector2D) *Vector2D {
 	return z
 }
 
 // Midpoint sets z to the segment l's midpoint and returns z.
-func (l *Line2D) Midpoint(z *Vector2D) *Vector2D {
-	z.X = (l.P2.X - l.P1.X) * 0.5
-	z.Y = (l.P2.Y - l.P1.Y) * 0.5
+func (x *Line2D) Midpoint(z *Vector2D) *Vector2D {
+	z.X = (x.P2.X - x.P1.X) * 0.5
+	z.Y = (x.P2.Y - x.P1.Y) * 0.5
 	return z
 }
 
 // SegmentIntersection sets z to the intersection of l1 and l2 and returns a
 // boolean indicating if the intersection occured on l1 and l2 as if they were
 // segments.
-func (l1 *Line2D) SegmentIntersection(l2 *Line2D, z *Vector2D) bool {
+func (a *Line2D) SegmentIntersection(b *Line2D, z *Vector2D) bool {
 	return false
 }
 
