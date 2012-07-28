@@ -1,8 +1,6 @@
 package geometry
 
-import (
-	"testing"
-)
+import "testing"
 
 func TestNewLine2D(t *testing.T) {
 	if !NewLine2D(1, 2, 3, 4).SegmentEqual(&Line2D{Vector2D{1, 2}, Vector2D{3, 4}}) {
@@ -49,6 +47,24 @@ func Benchmark_Line2D_FuzzyEqual(b *testing.B) {
 	l2 := &Line2D{Vector2D{-3, -2}, Vector2D{5, 6}}
 	for i := 0; i < b.N; i++ {
 		l1.FuzzyEqual(l2)
+	}
+}
+
+func TestLine2DIntersection(t *testing.T) {
+	l1 := &Line2D{Vector2D{0, 0}, Vector2D{1, 1}}
+	l2 := &Line2D{Vector2D{0, 1}, Vector2D{1, 0}}
+	p := &Vector2D{}
+	if !l1.Intersection(l2, p).Equal(&Vector2D{0.5, 0.5}) {
+		t.Error("Line2D.Intersection")
+	}
+}
+
+func Benchmark_Line2D_Intersection(b *testing.B) {
+	l1 := &Line2D{Vector2D{0, 0}, Vector2D{1, 1}}
+	l2 := &Line2D{Vector2D{0, 1}, Vector2D{1, 0}}
+	p := &Vector2D{}
+	for i := 0; i < b.N; i++ {
+		l1.Intersection(l2, p)
 	}
 }
 
