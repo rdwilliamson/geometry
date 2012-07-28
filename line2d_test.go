@@ -40,10 +40,38 @@ func Benchmark_Line2D_FuzzyEqual(b *testing.B) {
 	}
 }
 
+func TestLine2DLength(t *testing.T) {
+	l := &Line2D{Vector2D{1, 2}, Vector2D{4, 6}}
+	if l.Length() != 5 {
+		t.Error("Line2D.Length")
+	}
+}
+
+func Benchmark_Line2D_Length(b *testing.B) {
+	l := &Line2D{Vector2D{1, 2}, Vector2D{3, 4}}
+	for i := 0; i < b.N; i++ {
+		l.Length()
+	}
+}
+
+func TestLine2DLengthSquared(t *testing.T) {
+	l := &Line2D{Vector2D{1, 2}, Vector2D{4, 6}}
+	if l.LengthSquared() != 25 {
+		t.Error("Line2D.LengthSquared")
+	}
+}
+
+func Benchmark_Line2D_LengthSquared(b *testing.B) {
+	l := &Line2D{Vector2D{1, 2}, Vector2D{3, 4}}
+	for i := 0; i < b.N; i++ {
+		l.LengthSquared()
+	}
+}
+
 func TestLine2DMidpoint(t *testing.T) {
 	l, v := &Line2D{Vector2D{1, 2}, Vector2D{3, 4}}, &Vector2D{}
 	if !l.Midpoint(v).Equal(&Vector2D{2, 3}) {
-		t.Error("Line2D.Midpoint", v)
+		t.Error("Line2D.Midpoint")
 	}
 }
 

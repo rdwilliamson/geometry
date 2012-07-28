@@ -49,8 +49,18 @@ func (a *Line2D) FuzzyEqual(b *Line2D) bool {
 }
 
 // Intersection sets z to the intersection of l1 and l2 and returns z.
+
 // Length returns the length of l as if is a line segment.
+func (a *Line2D) Length() float64 {
+	dx, dy := a.P2.X-a.P1.X, a.P2.Y-a.P1.Y
+	return math.Sqrt(dx*dx + dy*dy)
+}
+
 // LengthSquared returns the length squared of l as if is a line segment.
+func (a *Line2D) LengthSquared() float64 {
+	dx, dy := a.P2.X-a.P1.X, a.P2.Y-a.P1.Y
+	return dx*dx + dy*dy
+}
 
 // Midpoint sets z to the segment l's midpoint and returns z.
 func (x *Line2D) Midpoint(z *Vector2D) *Vector2D {
