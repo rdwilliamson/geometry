@@ -134,8 +134,64 @@ func (a *Line2D) SegmentFuzzyEqual(b *Line2D) bool {
 // SegmentIntersection sets z to the intersection of l1 and l2 and returns a
 // boolean indicating if the intersection occured on l1 and l2 as if they were
 // segments.
-// SegmentPointDistance
-// SegmentPointDistanceSquared
+func (a *Line2D) SegmentIntersection(b *Line2D, z *Vector2D) bool {
+	// http://local.wasp.uwa.edu.au/~pbourke/geometry/lineline2d/
+	l1dx, l1dy := a.P2.X-a.P1.X, a.P2.Y-a.P1.Y
+	l2dx, l2dy := b.P2.X-b.P1.X, b.P2.Y-b.P1.Y
+	d := l2dy*l1dx - l2dx*l1dy
+	if d == 0 {
+		z.X = math.Inf(1)
+		z.Y = math.Inf(1)
+		return false
+	}
+	d = 1 / d
+	dx, dy := a.P1.X-b.P1.X, a.P1.Y-b.P1.Y
+	ua := (l2dx*dy - l2dy*dx) * d
+	ub := (l1dx*dy - l1dy*dx) * d
+	z.X = a.P1.X + ua*l1dx
+	z.Y = a.P1.Y + ua*l1dy
+	return 0 <= ua && ua <= 1 && 0 <= ub && ub <= 1
+}
+
+// SegmentPointDistance returns the distance between line segment a and point
+// b.
+func (a *Line2D) SegmentPointDistance(b *Vector2D) float64 {
+	// http://softsurfer.com/Archive/algorithm_0102/algorithm_0102.htm
+	ldx, ldy := a.P2.X-a.P1.X, a.P2.Y-a.P1.Y
+	c1 := ldx*(b.X-a.P1.X) + ldy*(b.Y-a.P1.Y)
+	if c1 <= 0 {
+		x, y := b.X-a.P1.X, b.Y-a.P1.Y
+		return math.Sqrt(x*x + y*y)
+	}
+	c2 := ldx*ldx + ldy*ldy
+	if c2 <= c1 {
+		x, y := b.X-a.P2.X, b.Y-a.P2.Y
+		return math.Sqrt(x*x + y*y)
+	}
+	c1 /= c2
+	x, y := b.X-(a.P1.X+ldx*c1), b.Y-(a.P1.Y+ldy*c1)
+	return math.Sqrt(x*x + y*y)
+}
+
+// SegmentPointDistanceSquared returns the distance between line segment a and
+// point b.
+func (a *Line2D) SegmentPointDistanceSquared(b *Vector2D) float64 {
+	// http://softsurfer.com/Archive/algorithm_0102/algorithm_0102.htm
+	ldx, ldy := a.P2.X-a.P1.X, a.P2.Y-a.P1.Y
+	c1 := ldx*(b.X-a.P1.X) + ldy*(b.Y-a.P1.Y)
+	if c1 <= 0 {
+		x, y := b.X-a.P1.X, b.Y-a.P1.Y
+		return x*x + y*y
+	}
+	c2 := ldx*ldx + ldy*ldy
+	if c2 <= c1 {
+		x, y := b.X-a.P2.X, b.Y-a.P2.Y
+		return x*x + y*y
+	}
+	c1 /= c2
+	x, y := b.X-(a.P1.X+ldx*c1), b.Y-(a.P1.Y+ldy*c1)
+	return x*x + y*y
+}
 
 // Set sets z to x and returns z.
 func (z *Line2D) Set(x *Line2D) *Line2D {
@@ -152,60 +208,3 @@ func (x *Line2D) ToVector(z *Vector2D) *Vector2D {
 	z.Y = x.P2.Y - x.P1.Y
 	return z
 }
-
-///////////////////////////////////////////////////////////////////////////////
-// OLD
-
-// // Return the distance between a point and a line segment.
-// func (l *Line2D) SegmentPointDistance(p *Point2D) float64 {
-// 	// http://softsurfer.com/Archive/algorithm_0102/algorithm_0102.htm
-// 	ldx, ldy := l.P2.X-l.P1.X, l.P2.Y-l.P1.Y
-// 	c1 := ldx*(p.X-l.P1.X) + ldy*(p.Y-l.P1.Y)
-// 	if c1 <= 0 {
-// 		x, y := p.X-l.P1.X, p.Y-l.P1.Y
-// 		return math.Sqrt(x*x + y*y)
-// 	}
-// 	c2 := ldx*ldx + ldy*ldy
-// 	if c2 <= c1 {
-// 		x, y := p.X-l.P2.X, p.Y-l.P2.Y
-// 		return math.Sqrt(x*x + y*y)
-// 	}
-// 	c1 /= c2
-// 	x, y := p.X-(l.P1.X+ldx*c1), p.Y-(l.P1.Y+ldy*c1)
-// 	return math.Sqrt(x*x + y*y)
-// }
-
-// // Returns the intersection of two lines.
-// func (l1 *Line2D) Intersection(l2 *Line2D) Point2D {
-// 	// http://local.wasp.uwa.edu.au/~pbourke/geometry/lineline2d/
-// 	l1dx, l1dy := l1.P2.X-l1.P1.X, l1.P2.Y-l1.P1.Y
-// 	l2dx, l2dy := l2.P2.X-l2.P1.X, l2.P2.Y-l2.P1.Y
-// 	d := l2dy*l1dx - l2dx*l1dy
-// 	if d == 0 {
-// 		return Point2D{math.Inf(1), math.Inf(1)}
-// 	}
-// 	ua := (l2dx*l1.P1.Y - l2.P1.Y - l2dy*l1.P1.X - l2.P1.X) / d
-// 	return Point2D{l1.P1.X + ua*l1dx, l1.P1.Y + ua*l1dy}
-// }
-
-// // Returns the intersection of two lines and if the intersection occurs between.
-// func (l1 *Line2D) SegmentIntersection(l2 *Line2D) (Point2D, bool) {
-// 	// http://local.wasp.uwa.edu.au/~pbourke/geometry/lineline2d/
-// 	l1dx, l1dy := l1.P2.X-l1.P1.X, l1.P2.Y-l1.P1.Y
-// 	l2dx, l2dy := l2.P2.X-l2.P1.X, l2.P2.Y-l2.P1.Y
-// 	d := l2dy*l1dx - l2dx*l1dy
-// 	if d == 0 {
-// 		return Point2D{math.Inf(1), math.Inf(1)}, false
-// 	}
-// 	d = 1 / d
-// 	dx, dy := l1.P1.X-l2.P1.X, l1.P1.Y-l2.P1.Y
-// 	ua := l2dx*dy - l2dy*dx
-// 	ub := l1dx*dy - l1dy*dx
-// 	ua *= d
-// 	ub *= d
-// 	var seg bool
-// 	if 0 <= ua && ua <= 1 && 0 <= ub && ub <= 1 {
-// 		seg = true
-// 	}
-// 	return Point2D{l1.P1.X + ua*l1dx, l1.P1.Y + ua*l1dy}, seg
-// }

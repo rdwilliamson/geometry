@@ -1,6 +1,9 @@
 package geometry
 
-import "testing"
+import (
+	"math"
+	"testing"
+)
 
 func TestNewLine2D(t *testing.T) {
 	if !NewLine2D(1, 2, 3, 4).SegmentEqual(&Line2D{Vector2D{1, 2}, Vector2D{3, 4}}) {
@@ -185,6 +188,76 @@ func Benchmark_Line2D_SegmentFuzzyEqual(b *testing.B) {
 	l2 := &Line2D{Vector2D{2, 2}, Vector2D{3, 4}}
 	for i := 0; i < b.N; i++ {
 		l1.SegmentFuzzyEqual(l2)
+	}
+}
+
+func TestLine2DSegmentIntersection(t *testing.T) {
+	l1 := &Line2D{Vector2D{-1, -1}, Vector2D{0, 0}}
+	l2 := &Line2D{Vector2D{0, 1}, Vector2D{1, 0}}
+	p := &Vector2D{}
+	if l1.SegmentIntersection(l2, p) || !p.Equal(&Vector2D{0.5, 0.5}) {
+		t.Error("Line2D.SegmentIntersection")
+	}
+	l1.P1 = Vector2D{1, 1}
+	if !l1.SegmentIntersection(l2, p) || !p.Equal(&Vector2D{0.5, 0.5}) {
+		t.Error("Line2D.SegmentIntersection")
+	}
+}
+
+func Benchmark_Line2D_SegmentIntersection(b *testing.B) {
+	l1 := &Line2D{Vector2D{-1, -1}, Vector2D{0, 0}}
+	l2 := &Line2D{Vector2D{0, 1}, Vector2D{1, 0}}
+	p := &Vector2D{}
+	for i := 0; i < b.N; i++ {
+		l1.SegmentIntersection(l2, p)
+	}
+}
+
+func TestLine2DSegmentPointDistance(t *testing.T) {
+	l := &Line2D{Vector2D{0, 1}, Vector2D{1, 1}}
+	p := &Vector2D{-1, 0}
+	if l.SegmentPointDistance(p) != math.Sqrt2 {
+		t.Error("Line2D.SegmentPointDistance")
+	}
+	p.X = 0.5
+	if l.SegmentPointDistance(p) != 1 {
+		t.Error("Line2D.SegmentPointDistance")
+	}
+	p.X = 2
+	if l.SegmentPointDistance(p) != math.Sqrt2 {
+		t.Error("Line2D.SegmentPointDistance")
+	}
+}
+
+func Benchmark_Line2D_SegmentPointDistance(b *testing.B) {
+	l := &Line2D{Vector2D{0, 1}, Vector2D{1, 1}}
+	p := &Vector2D{0.5, 0}
+	for i := 0; i < b.N; i++ {
+		l.SegmentPointDistance(p)
+	}
+}
+
+func TestLine2DSegmentPointDistanceSquared(t *testing.T) {
+	l := &Line2D{Vector2D{0, 1}, Vector2D{1, 1}}
+	p := &Vector2D{-1, 0}
+	if l.SegmentPointDistanceSquared(p) != 2 {
+		t.Error("Line2D.SegmentPointDistanceSquared")
+	}
+	p.X = 0.5
+	if l.SegmentPointDistanceSquared(p) != 1 {
+		t.Error("Line2D.SegmentPointDistanceSquared")
+	}
+	p.X = 2
+	if l.SegmentPointDistanceSquared(p) != 2 {
+		t.Error("Line2D.SegmentPointDistanceSquared")
+	}
+}
+
+func Benchmark_Line2D_SegmentPointDistanceSquared(b *testing.B) {
+	l := &Line2D{Vector2D{0, 1}, Vector2D{1, 1}}
+	p := &Vector2D{0.5, 0}
+	for i := 0; i < b.N; i++ {
+		l.SegmentPointDistanceSquared(p)
 	}
 }
 
