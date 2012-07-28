@@ -82,6 +82,20 @@ func Benchmark_Line2D_Midpoint(b *testing.B) {
 	}
 }
 
+func TestLine2DNormal(t *testing.T) {
+	l, v := &Line2D{Vector2D{1, 1}, Vector2D{3, 1}}, &Vector2D{}
+	if !l.Normal(v).Equal(&Vector2D{0, -2}) {
+		t.Error("Line2D.Normal", v)
+	}
+}
+
+func Benchmark_Line2D_Normal(b *testing.B) {
+	l, v := &Line2D{Vector2D{1, 1}, Vector2D{3, 1}}, &Vector2D{}
+	for i := 0; i < b.N; i++ {
+		l.Normal(v)
+	}
+}
+
 func TestLine2DPointDistance(t *testing.T) {
 	l, p := &Line2D{Vector2D{0, 0}, Vector2D{1, 0}}, &Vector2D{0, 1}
 	if l.PointDistance(p) != 1 {

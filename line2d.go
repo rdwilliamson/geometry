@@ -69,7 +69,13 @@ func (x *Line2D) Midpoint(z *Vector2D) *Vector2D {
 	return z
 }
 
-// Normal
+// Normal sets z to a vector perpendicular to a and with a magnitude equal to
+// the length of a as if it was a segement then returns z.
+func (a *Line2D) Normal(z *Vector2D) *Vector2D {
+	z.X = a.P2.Y - a.P1.Y
+	z.Y = a.P1.X - a.P2.X
+	return z
+}
 
 // PointDistance returns the distance point b is from line a.
 func (a *Line2D) PointDistance(b *Vector2D) float64 {
