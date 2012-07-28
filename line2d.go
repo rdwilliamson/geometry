@@ -137,38 +137,6 @@ func (x *Line2D) ToVector(z *Vector2D) *Vector2D {
 ///////////////////////////////////////////////////////////////////////////////
 // OLD
 
-// // Returns the length of the line.
-// func (l *Line2D) Length() float64 {
-// 	dx := l.P2.X - l.P1.X
-// 	dy := l.P2.Y - l.P1.Y
-// 	return math.Sqrt(dx*dx + dy*dy)
-// }
-
-// // Returns the squared length of the line.
-// func (l *Line2D) LengthSquared() float64 {
-// 	dx, dy := l.P2.X-l.P1.X, l.P2.Y-l.P1.Y
-// 	return dx*dx + dy*dy
-// }
-
-// // Returns true if the lines are equal.
-// func (l1 *Line2D) Equal(l2 *Line2D) bool {
-// 	return (l1.P1 == l2.P1 && l1.P2 == l2.P2) || (l1.P1 == l2.P2 && l1.P2 == l2.P1)
-// }
-
-// // Returns true if the line are very close.
-// func (l1 *Line2D) FuzzyEqual(l2 *Line2D) bool {
-// 	dx1, dy1 := l1.P1.X-l2.P1.X, l1.P1.Y-l2.P1.Y
-// 	dx2, dy2 := l1.P2.X-l2.P2.X, l1.P2.Y-l2.P2.Y
-// 	if dx1*dx1+dy1*dy1 < 0.000000000001*0.000000000001 &&
-// 		dx2*dx2+dy2*dy2 < 0.000000000001*0.000000000001 {
-// 		return true
-// 	}
-// 	dx1, dy1 = l1.P1.X-l2.P2.X, l1.P1.Y-l2.P2.Y
-// 	dx2, dy2 = l1.P2.X-l2.P1.X, l1.P2.Y-l2.P1.Y
-// 	return dx1*dx1+dy1*dy1 < 0.000000000001*0.000000000001 &&
-// 		dx2*dx2+dy2*dy2 < 0.000000000001*0.000000000001
-// }
-
 // // Return the distance between a point and a line segment.
 // func (l *Line2D) SegmentPointDistance(p *Point2D) float64 {
 // 	// http://softsurfer.com/Archive/algorithm_0102/algorithm_0102.htm
@@ -186,24 +154,6 @@ func (x *Line2D) ToVector(z *Vector2D) *Vector2D {
 // 	c1 /= c2
 // 	x, y := p.X-(l.P1.X+ldx*c1), p.Y-(l.P1.Y+ldy*c1)
 // 	return math.Sqrt(x*x + y*y)
-// }
-
-// // Returns the distance between a point and a line.
-// func (l *Line2D) PointDistance(p *Point2D) float64 {
-// 	// http://local.wasp.uwa.edu.au/~pbourke/geometry/pointline/
-// 	ldx, ldy := l.P2.X-l.P1.X, l.P2.Y-l.P1.Y
-// 	u := (ldx*(p.X-l.P1.X) + ldy*(p.Y-l.P1.Y)) / (ldx*ldx + ldy*ldy)
-// 	x, y := p.X-(l.P1.X+ldx*u), p.Y-(l.P1.Y+ldy*u)
-// 	return math.Sqrt(x*x + y*y)
-// }
-
-// // Returns the squared distance between a point and a line.
-// func (l *Line2D) PointSquaredDistance(p *Point2D) float64 {
-// 	// http://local.wasp.uwa.edu.au/~pbourke/geometry/pointline/
-// 	ldx, ldy := l.P2.X-l.P1.X, l.P2.Y-l.P1.Y
-// 	u := (ldx*(p.X-l.P1.X) + ldy*(p.Y-l.P1.Y)) / (ldx*ldx + ldy*ldy)
-// 	x, y := p.X-(l.P1.X+ldx*u), p.Y-(l.P1.Y+ldy*u)
-// 	return x*x + y*y
 // }
 
 // // Returns the intersection of two lines.
