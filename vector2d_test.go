@@ -45,20 +45,6 @@ func Benchmark_Vector2D_AngleDifference(b *testing.B) {
 	}
 }
 
-func TestVector2DAngleCosDifference(t *testing.T) {
-	v1, v2 := &Vector2D{1, 0}, &Vector2D{0, 1}
-	if FuzzyEqual(v1.AngleCosDifference(v2), math.Cos(math.Pi/2)) {
-		t.Error("Vector2D.AngleCosDifference")
-	}
-}
-
-func Benchmark_Vector2D_AngleCosDifference(b *testing.B) {
-	v1, v2 := &Vector2D{1, 2}, &Vector2D{3, 4}
-	for i := 0; i < b.N; i++ {
-		v1.AngleCosDifference(v2)
-	}
-}
-
 func TestVector2DAngleCosSquaredDifference(t *testing.T) {
 	v1, v2 := &Vector2D{1, 0}, &Vector2D{0, 1}
 	if FuzzyEqual(v1.AngleCosSquaredDifference(v2), math.Cos(math.Pi/2)) {
