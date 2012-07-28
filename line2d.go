@@ -21,6 +21,8 @@ type Line2D struct {
 
 // Equal
 // FuzzyEqual
+
+// Intersection sets z to the intersection of l1 and l2 and returns z.
 // Length returns the length of l as if is a line segment.
 // LengthSquared returns the length squared of l as if is a line segment.
 // Normal
@@ -28,34 +30,25 @@ type Line2D struct {
 // PointDistanceSquared
 // SegmentEqual
 // SegmentFuzzyEqual
+// SegmentIntersection sets z to the intersection of l1 and l2 and returns a
+// boolean indicating if the intersection occured on l1 and l2 as if they were
+// segments.
 // SegmentPointDistance
 // SegmentPointDistanceSquared
 // Set
+
+// Midpoint sets z to the segment l's midpoint and returns z.
+func (x *Line2D) Midpoint(z *Vector2D) *Vector2D {
+	z.X = (x.P1.X + x.P2.X) * 0.5
+	z.Y = (x.P1.Y + x.P2.Y) * 0.5
+	return z
+}
 
 // ToVector sets z to the vector from l.P1 to l.P2 and returns z.
 func (x *Line2D) ToVector(z *Vector2D) *Vector2D {
 	z.X = x.P2.X - x.P1.X
 	z.Y = x.P2.Y - x.P1.Y
 	return z
-}
-
-// Intersection sets z to the intersection of l1 and l2 and returns z.
-func (a *Line2D) Intersection(b *Line2D, z *Vector2D) *Vector2D {
-	return z
-}
-
-// Midpoint sets z to the segment l's midpoint and returns z.
-func (x *Line2D) Midpoint(z *Vector2D) *Vector2D {
-	z.X = (x.P2.X - x.P1.X) * 0.5
-	z.Y = (x.P2.Y - x.P1.Y) * 0.5
-	return z
-}
-
-// SegmentIntersection sets z to the intersection of l1 and l2 and returns a
-// boolean indicating if the intersection occured on l1 and l2 as if they were
-// segments.
-func (a *Line2D) SegmentIntersection(b *Line2D, z *Vector2D) bool {
-	return false
 }
 
 ///////////////////////////////////////////////////////////////////////////////
