@@ -25,6 +25,14 @@ type Line2D struct {
 // Intersection sets z to the intersection of l1 and l2 and returns z.
 // Length returns the length of l as if is a line segment.
 // LengthSquared returns the length squared of l as if is a line segment.
+
+// Midpoint sets z to the segment l's midpoint and returns z.
+func (x *Line2D) Midpoint(z *Vector2D) *Vector2D {
+	z.X = (x.P1.X + x.P2.X) * 0.5
+	z.Y = (x.P1.Y + x.P2.Y) * 0.5
+	return z
+}
+
 // Normal
 // PointDistance
 // PointDistanceSquared
@@ -36,13 +44,6 @@ type Line2D struct {
 // SegmentPointDistance
 // SegmentPointDistanceSquared
 // Set
-
-// Midpoint sets z to the segment l's midpoint and returns z.
-func (x *Line2D) Midpoint(z *Vector2D) *Vector2D {
-	z.X = (x.P1.X + x.P2.X) * 0.5
-	z.Y = (x.P1.Y + x.P2.Y) * 0.5
-	return z
-}
 
 // ToVector sets z to the vector from l.P1 to l.P2 and returns z.
 func (x *Line2D) ToVector(z *Vector2D) *Vector2D {
