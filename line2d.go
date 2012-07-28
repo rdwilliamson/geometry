@@ -1,6 +1,6 @@
 package geometry
 
-// import "math"
+import "math"
 
 // A Line2D representes a 2D line by two points P1 and P2 (represented by
 // vectors) on the line. The line is treated as an infinite line unless a
@@ -34,8 +34,25 @@ func (x *Line2D) Midpoint(z *Vector2D) *Vector2D {
 }
 
 // Normal
-// PointDistance
-// PointDistanceSquared
+
+// PointDistance returns the distance point b is from line a.
+func (a *Line2D) PointDistance(b *Vector2D) float64 {
+	// http://local.wasp.uwa.edu.au/~pbourke/geometry/pointline/
+	ldx, ldy := a.P2.X-a.P1.X, a.P2.Y-a.P1.Y
+	u := (ldx*(b.X-a.P1.X) + ldy*(b.Y-a.P1.Y)) / (ldx*ldx + ldy*ldy)
+	x, y := b.X-(a.P1.X+ldx*u), b.Y-(a.P1.Y+ldy*u)
+	return math.Sqrt(x*x + y*y)
+}
+
+// PointDistanceSquared returns the squared distance point b is from line a.
+func (a *Line2D) PointDistanceSquared(b *Vector2D) float64 {
+	// http://local.wasp.uwa.edu.au/~pbourke/geometry/pointline/
+	ldx, ldy := a.P2.X-a.P1.X, a.P2.Y-a.P1.Y
+	u := (ldx*(b.X-a.P1.X) + ldy*(b.Y-a.P1.Y)) / (ldx*ldx + ldy*ldy)
+	x, y := b.X-(a.P1.X+ldx*u), b.Y-(a.P1.Y+ldy*u)
+	return x*x + y*y
+}
+
 // SegmentEqual
 // SegmentFuzzyEqual
 // SegmentIntersection sets z to the intersection of l1 and l2 and returns a
