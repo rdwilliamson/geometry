@@ -19,8 +19,34 @@ type Line2D struct {
 // AngleCosDistance returns the cos of the amount the line l would have to
 // rotate about its midpoint (as if it were a segment) to pass through point p.
 
-// Equal
-// FuzzyEqual
+// Equal compares a and b and returns a boolean indicating if they are equal.
+func (a *Line2D) Equal(b *Line2D) bool {
+	ldx, ldy := a.P2.X-a.P1.X, a.P2.Y-a.P1.Y
+	d := 1.0 / (ldx*ldx + ldy*ldy)
+	u := (ldx*(b.P1.X-a.P1.X) + ldy*(b.P1.Y-a.P1.Y)) * d
+	x, y := b.P1.X-(a.P1.X+ldx*u), b.P1.Y-(a.P1.Y+ldy*u)
+	if x*x+y*y != 0 {
+		return false
+	}
+	u = (ldx*(b.P2.X-a.P1.X) + ldy*(b.P2.Y-a.P1.Y)) * d
+	x, y = b.P2.X-(a.P1.X+ldx*u), b.P2.Y-(a.P1.Y+ldy*u)
+	return x*x+y*y == 0
+}
+
+// FuzzyEqual compares a and b and returns a boolean indicating if they are
+// very close.
+func (a *Line2D) FuzzyEqual(b *Line2D) bool {
+	ldx, ldy := a.P2.X-a.P1.X, a.P2.Y-a.P1.Y
+	d := 1.0 / (ldx*ldx + ldy*ldy)
+	u := (ldx*(b.P1.X-a.P1.X) + ldy*(b.P1.Y-a.P1.Y)) * d
+	x, y := b.P1.X-(a.P1.X+ldx*u), b.P1.Y-(a.P1.Y+ldy*u)
+	if x*x+y*y >= 0.000000000001*0.000000000001 {
+		return false
+	}
+	u = (ldx*(b.P2.X-a.P1.X) + ldy*(b.P2.Y-a.P1.Y)) * d
+	x, y = b.P2.X-(a.P1.X+ldx*u), b.P2.Y-(a.P1.Y+ldy*u)
+	return x*x+y*y < 0.000000000001*0.000000000001
+}
 
 // Intersection sets z to the intersection of l1 and l2 and returns z.
 // Length returns the length of l as if is a line segment.
@@ -53,14 +79,37 @@ func (a *Line2D) PointDistanceSquared(b *Vector2D) float64 {
 	return x*x + y*y
 }
 
-// SegmentEqual
-// SegmentFuzzyEqual
+// SegmentEqual compares a and b as line segments and returns a boolean
+// indicating if they are equal.
+func (a *Line2D) SegmentEqual(b *Line2D) bool {
+	return *a == *b
+}
+
+// SegmentFuzzyEqual compares a and b as line segments and returns a boolean
+// indicating if they are very close.
+func (a *Line2D) SegmentFuzzyEqual(b *Line2D) bool {
+	dx, dy := b.P1.X-a.P1.X, b.P1.Y-a.P1.Y
+	if dx*dx+dy*dy >= 0.000000000001*0.000000000001 {
+		return false
+	}
+	dx, dy = b.P2.X-a.P2.X, b.P2.Y-a.P2.Y
+	return dx*dx+dy*dy < 0.000000000001*0.000000000001
+}
+
 // SegmentIntersection sets z to the intersection of l1 and l2 and returns a
 // boolean indicating if the intersection occured on l1 and l2 as if they were
 // segments.
 // SegmentPointDistance
 // SegmentPointDistanceSquared
-// Set
+
+// Set sets z to x and returns z.
+func (z *Line2D) Set(x *Line2D) *Line2D {
+	z.P1.X = x.P1.X
+	z.P1.Y = x.P1.Y
+	z.P2.X = x.P2.X
+	z.P2.Y = x.P2.Y
+	return z
+}
 
 // ToVector sets z to the vector from l.P1 to l.P2 and returns z.
 func (x *Line2D) ToVector(z *Vector2D) *Vector2D {
