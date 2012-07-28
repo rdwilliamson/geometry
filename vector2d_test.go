@@ -73,6 +73,42 @@ func Benchmark_Vector2D_AngleCosSquaredDifference(b *testing.B) {
 	}
 }
 
+func TestVector2DDirectionEqual(t *testing.T) {
+	v1, v2 := &Vector2D{1, 1}, &Vector2D{2, 0}
+	if v1.DirectionEqual(v2) {
+		t.Error("Vector2D.DirectionEqual")
+	}
+	v2.Y = 2
+	if !v1.DirectionEqual(v2) {
+		t.Error("Vector2D.DirectionEqual")
+	}
+}
+
+func Benchmark_Vector2D_DirectionEqual(b *testing.B) {
+	v1, v2 := &Vector2D{1, 1}, &Vector2D{2, 2}
+	for i := 0; i < b.N; i++ {
+		v1.DirectionEqual(v2)
+	}
+}
+
+func TestVector2DDirectionFuzzyEqual(t *testing.T) {
+	v1, v2 := &Vector2D{1, 1}, &Vector2D{1, 1.00000000001}
+	if v1.DirectionFuzzyEqual(v2) {
+		t.Error("Vector2D.DirectionFuzzyEqual")
+	}
+	v2.Y = 1.000000000001
+	if !v1.DirectionFuzzyEqual(v2) {
+		t.Error("Vector2D.DirectionFuzzyEqual")
+	}
+}
+
+func Benchmark_Vector2D_DirectionFuzzyEqual(b *testing.B) {
+	v1, v2 := &Vector2D{0, 0}, &Vector2D{1, 0}
+	for i := 0; i < b.N; i++ {
+		v1.DirectionFuzzyEqual(v2)
+	}
+}
+
 func TestVector2DDistance(t *testing.T) {
 	v1, v2 := &Vector2D{0, 0}, &Vector2D{1, 0}
 	if v1.Distance(v2) != 1 {

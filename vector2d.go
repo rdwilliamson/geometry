@@ -35,6 +35,22 @@ func (a *Vector2D) AngleCosSquaredDifference(b *Vector2D) float64 {
 	return dot * dot / ((a.X*a.X + a.Y*a.Y) * (b.X*b.X + b.Y*b.Y))
 }
 
+// DirectionEqual compares the direction of a and b and returns a boolean
+// indicating if they are equal.
+func (a *Vector2D) DirectionEqual(b *Vector2D) bool {
+	u := (a.X*b.X + a.Y*b.Y) / (a.X*a.X + a.Y*a.Y)
+	x, y := b.X-a.X*u, b.Y-a.Y*u
+	return x*x+y*y == 0
+}
+
+// DirectionFuzzyEqual compares the direction of a and b and returns a boolean
+// indicating if they are equal.
+func (a *Vector2D) DirectionFuzzyEqual(b *Vector2D) bool {
+	u := (a.X*b.X + a.Y*b.Y) / (a.X*a.X + a.Y*a.Y)
+	x, y := b.X-a.X*u, b.Y-a.Y*u
+	return x*x+y*y < 0.000000000001*0.000000000001
+}
+
 // Dist returns the distance between a and b.
 func (a *Vector2D) Distance(b *Vector2D) float64 {
 	dx, dy := b.X-a.X, b.Y-a.Y
