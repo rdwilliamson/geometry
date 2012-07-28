@@ -10,6 +10,10 @@ type Line2D struct {
 	P1, P2 Vector2D
 }
 
+func NewLine2D(x1, y1, x2, y2 float64) *Line2D {
+	return &Line2D{Vector2D{x1, y1}, Vector2D{x2, y2}}
+}
+
 // Should rays have P1 be the end point and P2 treated as a vector or P2 as a
 // point on the ray? I never use rays so I'm not sure which is more convenient.
 

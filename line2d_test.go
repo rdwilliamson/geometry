@@ -4,6 +4,18 @@ import (
 	"testing"
 )
 
+func TestNewLine2D(t *testing.T) {
+	if !NewLine2D(1, 2, 3, 4).SegmentEqual(&Line2D{Vector2D{1, 2}, Vector2D{3, 4}}) {
+		t.Error("NewLine2D")
+	}
+}
+
+func Benchmark_Line2D_New(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		NewLine2D(1, 2, 3, 4)
+	}
+}
+
 func TestLine2DEqual(t *testing.T) {
 	l1 := &Line2D{Vector2D{1, 2}, Vector2D{3, 4}}
 	l2 := &Line2D{Vector2D{-3, -2}, Vector2D{5, 6}}
