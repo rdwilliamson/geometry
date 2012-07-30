@@ -18,14 +18,14 @@ func Benchmark_Vector2D_New(b *testing.B) {
 }
 
 func TestVector2DAdd(t *testing.T) {
-	r, v1, v2 := &Vector2D{0, 0}, &Vector2D{1, 2}, &Vector2D{3, 4}
+	r, v1, v2 := &Vector2D{}, &Vector2D{1, 2}, &Vector2D{3, 4}
 	if !r.Add(v1, v2).Equal(&Vector2D{4, 6}) {
 		t.Error("Vector2D.Add")
 	}
 }
 
 func Benchmark_Vector2D_Add(b *testing.B) {
-	r, v1, v2 := &Vector2D{0, 0}, &Vector2D{1, 2}, &Vector2D{3, 4}
+	r, v1, v2 := &Vector2D{}, &Vector2D{1, 2}, &Vector2D{3, 4}
 	for i := 0; i < b.N; i++ {
 		r.Add(v1, v2)
 	}
@@ -60,28 +60,28 @@ func Benchmark_Vector2D_AngleCosSquaredDifference(b *testing.B) {
 }
 
 func TestVector2DDistance(t *testing.T) {
-	v1, v2 := &Vector2D{0, 0}, &Vector2D{1, 0}
+	v1, v2 := &Vector2D{}, &Vector2D{1, 0}
 	if v1.Distance(v2) != 1 {
 		t.Error("Vector2D.Distance")
 	}
 }
 
 func Benchmark_Vector2D_Distance(b *testing.B) {
-	v1, v2 := &Vector2D{0, 0}, &Vector2D{1, 0}
+	v1, v2 := &Vector2D{}, &Vector2D{1, 0}
 	for i := 0; i < b.N; i++ {
 		v1.Distance(v2)
 	}
 }
 
 func TestVector2DDistanceSquared(t *testing.T) {
-	v1, v2 := &Vector2D{0, 0}, &Vector2D{1, 0}
+	v1, v2 := &Vector2D{}, &Vector2D{1, 0}
 	if v1.DistanceSquared(v2) != 1 {
 		t.Error("Vector2D.DistanceSquared")
 	}
 }
 
 func Benchmark_Vector2D_DistanceSquared(b *testing.B) {
-	v1, v2 := &Vector2D{0, 0}, &Vector2D{1, 0}
+	v1, v2 := &Vector2D{}, &Vector2D{1, 0}
 	for i := 0; i < b.N; i++ {
 		v1.DistanceSquared(v2)
 	}
@@ -130,7 +130,7 @@ func Benchmark_Vector2D_MagnitudeSquared(b *testing.B) {
 }
 
 func TestVector2DEqual(t *testing.T) {
-	v1, v2 := &Vector2D{0, 0}, &Vector2D{1, 0}
+	v1, v2 := &Vector2D{}, &Vector2D{1, 0}
 	if v1.Equal(v2) {
 		t.Error("Vector2D.Equal")
 	}
@@ -141,14 +141,14 @@ func TestVector2DEqual(t *testing.T) {
 }
 
 func Benchmark_Vector2D_Equal(b *testing.B) {
-	v1, v2 := &Vector2D{0, 0}, &Vector2D{1, 0}
+	v1, v2 := &Vector2D{}, &Vector2D{1, 0}
 	for i := 0; i < b.N; i++ {
 		v1.Equal(v2)
 	}
 }
 
 func TestVector2DFuzzyEqual(t *testing.T) {
-	v1, v2 := &Vector2D{0, 0}, &Vector2D{0.000000000001, 0}
+	v1, v2 := &Vector2D{}, &Vector2D{0.000000000001, 0}
 	if v1.FuzzyEqual(v2) {
 		t.Error("Vector2D.FuzzyEqual")
 	}
@@ -159,35 +159,35 @@ func TestVector2DFuzzyEqual(t *testing.T) {
 }
 
 func Benchmark_Vector2D_FuzzyEqual(b *testing.B) {
-	v1, v2 := &Vector2D{0, 0}, &Vector2D{1, 0}
+	v1, v2 := &Vector2D{}, &Vector2D{1, 0}
 	for i := 0; i < b.N; i++ {
 		v1.FuzzyEqual(v2)
 	}
 }
 
 func TestVector2DSet(t *testing.T) {
-	v1, v2 := &Vector2D{0, 0}, &Vector2D{1, 0}
+	v1, v2 := &Vector2D{}, &Vector2D{1, 0}
 	if !v1.Set(v2).Equal(v2) {
 		t.Error("Vector2D.Set")
 	}
 }
 
 func Benchmark_Vector2D_Set(b *testing.B) {
-	v1, v2 := &Vector2D{0, 0}, &Vector2D{1, 0}
+	v1, v2 := &Vector2D{}, &Vector2D{1, 0}
 	for i := 0; i < b.N; i++ {
 		v1.Set(v2)
 	}
 }
 
 func TestVector2DSubtract(t *testing.T) {
-	r, v1, v2 := &Vector2D{0, 0}, &Vector2D{1, 2}, &Vector2D{3, 4}
+	r, v1, v2 := &Vector2D{}, &Vector2D{1, 2}, &Vector2D{3, 4}
 	if !r.Subtract(v1, v2).Equal(&Vector2D{-2, -2}) {
 		t.Error("Vector2D.Subtract")
 	}
 }
 
 func Benchmark_Vector2D_Subtract(b *testing.B) {
-	r, v1, v2 := &Vector2D{0, 0}, &Vector2D{1, 2}, &Vector2D{3, 4}
+	r, v1, v2 := &Vector2D{}, &Vector2D{1, 2}, &Vector2D{3, 4}
 	for i := 0; i < b.N; i++ {
 		r.Subtract(v1, v2)
 	}
