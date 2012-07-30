@@ -46,13 +46,13 @@ func (a *Vector2D) DirectionFuzzyEqual(b *Vector2D) bool {
 	return x*x+y*y < 0.000000000001*0.000000000001
 }
 
-// Dist returns the distance between a and b.
+// Distance returns the distance between a and b.
 func (a *Vector2D) Distance(b *Vector2D) float64 {
 	dx, dy := b.X-a.X, b.Y-a.Y
 	return math.Sqrt(dx*dx + dy*dy)
 }
 
-// DistSq returns the squared distance between a and b.
+// DistanceSquared returns the squared distance between a and b.
 func (a *Vector2D) DistanceSquared(b *Vector2D) float64 {
 	dx, dy := b.X-a.X, b.Y-a.Y
 	return dx*dx + dy*dy
@@ -134,7 +134,7 @@ func (z *Vector2D) Scale(x *Vector2D, n float64) *Vector2D {
 	return z
 }
 
-// Subtract Sets z to the piecewise difference a-b and returns z;
+// Subtract Sets z to the piecewise difference a-b and returns z.
 func (z *Vector2D) Subtract(a, b *Vector2D) *Vector2D {
 	z.X = a.X - b.X
 	z.Y = a.Y - b.Y
