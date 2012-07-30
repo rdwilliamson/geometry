@@ -1,39 +1,17 @@
 package geometry
 
-import (
-	"math"
-)
+import "math"
 
 // A line represented by two points.
 type Line3D struct {
-	P1, P2 Point3D
+	P1, P2 Vector3D
 }
 
-// Returns a vector from the first point to the second.
-func (l *Line3D) ToVector() Vector3D {
-	return Vector3D{l.P2.X - l.P1.X, l.P2.Y - l.P1.Y, l.P2.Z - l.P1.Z}
-}
+///////////////////////////////////////////////////////////////////////////////
+// OLD
 
-// Returns the length of the vector.
-func (l *Line3D) Length() float64 {
-	dx, dy, dz := l.P2.X-l.P1.X, l.P2.Y-l.P1.Y, l.P2.Z-l.P1.Z
-	return math.Sqrt(dx*dx + dy*dy + dz*dz)
-}
-
-// Returns the length of the vector.
-func (l *Line3D) LengthSquared() float64 {
-	dx, dy, dz := l.P2.X-l.P1.X, l.P2.Y-l.P1.Y, l.P2.Z-l.P1.Z
-	return dx*dx + dy*dy + dz*dz
-}
-
-// Returns the midpoint of the line.
-func (l *Line3D) Midpoint() Point3D {
-	return Point3D{(l.P2.X - l.P1.X) * 0.5, (l.P2.Y - l.P1.Y) * 0.5, (l.P2.Z - l.P1.Z) * 0.5}
-}
-
-// Returns true if the lines are equal.
 func (l1 *Line3D) Equal(l2 *Line3D) bool {
-	return (l1.P1 == l2.P1 && l1.P2 == l2.P2) || (l1.P1 == l2.P2 && l1.P2 == l2.P1)
+	return *l1 == *l2
 }
 
 // Returns true if the lines are nearly equal.
@@ -51,7 +29,7 @@ func (l1 *Line3D) FuzzyEqual(l2 *Line3D) bool {
 }
 
 // Returns the distance between a point and a line.
-func (l *Line3D) PointDistance(p *Point3D) float64 {
+func (l *Line3D) PointDistance(p *Vector3D) float64 {
 	// http://local.wasp.uwa.edu.au/~pbourke/geometry/pointline/
 	ldx, ldy, ldz := l.P2.X-l.P1.X, l.P2.Y-l.P1.Y, l.P2.Z-l.P1.Z
 	u := (ldx*(p.X-l.P1.X) + ldy*(p.Y-l.P1.Y) + ldz*(p.Z-l.P1.Z)) / (ldx*ldx + ldy*ldy + ldz*ldz)
@@ -60,7 +38,7 @@ func (l *Line3D) PointDistance(p *Point3D) float64 {
 }
 
 // Returns the squared distance between a point and a line.
-func (l *Line3D) PointSquaredDistance(p *Point3D) float64 {
+func (l *Line3D) PointSquaredDistance(p *Vector3D) float64 {
 	// http://local.wasp.uwa.edu.au/~pbourke/geometry/pointline/
 	ldx, ldy, ldz := l.P2.X-l.P1.X, l.P2.Y-l.P1.Y, l.P2.Z-l.P1.Z
 	u := (ldx*(p.X-l.P1.X) + ldy*(p.Y-l.P1.Y) + ldz*(p.Z-l.P1.Z)) / (ldx*ldx + ldy*ldy + ldz*ldz)
@@ -81,6 +59,6 @@ func (l1 *Line3D) LineBetween(l2 *Line3D) Line3D {
 	d2121 := l1dx*l1dx + l1dy*l1dy + l1dz*l2dz
 	mua := (d1343*d4321 - d1321*d4343) / (d2121*d4343 - d4321*d4321)
 	mub := (d1343 + mua*d4321) / d4343
-	return Line3D{Point3D{l1dx*mua + l1.P1.X, l1dy*mua + l1.P1.Y, l1dz*mua + l1.P1.Z},
-		Point3D{l2dx*mub + l2.P1.X, l2dy*mub + l2.P1.Y, l2dz*mub + l2.P1.Z}}
+	return Line3D{Vector3D{l1dx*mua + l1.P1.X, l1dy*mua + l1.P1.Y, l1dz*mua + l1.P1.Z},
+		Vector3D{l2dx*mub + l2.P1.X, l2dy*mub + l2.P1.Y, l2dz*mub + l2.P1.Z}}
 }

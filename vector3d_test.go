@@ -1,1 +1,249 @@
 package geometry
+
+import (
+	"math"
+	"testing"
+)
+
+func TestNewVector3D(t *testing.T) {
+	if !NewVector3D(1, 2, 3).Equal(&Vector3D{1, 2, 3}) {
+		t.Error("NewVector3D")
+	}
+}
+
+func Benchmark_Vector3D_New(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		NewVector3D(0, 0, 0)
+	}
+}
+
+func TestVector3DAdd(t *testing.T) {
+	r, v1, v2 := &Vector3D{}, &Vector3D{1, 2, 5}, &Vector3D{3, 4, 6}
+	if !r.Add(v1, v2).Equal(&Vector3D{4, 6, 11}) {
+		t.Error("Vector3D.Add")
+	}
+}
+
+func Benchmark_Vector3D_Add(b *testing.B) {
+	r, v1, v2 := &Vector3D{}, &Vector3D{1, 2, 5}, &Vector3D{3, 4, 6}
+	for i := 0; i < b.N; i++ {
+		r.Add(v1, v2)
+	}
+}
+
+func TestVector3DAngleDifference(t *testing.T) {
+	v1, v2 := &Vector3D{1, 0, 0}, &Vector3D{0, 0, 1}
+	if v1.AngleDifference(v2) != math.Pi/2 {
+		t.Error("Vector3D.AngleDifference")
+	}
+}
+
+func Benchmark_Vector3D_AngleDifference(b *testing.B) {
+	v1, v2 := &Vector3D{1, 2, 5}, &Vector3D{3, 4, 6}
+	for i := 0; i < b.N; i++ {
+		v1.AngleDifference(v2)
+	}
+}
+
+func TestVector3DAngleCosSquaredDifference(t *testing.T) {
+	v1, v2 := &Vector3D{1, 0, 0}, &Vector3D{0, 0, 1}
+	if FuzzyEqual(v1.AngleCosSquaredDifference(v2), math.Cos(math.Pi/2)) {
+		t.Error("Vector3D.AngleCosSquaredDifference")
+	}
+}
+
+func Benchmark_Vector3D_AngleCosSquaredDifference(b *testing.B) {
+	v1, v2 := &Vector3D{1, 2, 5}, &Vector3D{3, 4, 6}
+	for i := 0; i < b.N; i++ {
+		v1.AngleCosSquaredDifference(v2)
+	}
+}
+
+func TestVector3DDirectionEqual(t *testing.T) {
+	v1, v2 := &Vector3D{1, 1, 1}, &Vector3D{2, 2, 2}
+	if !v1.DirectionEqual(v2) {
+		t.Error("Vector3D.DirectionEqual")
+	}
+	if !v2.DirectionEqual(v1) {
+		t.Error("Vector3D.DirectionEqual")
+	}
+}
+
+func Benchmark_Vector3D_DirectionEqual(b *testing.B) {
+	v1, v2 := &Vector3D{1, 1, 1}, &Vector3D{2, 2, 2}
+	for i := 0; i < b.N; i++ {
+		v1.DirectionEqual(v2)
+	}
+}
+
+func TestVector3DDirectionFuzzyEqual(t *testing.T) {
+	v1, v2 := &Vector3D{1, 1, 1}, &Vector3D{2, 2, 2.000000000001}
+	if !v1.DirectionFuzzyEqual(v2) {
+		t.Error("Vector3D.DirectionFuzzyEqual")
+	}
+	if !v2.DirectionFuzzyEqual(v1) {
+		t.Error("Vector3D.DirectionFuzzyEqual")
+	}
+	v2.Z = 2.00000000001
+	if v1.DirectionFuzzyEqual(v2) {
+		t.Error("Vector3D.DirectionFuzzyEqual")
+	}
+	if v2.DirectionFuzzyEqual(v1) {
+		t.Error("Vector3D.DirectionFuzzyEqual")
+	}
+}
+
+func Benchmark_Vector3D_DirectionFuzzyEqual(b *testing.B) {
+	v1, v2 := &Vector3D{1, 1, 1}, &Vector3D{2, 2, 2}
+	for i := 0; i < b.N; i++ {
+		v1.DirectionFuzzyEqual(v2)
+	}
+}
+
+func TestVector3DCrossProduct(t *testing.T) {
+	r, v1, v2 := &Vector3D{}, &Vector3D{1, 2, 3}, &Vector3D{4, 5, 6}
+	if !r.CrossProduct(v1, v2).Equal(&Vector3D{-3, 6, -3}) {
+		t.Error("Vector3D.CrossProduct")
+	}
+}
+
+func Benchmark_Vector3D_CrossProduct(b *testing.B) {
+	r, v1, v2 := &Vector3D{}, &Vector3D{1, 2, 3}, &Vector3D{4, 5, 6}
+	for i := 0; i < b.N; i++ {
+		r.CrossProduct(v1, v2)
+	}
+}
+
+func TestVector3DDistance(t *testing.T) {
+	v1, v2 := &Vector3D{}, &Vector3D{1, 0, 0}
+	if v1.Distance(v2) != 1 {
+		t.Error("Vector3D.Distance")
+	}
+}
+
+func Benchmark_Vector3D_Distance(b *testing.B) {
+	v1, v2 := &Vector3D{}, &Vector3D{1, 2, 3}
+	for i := 0; i < b.N; i++ {
+		v1.Distance(v2)
+	}
+}
+
+func TestVector3DDistanceSquared(t *testing.T) {
+	v1, v2 := &Vector3D{}, &Vector3D{1, 0, 0}
+	if v1.DistanceSquared(v2) != 1 {
+		t.Error("Vector3D.DistanceSquared")
+	}
+}
+
+func Benchmark_Vector3D_DistanceSquared(b *testing.B) {
+	v1, v2 := &Vector3D{}, &Vector3D{1, 2, 3}
+	for i := 0; i < b.N; i++ {
+		v1.DistanceSquared(v2)
+	}
+}
+
+func TestVector3DDotProduct(t *testing.T) {
+	v1, v2 := &Vector3D{1, 2, 5}, &Vector3D{3, 4, 6}
+	if v1.DotProduct(v2) != 41 {
+		t.Error("Vector3D.DotProduct")
+	}
+}
+
+func Benchmark_Vector3D_DotProduct(b *testing.B) {
+	v1, v2 := &Vector3D{1, 2, 5}, &Vector3D{3, 4, 6}
+	for i := 0; i < b.N; i++ {
+		v1.DotProduct(v2)
+	}
+}
+
+func TestVector3DMagnitude(t *testing.T) {
+	v := &Vector3D{3, 4, 5}
+	if v.Magnitude() != math.Sqrt(50) {
+		t.Error("Vector3D.Magnitude")
+	}
+}
+
+func Benchmark_Vector3D_Magnitude(b *testing.B) {
+	v := &Vector3D{3, 4, 5}
+	for i := 0; i < b.N; i++ {
+		v.Magnitude()
+	}
+}
+
+func TestVector3DMagnitudeSquared(t *testing.T) {
+	v := &Vector3D{3, 4, 5}
+	if v.MagnitudeSquared() != 50 {
+		t.Error("Vector3D.MagnitudeSquared")
+	}
+}
+
+func Benchmark_Vector3D_MagnitudeSquared(b *testing.B) {
+	v := &Vector3D{3, 4, 5}
+	for i := 0; i < b.N; i++ {
+		v.MagnitudeSquared()
+	}
+}
+
+func TestVector3DEqual(t *testing.T) {
+	v1, v2 := &Vector3D{}, &Vector3D{1, 0, 0}
+	if v1.Equal(v2) {
+		t.Error("Vector3D.Equal")
+	}
+	v2.X = 0
+	if !v1.Equal(v2) {
+		t.Error("Vector3D.Equal")
+	}
+}
+
+func Benchmark_Vector3D_Equal(b *testing.B) {
+	v1, v2 := &Vector3D{}, &Vector3D{1, 0, 0}
+	for i := 0; i < b.N; i++ {
+		v1.Equal(v2)
+	}
+}
+
+func TestVector3DFuzzyEqual(t *testing.T) {
+	v1, v2 := &Vector3D{}, &Vector3D{0.000000000001, 0, 0}
+	if v1.FuzzyEqual(v2) {
+		t.Error("Vector3D.FuzzyEqual")
+	}
+	v2.X = 0.0000000000001
+	if !v1.FuzzyEqual(v2) {
+		t.Error("Vector3D.FuzzyEqual")
+	}
+}
+
+func Benchmark_Vector3D_FuzzyEqual(b *testing.B) {
+	v1, v2 := &Vector3D{}, &Vector3D{1, 0, 0}
+	for i := 0; i < b.N; i++ {
+		v1.FuzzyEqual(v2)
+	}
+}
+
+func TestVector3DSet(t *testing.T) {
+	v1, v2 := &Vector3D{}, &Vector3D{1, 2, 3}
+	if !v1.Set(v2).Equal(v2) {
+		t.Error("Vector3D.Set")
+	}
+}
+
+func Benchmark_Vector3D_Set(b *testing.B) {
+	v1, v2 := &Vector3D{}, &Vector3D{1, 2, 3}
+	for i := 0; i < b.N; i++ {
+		v1.Set(v2)
+	}
+}
+
+func TestVector3DSubtract(t *testing.T) {
+	r, v1, v2 := &Vector3D{}, &Vector3D{1, 2, 5}, &Vector3D{3, 4, 6}
+	if !r.Subtract(v1, v2).Equal(&Vector3D{-2, -2, -1}) {
+		t.Error("Vector3D.Subtract")
+	}
+}
+
+func Benchmark_Vector3D_Subtract(b *testing.B) {
+	r, v1, v2 := &Vector3D{}, &Vector3D{1, 2, 5}, &Vector3D{3, 4, 6}
+	for i := 0; i < b.N; i++ {
+		r.Subtract(v1, v2)
+	}
+}
