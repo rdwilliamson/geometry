@@ -1,114 +1,53 @@
 package geometry
 
-import (
-	"math"
-)
+import "math"
 
-// A 3D Vector.
+// A Vector3D is a 3D vector or 3D point depending on how it's used.
 type Vector3D struct {
 	X, Y, Z float64
 }
 
-// Add a vector.
-func (v1 *Vector3D) Add(v2 *Vector3D) {
-	v1.X += v2.X
-	v1.Y += v2.Y
-	v1.Z += v2.Z
-}
+// NewVector2D returns a new Vector2D.
 
-// Subtract a vector.
-func (v1 *Vector3D) Subtract(v2 *Vector3D) {
-	v1.X -= v2.X
-	v1.Y -= v2.Y
-	v1.Z -= v2.Z
-}
+// Add sets z to the piecewise sum a+b and returns z.
 
-// Multiplies the vector element by element.
-func (v1 *Vector3D) Multiply(v2 *Vector3D) {
-	v1.X *= v2.X
-	v1.Y *= v2.X
-	v1.Z *= v2.Z
-}
+// AngleDifference returns the angle between a and b.
 
-// Divides the vector element by element.
-func (v1 *Vector3D) Divide(v2 *Vector3D) {
-	v1.X /= v2.X
-	v1.Y /= v2.Y
-	v1.Z /= v2.Z
-}
+// AngleCosDifference returns the squared cos of the angle between a and b.
 
-// Scales the vector.
-func (v *Vector3D) Scale(s float64) {
-	v.X *= s
-	v.Y *= s
-	v.Z *= s
-}
+// DirectionEqual compares the direction of a and b and returns a boolean
+// indicating if they are equal.
 
-// Returns the length of the vector.
-func (v *Vector3D) Length() float64 {
-	return math.Sqrt(v.X*v.X + v.Y*v.Y + v.Z*v.Z)
-}
+// DirectionFuzzyEqual compares the direction of a and b and returns a boolean
+// indicating if they are equal.
 
-// Returns the squared length of the vector.
-func (v *Vector3D) LengthSquared() float64 {
-	return v.X*v.X + v.Y*v.Y + v.Z*v.Z
-}
+// Distance returns the distance between a and b.
 
-// Returns the dot product of two vectors.
-func (v1 *Vector3D) DotProduct(v2 *Vector3D) float64 {
-	return v1.X*v2.X + v1.Y*v2.Y + v1.Z*v2.Z
-}
+// DistanceSquared returns the squared distance between a and b.
 
-// Returns the cross product of two vectors.
-func (v1 *Vector3D) CrossProduct(v2 *Vector3D) Vector3D {
-	return Vector3D{v1.Y*v2.Z - v1.Z*v2.Y, v1.Z*v2.X - v1.X*v2.Z, v1.X*v2.Y - v1.Y*v2.X}
-}
+// Divide sets z to the piecewise quotient a/b and returns z.
 
-// Returns true if the two vectors are the same.
-func (v1 *Vector3D) Equal(v2 *Vector3D) bool {
-	return *v1 == *v2
-}
+// DotProduct returns the dot product of a and b.
 
-// Returns true if the two vectors are close.
-func (v1 *Vector3D) FuzzyEqual(v2 *Vector3D) bool {
-	dx, dy, dz := v2.X-v1.X, v2.Y-v1.Y, v2.Z-v1.Z
-	return dx*dx+dy*dy+dz*dz < 0.000000000001*0.000000000001
-}
+// Equal compares a and b and returns a boolean indicating if they are equal.
 
-// Normalizes the vector. The zero vector remains unchanged.
-func (v *Vector3D) Normalize() {
-	if v.X == 0 && v.Y == 0 && v.Z == 0 {
-		return
-	}
-	l := 1 / math.Sqrt(v.X*v.X+v.Y*v.Y+v.Z*v.Z)
-	v.X *= l
-	v.Y *= l
-	v.Z *= l
-}
+// FuzzyEqual compares a and b and returns a boolean indicating if they are
+// very close.
 
-// Returns the scalar projection.
-func (v1 *Vector3D) ScalarProjection(v2 *Vector3D) float64 {
-	return (v1.X*v2.X + v1.Y*v2.Y + v1.Z*v2.Z) / math.Sqrt(v2.X*v2.X+v2.Y*v2.Y+v2.Z*v2.Z)
-}
+// Magnitude returns the magnitude of a.
 
-// Returns the vector projection.
-func (v1 *Vector3D) ProjectedOnto(v2 *Vector3D) Vector3D {
-	s := (v1.X*v2.X + v1.Y*v2.Y + v1.Z*v2.Z) / (v2.X*v2.X + v2.Y*v2.Y + v2.Z*v2.Z)
-	return Vector3D{v2.X * s, v2.Y * s, v2.Z * s}
-}
+// MagnitudeSquared returns the squared magnitude of a.
 
-// Returns the angle between two vectors.
-func (v1 *Vector3D) AngleBetween(v2 *Vector3D) float64 {
-	dot := v1.X*v2.X + v1.Y*v2.Y + v1.Z*v2.Z
-	v1d := (v1.X*v1.X + v1.Y*v1.Y + v1.Z*v1.Z)
-	v2d := (v2.X*v2.X + v2.Y*v2.Y + v2.Z*v2.Z)
-	return math.Acos(dot / math.Sqrt(v1d*v2d))
-}
+// Multiply sets z to the piecewise multiplication of a*b and returns z.
 
-// Returns the cos of the angle between two vectors.
-func (v1 *Vector3D) CosAngleBetween(v2 *Vector3D) float64 {
-	dot := v1.X*v2.X + v1.Y*v2.Y + v1.Z*v2.Z
-	v1d := (v1.X*v1.X + v1.Y*v1.Y + v1.Z*v1.Z)
-	v2d := (v2.X*v2.X + v2.Y*v2.Y + v2.Z*v2.Z)
-	return dot / math.Sqrt(v1d*v2d)
-}
+// Normalize sets z to a unit vector in the same direction as x and returns z.
+
+// Projection sets z to the projection of a onto b and returns z.
+
+// Set sets z to x and returns z.
+
+// ScalarProjection returns the scalar projection of a onto b.
+
+// Scale sets z to scalar multiplication n*x and returns z.
+
+// Subtract Sets z to the piecewise difference a-b and returns z.
