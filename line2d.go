@@ -19,9 +19,24 @@ func NewLine2D(x1, y1, x2, y2 float64) *Line2D {
 
 // AngleDistance returns the amount the line l would have to rotate about its
 // midpoint (as if it were a segment) to pass through point p.
+func (a *Line2D) AngleDistance(b *Vector2D) float64 {
+	mpx, mpy := (a.P1.X+a.P2.X)*0.5, (a.P1.Y+a.P2.Y)*0.5
+	l1dx, l1dy := a.P1.X-mpx, a.P1.Y-mpy
+	l2dx, l2dy := b.X-mpx, b.Y-mpy
+	return math.Abs(math.Acos((l1dx*l2dx+l1dy*l2dy)/
+		math.Sqrt((l1dx*l1dx+l1dy*l1dy)*(l2dx*l2dx+l2dy*l2dy))) - math.Pi/2)
+}
 
-// AngleCosDistance returns the cos of the amount the line l would have to
-// rotate about its midpoint (as if it were a segment) to pass through point p.
+// AngleCosSquaredDistance returns the cos of the amount the line l would have
+// to rotate about its midpoint (as if it were a segment) to pass through point
+// p.
+func (a *Line2D) AngleCosSquaredDistance(b *Vector2D) float64 {
+	mpx, mpy := (a.P1.X+a.P2.X)*0.5, (a.P1.Y+a.P2.Y)*0.5
+	l1dx, l1dy := a.P1.X-mpx, a.P1.Y-mpy
+	l2dx, l2dy := b.X-mpx, b.Y-mpy
+	dot := l1dx*l2dx + l1dy*l2dy
+	return dot * dot / ((l1dx*l1dx + l1dy*l1dy) * (l2dx*l2dx + l2dy*l2dy))
+}
 
 // Equal compares a and b and returns a boolean indicating if they are equal.
 func (a *Line2D) Equal(b *Line2D) bool {
