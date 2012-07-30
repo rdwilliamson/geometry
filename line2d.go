@@ -10,6 +10,7 @@ type Line2D struct {
 	P1, P2 Vector2D
 }
 
+// NewLine2D returns a new Line2D.
 func NewLine2D(x1, y1, x2, y2 float64) *Line2D {
 	return &Line2D{Vector2D{x1, y1}, Vector2D{x2, y2}}
 }
@@ -132,7 +133,7 @@ func (a *Line2D) PointDistanceSquared(b *Vector2D) float64 {
 // SegmentEqual compares a and b as line segments and returns a boolean
 // indicating if they are equal.
 func (a *Line2D) SegmentEqual(b *Line2D) bool {
-	return *a == *b
+	return (a.P1 == b.P1 && a.P2 == b.P2) || (a.P1 == b.P2 && a.P2 == b.P1)
 }
 
 // SegmentFuzzyEqual compares a and b as line segments and returns a boolean

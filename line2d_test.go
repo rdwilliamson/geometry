@@ -17,62 +17,6 @@ func Benchmark_Line2D_New(b *testing.B) {
 	}
 }
 
-func TestLine2DAngleDistance(t *testing.T) {
-	l := &Line2D{Vector2D{0, 0}, Vector2D{1, 1}}
-	p := &Vector2D{1, 0.5}
-	if !FuzzyEqual(l.AngleDistance(p), math.Pi/4) {
-		t.Error("Line2D.AngleDistance")
-	}
-	p = &Vector2D{0, 0.5}
-	if !FuzzyEqual(l.AngleDistance(p), math.Pi/4) {
-		t.Error("Line2D.AngleDistance")
-	}
-	l = &Line2D{Vector2D{1, 1}, Vector2D{0, 0}}
-	if !FuzzyEqual(l.AngleDistance(p), math.Pi/4) {
-		t.Error("Line2D.AngleDistance")
-	}
-	p = &Vector2D{1, 0.5}
-	if !FuzzyEqual(l.AngleDistance(p), math.Pi/4) {
-		t.Error("Line2D.AngleDistance")
-	}
-}
-
-func Benchmark_Line2D_AngleDistance(b *testing.B) {
-	l := &Line2D{Vector2D{0, 0}, Vector2D{1, 1}}
-	p := &Vector2D{1, 0.5}
-	for i := 0; i < b.N; i++ {
-		l.AngleDistance(p)
-	}
-}
-
-func TestLine2DAngleCosSquaredDistance(t *testing.T) {
-	l := &Line2D{Vector2D{0, 0}, Vector2D{1, 1}}
-	p := &Vector2D{1, 0.5}
-	if l.AngleCosSquaredDistance(p) != 0.5 {
-		t.Error("Line2D.AngleCosSquaredDistance")
-	}
-	p = &Vector2D{0, 0.5}
-	if l.AngleCosSquaredDistance(p) != 0.5 {
-		t.Error("Line2D.AngleCosSquaredDistance")
-	}
-	l = &Line2D{Vector2D{1, 1}, Vector2D{0, 0}}
-	if l.AngleCosSquaredDistance(p) != 0.5 {
-		t.Error("Line2D.AngleCosSquaredDistance")
-	}
-	p = &Vector2D{1, 0.5}
-	if l.AngleCosSquaredDistance(p) != 0.5 {
-		t.Error("Line2D.AngleCosSquaredDistance")
-	}
-}
-
-func Benchmark_Line2D_AngleCosSquaredDistance(b *testing.B) {
-	l := &Line2D{Vector2D{0, 0}, Vector2D{1, 1}}
-	p := &Vector2D{1, 0.5}
-	for i := 0; i < b.N; i++ {
-		l.AngleCosSquaredDistance(p)
-	}
-}
-
 func TestLine2DEqual(t *testing.T) {
 	l1 := &Line2D{Vector2D{1, 2}, Vector2D{3, 4}}
 	l2 := &Line2D{Vector2D{-3, -2}, Vector2D{5, 6}}
@@ -213,7 +157,7 @@ func Benchmark_Line2D_PointDistanceSquared(b *testing.B) {
 
 func TestLine2DSegmentEqual(t *testing.T) {
 	l1 := &Line2D{Vector2D{1, 2}, Vector2D{3, 4}}
-	l2 := &Line2D{Vector2D{1, 2}, Vector2D{3, 4}}
+	l2 := &Line2D{Vector2D{3, 4}, Vector2D{1, 2}}
 	if !l1.SegmentEqual(l2) {
 		t.Error("Line2D.SegmentEqual")
 	}
