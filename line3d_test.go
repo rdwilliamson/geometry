@@ -2,24 +2,65 @@ package geometry
 
 import "testing"
 
-func TestLine3DFuzzyFuzzyEqual(t *testing.T) {
-	l1 := &Line3D{Vector3D{1, 2, 3}, Vector3D{1, 1, 1}}
-	l2 := &Line3D{Vector3D{1, 1, 1}, Vector3D{1, 2, 3}}
-	l1.P1.X += 0.0000000000001
-	if !l1.FuzzyEqual(l2) || !l1.FuzzyEqual(l1) {
-		t.Error("Line3D.FuzzyEqual")
+func TestLine3DLineBetween(t *testing.T) {
+	l1 := &Line3D{Vector3D{1, 2, 1}, Vector3D{3, 3, 3}}
+	l2 := &Line3D{Vector3D{1, 2, 1}, Vector3D{1, 2, 3}}
+	r := &Line3D{}
+	lb := &Line3D{Vector3D{1, 2, 1}, Vector3D{1, 2, 1}}
+	if r.LineBetween(l1, l2); !r.SegmentEqual(lb) {
+		t.Error("Line3D.LineBetween")
 	}
-	l2.P1.X += 0.000000000001
-	if l1.FuzzyEqual(l2) || !l1.FuzzyEqual(l1) {
-		t.Error("Line3D.FuzzyEqual")
+	l1 = &Line3D{Vector3D{1, 2, 1}, Vector3D{5, 4, 5}}
+	l2 = &Line3D{Vector3D{5, 6, 1}, Vector3D{1, 4, 5}}
+	lb = &Line3D{Vector3D{3.4, 3.2, 3.4}, Vector3D{2.6, 4.8, 3.4}}
+	if r.LineBetween(l1, l2); !r.SegmentFuzzyEqual(lb) {
+		t.Error("Line3D.LineBetween")
 	}
 }
 
-func Benchmark_Line3D_FuzzyEqual(b *testing.B) {
+func Benchmark_Line3D_LineBetween(b *testing.B) {
+	l1 := &Line3D{Vector3D{1, 2, 1}, Vector3D{5, 4, 5}}
+	l2 := &Line3D{Vector3D{5, 6, 1}, Vector3D{1, 4, 5}}
+	r := &Line3D{}
+	for i := 0; i < b.N; i++ {
+		r.LineBetween(l1, l2)
+	}
+}
+
+func TestLine3DSegmentEqual(t *testing.T) {
+	l1 := &Line3D{Vector3D{1, 2, 3}, Vector3D{1, 1, 1}}
+	l2 := &Line3D{Vector3D{1, 1, 1}, Vector3D{1, 2, 3}}
+	if !l1.SegmentEqual(l2) {
+		t.Error("Line3D.SegmentEqual")
+	}
+}
+
+func Benchmark_Line3D_SegmentEqual(b *testing.B) {
 	l1 := &Line3D{Vector3D{1, 2, 3}, Vector3D{1, 1, 1}}
 	l2 := &Line3D{Vector3D{1, 1, 1}, Vector3D{1, 2, 3}}
 	for i := 0; i < b.N; i++ {
-		l1.FuzzyEqual(l2)
+		l1.SegmentEqual(l2)
+	}
+}
+
+func TestLine3DSegmentFuzzyEqual(t *testing.T) {
+	l1 := &Line3D{Vector3D{1, 2, 3}, Vector3D{1, 1, 1}}
+	l2 := &Line3D{Vector3D{1, 1, 1}, Vector3D{1, 2, 3}}
+	l1.P1.X += 0.0000000000001
+	if !l1.SegmentFuzzyEqual(l2) || !l1.SegmentFuzzyEqual(l1) {
+		t.Error("Line3D.SegmentFuzzyEqual")
+	}
+	l2.P1.X += 0.000000000001
+	if l1.SegmentFuzzyEqual(l2) || !l1.SegmentFuzzyEqual(l1) {
+		t.Error("Line3D.SegmentFuzzyEqual")
+	}
+}
+
+func Benchmark_Line3D_SegmentFuzzyEqual(b *testing.B) {
+	l1 := &Line3D{Vector3D{1, 2, 3}, Vector3D{1, 1, 1}}
+	l2 := &Line3D{Vector3D{1, 1, 1}, Vector3D{1, 2, 3}}
+	for i := 0; i < b.N; i++ {
+		l1.SegmentFuzzyEqual(l2)
 	}
 }
 
@@ -52,28 +93,5 @@ func Benchmark_Line3D_PointSquaredDistance(b *testing.B) {
 	p := &Vector3D{0, 1, 0}
 	for i := 0; i < b.N; i++ {
 		l.PointSquaredDistance(p)
-	}
-}
-
-func TestLine3DLineBetween(t *testing.T) {
-	l1 := &Line3D{Vector3D{1, 2, 1}, Vector3D{3, 3, 3}}
-	l2 := &Line3D{Vector3D{1, 2, 1}, Vector3D{1, 2, 3}}
-	lb := &Line3D{Vector3D{1, 2, 1}, Vector3D{1, 2, 1}}
-	if l := l1.LineBetween(l2); !l.Equal(lb) {
-		t.Error("Line3D.LineBetween", l)
-	}
-	l1 = &Line3D{Vector3D{1, 2, 1}, Vector3D{5, 4, 5}}
-	l2 = &Line3D{Vector3D{5, 6, 1}, Vector3D{1, 4, 5}}
-	lb = &Line3D{Vector3D{3.4, 3.2, 3.4}, Vector3D{2.6, 4.8, 3.4}}
-	if l := l1.LineBetween(l2); !l.FuzzyEqual(lb) {
-		t.Error("Line3D.LineBetween")
-	}
-}
-
-func Benchmark_Line3D_LineBetween(b *testing.B) {
-	l1 := &Line3D{Vector3D{1, 2, 1}, Vector3D{5, 4, 5}}
-	l2 := &Line3D{Vector3D{5, 6, 1}, Vector3D{1, 4, 5}}
-	for i := 0; i < b.N; i++ {
-		l1.LineBetween(l2)
 	}
 }

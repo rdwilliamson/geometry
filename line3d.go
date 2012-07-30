@@ -2,63 +2,75 @@ package geometry
 
 import "math"
 
-// A line represented by two points.
+// A Line3D representes a 3D line by two points P1 and P2 (represented by
+// vectors) on the line. The line is treated as an infinite line unless a
+// method explicitly says otherwise. If treated as a segment then P1 and P2 are
+// the end points of the line segment.
 type Line3D struct {
 	P1, P2 Vector3D
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// OLD
-
-func (l1 *Line3D) Equal(l2 *Line3D) bool {
-	return *l1 == *l2
+// LineBetween sets z to the shortest line between a and b and returns z. This
+// function is intended as a replacement for intersection (which can be still
+// be tested by z.P1 == z.P2).
+func (z *Line3D) LineBetween(a, b *Line3D) *Line3D {
+	// http://local.wasp.uwa.edu.au/~pbourke/geometry/lineline3d/
+	adx, ady, adz := a.P2.X-a.P1.X, a.P2.Y-a.P1.Y, a.P2.Z-a.P1.Z
+	bdx, bdy, bdz := b.P2.X-b.P1.X, b.P2.Y-b.P1.Y, b.P2.Z-b.P1.Z
+	p1dx, p1dy, p1dz := a.P1.X-b.P1.X, a.P1.Y-b.P1.Y, a.P1.Z-b.P1.Z
+	d1343 := p1dx*bdx + p1dy*bdy + p1dz*bdz
+	d4321 := bdx*adx + bdy*ady + bdz*adz
+	d1321 := p1dx*adx + p1dy*ady + p1dz*adz
+	d4343 := bdx*bdx + bdy*bdy + bdz*bdz
+	d2121 := adx*adx + ady*ady + adz*bdz
+	mua := (d1343*d4321 - d1321*d4343) / (d2121*d4343 - d4321*d4321)
+	mub := (d1343 + mua*d4321) / d4343
+	z.P1.X = adx*mua + a.P1.X
+	z.P1.Y = ady*mua + a.P1.Y
+	z.P1.Z = adz*mua + a.P1.Z
+	z.P2.X = bdx*mub + b.P1.X
+	z.P2.Y = bdy*mub + b.P1.Y
+	z.P2.Z = bdz*mub + b.P1.Z
+	return z
 }
 
-// Returns true if the lines are nearly equal.
-func (l1 *Line3D) FuzzyEqual(l2 *Line3D) bool {
-	dx1, dy1, dz1 := l1.P1.X-l2.P1.X, l1.P1.Y-l2.P1.Y, l1.P1.Z-l2.P1.Z
-	dx2, dy2, dz2 := l1.P2.X-l2.P2.X, l1.P2.Y-l2.P2.Y, l1.P2.Z-l2.P2.Z
+// PointDistance returns the distance point b is from line a.
+func (a *Line3D) PointDistance(b *Vector3D) float64 {
+	// http://local.wasp.uwa.edu.au/~pbourke/geometry/pointline/
+	ldx, ldy, ldz := a.P2.X-a.P1.X, a.P2.Y-a.P1.Y, a.P2.Z-a.P1.Z
+	u := (ldx*(b.X-a.P1.X) + ldy*(b.Y-a.P1.Y) + ldz*(b.Z-a.P1.Z)) /
+		(ldx*ldx + ldy*ldy + ldz*ldz)
+	x, y, z := b.X-(a.P1.X+ldx*u), b.Y-(a.P1.Y+ldy*u), b.Z-(a.P1.Z+ldz*u)
+	return math.Sqrt(x*x + y*y + z*z)
+}
+
+// PointDistanceSquared returns the squared distance point b is from line a.
+func (a *Line3D) PointSquaredDistance(b *Vector3D) float64 {
+	// http://local.wasp.uwa.edu.au/~pbourke/geometry/pointline/
+	ldx, ldy, ldz := a.P2.X-a.P1.X, a.P2.Y-a.P1.Y, a.P2.Z-a.P1.Z
+	u := (ldx*(b.X-a.P1.X) + ldy*(b.Y-a.P1.Y) + ldz*(b.Z-a.P1.Z)) /
+		(ldx*ldx + ldy*ldy + ldz*ldz)
+	x, y, z := b.X-(a.P1.X+ldx*u), b.Y-(a.P1.Y+ldy*u), b.Z-(a.P1.Z+ldz*u)
+	return x*x + y*y + z*z
+}
+
+// SegmentEqual compares a and b as line segments and returns a boolean
+// indicating if they are equal.
+func (a *Line3D) SegmentEqual(b *Line3D) bool {
+	return (a.P1 == b.P1 && a.P2 == b.P2) || (a.P1 == b.P2 && a.P2 == b.P1)
+}
+
+// SegmentFuzzyEqual compares a and b as line segments and returns a boolean
+// indicating if they are very close.
+func (a *Line3D) SegmentFuzzyEqual(b *Line3D) bool {
+	dx1, dy1, dz1 := a.P1.X-b.P1.X, a.P1.Y-b.P1.Y, a.P1.Z-b.P1.Z
+	dx2, dy2, dz2 := a.P2.X-b.P2.X, a.P2.Y-b.P2.Y, a.P2.Z-b.P2.Z
 	if dx1*dx1+dy1*dy1+dz1*dz1 < 0.000000000001*0.000000000001 &&
 		dx2*dx2+dy2*dy2+dz2*dz2 < 0.000000000001*0.000000000001 {
 		return true
 	}
-	dx1, dy1, dz1 = l1.P1.X-l2.P2.X, l1.P1.Y-l2.P2.Y, l1.P1.Z-l2.P2.Z
-	dx2, dy2, dz2 = l1.P2.X-l2.P1.X, l1.P2.Y-l2.P1.Y, l1.P2.Z-l2.P1.Z
+	dx1, dy1, dz1 = a.P1.X-b.P2.X, a.P1.Y-b.P2.Y, a.P1.Z-b.P2.Z
+	dx2, dy2, dz2 = a.P2.X-b.P1.X, a.P2.Y-b.P1.Y, a.P2.Z-b.P1.Z
 	return dx1*dx1+dy1*dy1+dz1*dz1 < 0.000000000001*0.000000000001 &&
 		dx2*dx2+dy2*dy2+dz2*dz2 < 0.000000000001*0.000000000001
-}
-
-// Returns the distance between a point and a line.
-func (l *Line3D) PointDistance(p *Vector3D) float64 {
-	// http://local.wasp.uwa.edu.au/~pbourke/geometry/pointline/
-	ldx, ldy, ldz := l.P2.X-l.P1.X, l.P2.Y-l.P1.Y, l.P2.Z-l.P1.Z
-	u := (ldx*(p.X-l.P1.X) + ldy*(p.Y-l.P1.Y) + ldz*(p.Z-l.P1.Z)) / (ldx*ldx + ldy*ldy + ldz*ldz)
-	x, y, z := p.X-(l.P1.X+ldx*u), p.Y-(l.P1.Y+ldy*u), p.Z-(l.P1.Z+ldz*u)
-	return math.Sqrt(x*x + y*y + z*z)
-}
-
-// Returns the squared distance between a point and a line.
-func (l *Line3D) PointSquaredDistance(p *Vector3D) float64 {
-	// http://local.wasp.uwa.edu.au/~pbourke/geometry/pointline/
-	ldx, ldy, ldz := l.P2.X-l.P1.X, l.P2.Y-l.P1.Y, l.P2.Z-l.P1.Z
-	u := (ldx*(p.X-l.P1.X) + ldy*(p.Y-l.P1.Y) + ldz*(p.Z-l.P1.Z)) / (ldx*ldx + ldy*ldy + ldz*ldz)
-	x, y, z := p.X-(l.P1.X+ldx*u), p.Y-(l.P1.Y+ldy*u), p.Z-(l.P1.Z+ldz*u)
-	return x*x + y*y + z*z
-}
-
-// Returns the shortest line between two lines.
-func (l1 *Line3D) LineBetween(l2 *Line3D) Line3D {
-	// http://local.wasp.uwa.edu.au/~pbourke/geometry/lineline3d/
-	l1dx, l1dy, l1dz := l1.P2.X-l1.P1.X, l1.P2.Y-l1.P1.Y, l1.P2.Z-l1.P1.Z
-	l2dx, l2dy, l2dz := l2.P2.X-l2.P1.X, l2.P2.Y-l2.P1.Y, l2.P2.Z-l2.P1.Z
-	p1dx, p1dy, p1dz := l1.P1.X-l2.P1.X, l1.P1.Y-l2.P1.Y, l1.P1.Z-l2.P1.Z
-	d1343 := p1dx*l2dx + p1dy*l2dy + p1dz*l2dz
-	d4321 := l2dx*l1dx + l2dy*l1dy + l2dz*l1dz
-	d1321 := p1dx*l1dx + p1dy*l1dy + p1dz*l1dz
-	d4343 := l2dx*l2dx + l2dy*l2dy + l2dz*l2dz
-	d2121 := l1dx*l1dx + l1dy*l1dy + l1dz*l2dz
-	mua := (d1343*d4321 - d1321*d4343) / (d2121*d4343 - d4321*d4321)
-	mub := (d1343 + mua*d4321) / d4343
-	return Line3D{Vector3D{l1dx*mua + l1.P1.X, l1dy*mua + l1.P1.Y, l1dz*mua + l1.P1.Z},
-		Vector3D{l2dx*mub + l2.P1.X, l2dy*mub + l2.P1.Y, l2dz*mub + l2.P1.Z}}
 }
