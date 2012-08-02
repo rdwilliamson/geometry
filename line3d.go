@@ -20,7 +20,8 @@ func (a *Line3D) Equal(b *Line3D) bool {
 		return false
 	}
 	il1dx, il2dx := 1/l1dx, 1/(b.P2.X-b.P1.X)
-	return l1dy*il1dx == (b.P2.Y-b.P1.Y)*il2dx && l1dz*il1dx == (b.P2.Z-b.P1.Z)*il2dx
+	return l1dy*il1dx == (b.P2.Y-b.P1.Y)*il2dx &&
+		l1dz*il1dx == (b.P2.Z-b.P1.Z)*il2dx
 }
 
 // FuzzyEqual compares a and b and returns a boolean indicating if they are
@@ -36,7 +37,8 @@ func (a *Line3D) FuzzyEqual(b *Line3D) bool {
 	il1dx, il2dx := 1/l1dx, 1/(b.P2.X-b.P1.X)
 	dyr := l1dy*il1dx - (b.P2.Y-b.P1.Y)*il2dx
 	dzr := l1dz*il1dx - (b.P2.Z-b.P1.Z)*il2dx
-	return dyr*dyr < 0.000000000001*0.000000000001 && dzr*dzr < 0.000000000001*0.000000000001
+	return dyr*dyr < 0.000000000001*0.000000000001 &&
+		dzr*dzr < 0.000000000001*0.000000000001
 }
 
 // LineBetween sets z to the shortest line between a and b and returns z. This
