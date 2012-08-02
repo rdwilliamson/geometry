@@ -48,9 +48,7 @@ func (a *Line2D) Equal(b *Line2D) bool {
 	if x*x+y*y != 0 {
 		return false
 	}
-	u = (ldx*(b.P2.X-a.P1.X) + ldy*(b.P2.Y-a.P1.Y)) * d
-	x, y = b.P2.X-(a.P1.X+ldx*u), b.P2.Y-(a.P1.Y+ldy*u)
-	return x*x+y*y == 0
+	return ldy/ldx == (b.P2.Y-b.P1.Y)/(b.P2.X-b.P1.X)
 }
 
 // FuzzyEqual compares a and b and returns a boolean indicating if they are
@@ -63,9 +61,8 @@ func (a *Line2D) FuzzyEqual(b *Line2D) bool {
 	if x*x+y*y >= 0.000000000001*0.000000000001 {
 		return false
 	}
-	u = (ldx*(b.P2.X-a.P1.X) + ldy*(b.P2.Y-a.P1.Y)) * d
-	x, y = b.P2.X-(a.P1.X+ldx*u), b.P2.Y-(a.P1.Y+ldy*u)
-	return x*x+y*y < 0.000000000001*0.000000000001
+	dr := (ldy / ldx) - ((b.P2.Y - b.P1.Y) / (b.P2.X - b.P1.X))
+	return dr*dr < 0.000000000001*0.000000000001
 }
 
 // Intersection sets z to the intersection of l1 and l2 and returns z.
