@@ -2,6 +2,42 @@ package geometry
 
 import "testing"
 
+func TestLine3DEqual(t *testing.T) {
+	l1 := &Line3D{Vector3D{1, 2, 3}, Vector3D{4, 5, 6}}
+	l2 := &Line3D{Vector3D{5, 6, 7}, Vector3D{0, 1, 2}}
+	if !l1.Equal(l2) {
+		t.Error("Line3D.Equal")
+	}
+}
+
+func Benchmark_Line3D_Equal(b *testing.B) {
+	l1 := &Line3D{Vector3D{1, 2, 3}, Vector3D{4, 5, 6}}
+	l2 := &Line3D{Vector3D{5, 6, 7}, Vector3D{0, 1, 2}}
+	for i := 0; i < b.N; i++ {
+		l1.Equal(l2)
+	}
+}
+
+func TestLine3DFuzzyEqual(t *testing.T) {
+	l1 := &Line3D{Vector3D{1, 2, 3}, Vector3D{4, 5, 6}}
+	l2 := &Line3D{Vector3D{5, 6, 7}, Vector3D{0, 1, 2.00000000001}}
+	if l1.FuzzyEqual(l2) {
+		t.Error("Line3D.FuzzyEqual")
+	}
+	l2.P2.Z = 2.000000000001
+	if !l1.FuzzyEqual(l2) {
+		t.Error("Line3D.FuzzyEqual")
+	}
+}
+
+func Benchmark_Line3D_FuzzyEqual(b *testing.B) {
+	l1 := &Line3D{Vector3D{1, 2, 3}, Vector3D{4, 5, 6}}
+	l2 := &Line3D{Vector3D{5, 6, 7}, Vector3D{0, 1, 2}}
+	for i := 0; i < b.N; i++ {
+		l1.FuzzyEqual(l2)
+	}
+}
+
 func TestLine3DLineBetween(t *testing.T) {
 	l1 := &Line3D{Vector3D{1, 2, 1}, Vector3D{3, 3, 3}}
 	l2 := &Line3D{Vector3D{1, 2, 1}, Vector3D{1, 2, 3}}

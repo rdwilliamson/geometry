@@ -10,6 +10,35 @@ type Line3D struct {
 	P1, P2 Vector3D
 }
 
+// Equal compares a and b and returns a boolean indicating if they are equal.
+func (a *Line3D) Equal(b *Line3D) bool {
+	l1dx, l1dy, l1dz := a.P2.X-a.P1.X, a.P2.Y-a.P1.Y, a.P2.Z-a.P1.Z
+	d := 1 / (l1dx*l1dx + l1dy*l1dy + l1dz*l1dz)
+	u := (l1dx*(b.P1.X-a.P1.X) + l1dy*(b.P1.Y-a.P1.Y) + l1dz*(b.P1.Z-a.P1.Z)) * d
+	x, y, z := b.P1.X-(a.P1.X+l1dx*u), b.P1.Y-(a.P1.Y+l1dy*u), b.P1.Z-(a.P1.Z+l1dz*u)
+	if x*x+y*y+z*z != 0 {
+		return false
+	}
+	il1dx, il2dx := 1/l1dx, 1/(b.P2.X-b.P1.X)
+	return l1dy*il1dx == (b.P2.Y-b.P1.Y)*il2dx && l1dz*il1dx == (b.P2.Z-b.P1.Z)*il2dx
+}
+
+// FuzzyEqual compares a and b and returns a boolean indicating if they are
+// very close.
+func (a *Line3D) FuzzyEqual(b *Line3D) bool {
+	l1dx, l1dy, l1dz := a.P2.X-a.P1.X, a.P2.Y-a.P1.Y, a.P2.Z-a.P1.Z
+	d := 1 / (l1dx*l1dx + l1dy*l1dy + l1dz*l1dz)
+	u := (l1dx*(b.P1.X-a.P1.X) + l1dy*(b.P1.Y-a.P1.Y) + l1dz*(b.P1.Z-a.P1.Z)) * d
+	x, y, z := b.P1.X-(a.P1.X+l1dx*u), b.P1.Y-(a.P1.Y+l1dy*u), b.P1.Z-(a.P1.Z+l1dz*u)
+	if x*x+y*y+z*z >= 0.000000000001*0.000000000001 {
+		return false
+	}
+	il1dx, il2dx := 1/l1dx, 1/(b.P2.X-b.P1.X)
+	dyr := l1dy*il1dx - (b.P2.Y-b.P1.Y)*il2dx
+	dzr := l1dz*il1dx - (b.P2.Z-b.P1.Z)*il2dx
+	return dyr*dyr < 0.000000000001*0.000000000001 && dzr*dzr < 0.000000000001*0.000000000001
+}
+
 // LineBetween sets z to the shortest line between a and b and returns z. This
 // function is intended as a replacement for intersection (which can be still
 // be tested by z.P1 == z.P2).
