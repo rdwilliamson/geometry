@@ -65,6 +65,18 @@ func (z *Line3D) LineBetween(a, b *Line3D) *Line3D {
 	return z
 }
 
+// Length returns the length of l as if is a line segment.
+func (a *Line3D) Length() float64 {
+	dx, dy, dz := a.P2.X-a.P1.X, a.P2.Y-a.P1.Y, a.P2.Z-a.P1.Z
+	return math.Sqrt(dx*dx + dy*dy + dz*dz)
+}
+
+// LengthSquared returns the length squared of l as if is a line segment.
+func (a *Line3D) LengthSquared() float64 {
+	dx, dy, dz := a.P2.X-a.P1.X, a.P2.Y-a.P1.Y, a.P2.Z-a.P1.Z
+	return dx*dx + dy*dy + dz*dz
+}
+
 // PointDistance returns the distance point b is from line a.
 func (a *Line3D) PointDistance(b *Vector3D) float64 {
 	// http://local.wasp.uwa.edu.au/~pbourke/geometry/pointline/

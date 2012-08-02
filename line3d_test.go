@@ -1,6 +1,9 @@
 package geometry
 
-import "testing"
+import (
+	"math"
+	"testing"
+)
 
 func TestLine3DEqual(t *testing.T) {
 	l1 := &Line3D{Vector3D{1, 2, 3}, Vector3D{4, 5, 6}}
@@ -60,6 +63,34 @@ func Benchmark_Line3D_LineBetween(b *testing.B) {
 	r := &Line3D{}
 	for i := 0; i < b.N; i++ {
 		r.LineBetween(l1, l2)
+	}
+}
+
+func TestLine3DLength(t *testing.T) {
+	l := &Line3D{Vector3D{1, 2, 3}, Vector3D{6, 5, 4}}
+	if l.Length() != math.Sqrt(35) {
+		t.Error("Line3D.Length")
+	}
+}
+
+func Benchmark_Line3D_Length(b *testing.B) {
+	l := &Line3D{Vector3D{1, 2, 3}, Vector3D{6, 5, 4}}
+	for i := 0; i < b.N; i++ {
+		l.Length()
+	}
+}
+
+func TestLine3DLengthSquared(t *testing.T) {
+	l := &Line3D{Vector3D{1, 2, 3}, Vector3D{6, 5, 4}}
+	if l.LengthSquared() != 35 {
+		t.Error("Line3D.LengthSquared")
+	}
+}
+
+func Benchmark_Line3D_LengthSquared(b *testing.B) {
+	l := &Line3D{Vector3D{1, 2, 3}, Vector3D{6, 5, 4}}
+	for i := 0; i < b.N; i++ {
+		l.LengthSquared()
 	}
 }
 
