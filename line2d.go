@@ -186,8 +186,8 @@ func (a *Line2D) SegmentPointDistance(b *Vector2D) float64 {
 	return math.Sqrt(x*x + y*y)
 }
 
-// SegmentPointDistanceSquared returns the distance between line segment a and
-// point b.
+// SegmentPointDistanceSquared returns the squared distance between line
+// segment a and point b.
 func (a *Line2D) SegmentPointDistanceSquared(b *Vector2D) float64 {
 	// http://softsurfer.com/Archive/algorithm_0102/algorithm_0102.htm
 	ldx, ldy := a.P2.X-a.P1.X, a.P2.Y-a.P1.Y

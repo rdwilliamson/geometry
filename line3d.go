@@ -126,6 +126,17 @@ func (a *Line3D) SegmentFuzzyEqual(b *Line3D) bool {
 		dx2*dx2+dy2*dy2+dz2*dz2 < 0.000000000001*0.000000000001
 }
 
+// SegmentIntersection sets z to the shortest line between a and b and returns
+// a boolean indicating if both z's end points lie on line segments a and b.
+// This function is intended as a replacement for intersection (which can be
+// still be tested by z.P1 == z.P2).
+
+// SegmentPointDistance returns the distance between line segment a and point
+// b.
+
+// SegmentPointDistanceSquared returns the squared distance between line
+// segment a and point b.
+
 // Set sets z to x and returns z.
 func (z *Line3D) Set(x *Line3D) *Line3D {
 	z.P1.X = x.P1.X
