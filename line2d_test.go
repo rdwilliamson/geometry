@@ -128,8 +128,15 @@ func Benchmark_Line2D_Normal(b *testing.B) {
 }
 
 func TestLine2DPointAngleDistance(t *testing.T) {
-	// need to test line and then swap end point
-	t.Error("test not implemented")
+	l := &Line2D{Vector2D{}, Vector2D{1, 1}}
+	p := &Vector2D{1, 0.5}
+	if l.PointAngleDistance(p) != math.Pi/4 {
+		t.Error("Line2D.PointAngleDistance")
+	}
+	l.P1, l.P2 = l.P2, l.P1
+	if !FuzzyEqual(l.PointAngleDistance(p), math.Pi/4) {
+		t.Error("Line2D.PointAngleDistance")
+	}
 }
 
 func Benchmark_Line2D_PointAngleDistance(b *testing.B) {
@@ -140,8 +147,15 @@ func Benchmark_Line2D_PointAngleDistance(b *testing.B) {
 }
 
 func TestLine2DPointAngleCosSquaredDistance(t *testing.T) {
-	// need to test line and then swap end point
-	t.Error("test not implemented")
+	l := &Line2D{Vector2D{}, Vector2D{1, 1}}
+	p := &Vector2D{1, 0.5}
+	if l.PointAngleCosSquaredDistance(p) != 0.5 {
+		t.Error("Line2D.PointAngleCosSquaredDistance")
+	}
+	l.P1, l.P2 = l.P2, l.P1
+	if l.PointAngleCosSquaredDistance(p) != 0.5 {
+		t.Error("Line2D.PointAngleCosSquaredDistance")
+	}
 }
 
 func Benchmark_Line2D_PointAngleCosSquaredDistance(b *testing.B) {
