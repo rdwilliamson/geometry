@@ -77,6 +77,14 @@ func (a *Line3D) LengthSquared() float64 {
 	return dx*dx + dy*dy + dz*dz
 }
 
+// Midpoint sets z to the segment l's midpoint and returns z.
+func (a *Line3D) Midpoint(z *Vector3D) *Vector3D {
+	z.X = (a.P1.X + a.P2.X) * 0.5
+	z.Y = (a.P1.Y + a.P2.Y) * 0.5
+	z.Z = (a.P1.Z + a.P2.Z) * 0.5
+	return z
+}
+
 // PointDistance returns the distance point b is from line a.
 func (a *Line3D) PointDistance(b *Vector3D) float64 {
 	// http://local.wasp.uwa.edu.au/~pbourke/geometry/pointline/
@@ -116,4 +124,23 @@ func (a *Line3D) SegmentFuzzyEqual(b *Line3D) bool {
 	dx2, dy2, dz2 = a.P2.X-b.P1.X, a.P2.Y-b.P1.Y, a.P2.Z-b.P1.Z
 	return dx1*dx1+dy1*dy1+dz1*dz1 < 0.000000000001*0.000000000001 &&
 		dx2*dx2+dy2*dy2+dz2*dz2 < 0.000000000001*0.000000000001
+}
+
+// Set sets z to x and returns z.
+func (z *Line3D) Set(x *Line3D) *Line3D {
+	z.P1.X = x.P1.X
+	z.P1.Y = x.P1.Y
+	z.P1.Z = x.P1.Z
+	z.P2.X = x.P2.X
+	z.P2.Y = x.P2.Y
+	z.P2.Z = x.P2.Z
+	return z
+}
+
+// ToVector sets z to the vector from l.P1 to l.P2 and returns z.
+func (x *Line3D) ToVector(z *Vector3D) *Vector3D {
+	z.X = x.P2.X - x.P1.X
+	z.Y = x.P2.Y - x.P1.Y
+	z.Z = x.P2.Z - x.P1.Z
+	return z
 }

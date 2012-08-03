@@ -94,6 +94,22 @@ func Benchmark_Line3D_LengthSquared(b *testing.B) {
 	}
 }
 
+func TestLine3DMidpoint(t *testing.T) {
+	l := &Line3D{Vector3D{1, 2, 3}, Vector3D{6, 5, 4}}
+	p := &Vector3D{}
+	if !l.Midpoint(p).Equal(&Vector3D{3.5, 3.5, 3.5}) {
+		t.Error("Line3D.Midpoint")
+	}
+}
+
+func Benchmark_Line3D_Midpoint(b *testing.B) {
+	l := &Line3D{Vector3D{1, 2, 3}, Vector3D{6, 5, 4}}
+	p := &Vector3D{}
+	for i := 0; i < b.N; i++ {
+		l.Midpoint(p)
+	}
+}
+
 func TestLine3DSegmentEqual(t *testing.T) {
 	l1 := &Line3D{Vector3D{1, 2, 3}, Vector3D{1, 1, 1}}
 	l2 := &Line3D{Vector3D{1, 1, 1}, Vector3D{1, 2, 3}}
@@ -160,5 +176,37 @@ func Benchmark_Line3D_PointSquaredDistance(b *testing.B) {
 	p := &Vector3D{0, 1, 0}
 	for i := 0; i < b.N; i++ {
 		l.PointSquaredDistance(p)
+	}
+}
+
+func TestLine3DSet(t *testing.T) {
+	l1 := &Line3D{Vector3D{1, 2, 3}, Vector3D{1, 1, 1}}
+	l2 := &Line3D{Vector3D{}, Vector3D{}}
+	if !l2.Set(l1).Equal(l1) {
+		t.Error("Line3D.Set")
+	}
+}
+
+func Benchmark_Line3D_Set(b *testing.B) {
+	l1 := &Line3D{Vector3D{1, 2, 3}, Vector3D{1, 1, 1}}
+	l2 := &Line3D{Vector3D{}, Vector3D{}}
+	for i := 0; i < b.N; i++ {
+		l2.Set(l1)
+	}
+}
+
+func TestLine3DToVector(t *testing.T) {
+	l := &Line3D{Vector3D{1, 2, 3}, Vector3D{1, 1, 1}}
+	v := &Vector3D{}
+	if !l.ToVector(v).Equal(&Vector3D{0, -1, -2}) {
+		t.Error("Line3D.ToVector")
+	}
+}
+
+func Benchmark_Line3D_ToVector(b *testing.B) {
+	l := &Line3D{Vector3D{1, 2, 3}, Vector3D{1, 1, 1}}
+	v := &Vector3D{}
+	for i := 0; i < b.N; i++ {
+		l.ToVector(v)
 	}
 }
