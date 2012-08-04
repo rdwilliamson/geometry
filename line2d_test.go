@@ -127,41 +127,41 @@ func Benchmark_Line2D_Normal(b *testing.B) {
 	}
 }
 
-func TestLine2DPointAngleDistance(t *testing.T) {
+func TestLine2DPointAngularDistance(t *testing.T) {
 	l := &Line2D{Vector2D{}, Vector2D{1, 1}}
 	p := &Vector2D{1, 0.5}
-	if l.PointAngleDistance(p) != math.Pi/4 {
-		t.Error("Line2D.PointAngleDistance")
+	if l.PointAngularDistance(p) != math.Pi/4 {
+		t.Error("Line2D.PointAngularDistance")
 	}
 	l.P1, l.P2 = l.P2, l.P1
-	if !FuzzyEqual(l.PointAngleDistance(p), math.Pi/4) {
-		t.Error("Line2D.PointAngleDistance")
+	if !FuzzyEqual(l.PointAngularDistance(p), math.Pi/4) {
+		t.Error("Line2D.PointAngularDistance")
 	}
 }
 
-func Benchmark_Line2D_PointAngleDistance(b *testing.B) {
+func Benchmark_Line2D_PointAngularDistance(b *testing.B) {
 	l, p := &Line2D{Vector2D{1, 1}, Vector2D{}}, &Vector2D{1, 0.5}
 	for i := 0; i < b.N; i++ {
-		l.PointAngleDistance(p)
+		l.PointAngularDistance(p)
 	}
 }
 
-func TestLine2DPointAngleCosSquaredDistance(t *testing.T) {
+func TestLine2DPointAngularCosSquaredDistance(t *testing.T) {
 	l := &Line2D{Vector2D{}, Vector2D{1, 1}}
 	p := &Vector2D{1, 0.5}
-	if l.PointAngleCosSquaredDistance(p) != 0.5 {
-		t.Error("Line2D.PointAngleCosSquaredDistance")
+	if l.PointAngularCosSquaredDistance(p) != 0.5 {
+		t.Error("Line2D.PointAngularCosSquaredDistance")
 	}
 	l.P1, l.P2 = l.P2, l.P1
-	if l.PointAngleCosSquaredDistance(p) != 0.5 {
-		t.Error("Line2D.PointAngleCosSquaredDistance")
+	if l.PointAngularCosSquaredDistance(p) != 0.5 {
+		t.Error("Line2D.PointAngularCosSquaredDistance")
 	}
 }
 
-func Benchmark_Line2D_PointAngleCosSquaredDistance(b *testing.B) {
+func Benchmark_Line2D_PointAngularCosSquaredDistance(b *testing.B) {
 	l, p := &Line2D{Vector2D{1, 1}, Vector2D{}}, &Vector2D{1, 0.5}
 	for i := 0; i < b.N; i++ {
-		l.PointAngleCosSquaredDistance(p)
+		l.PointAngularCosSquaredDistance(p)
 	}
 }
 
@@ -233,11 +233,11 @@ func TestLine2DSegmentIntersection(t *testing.T) {
 	l1 := &Line2D{Vector2D{-1, -1}, Vector2D{0, 0}}
 	l2 := &Line2D{Vector2D{0, 1}, Vector2D{1, 0}}
 	p := &Vector2D{}
-	if l1.SegmentIntersection(l2, p) || !p.Equal(&Vector2D{0.5, 0.5}) {
+	if _, onBoth := l1.SegmentIntersection(l2, p); onBoth || !p.Equal(&Vector2D{0.5, 0.5}) {
 		t.Error("Line2D.SegmentIntersection")
 	}
 	l1.P1 = Vector2D{1, 1}
-	if !l1.SegmentIntersection(l2, p) || !p.Equal(&Vector2D{0.5, 0.5}) {
+	if _, onBoth := l1.SegmentIntersection(l2, p); !onBoth || !p.Equal(&Vector2D{0.5, 0.5}) {
 		t.Error("Line2D.SegmentIntersection")
 	}
 }

@@ -10,7 +10,8 @@ type Line3D struct {
 	P1, P2 Vector3D
 }
 
-// Equal compares a and b and returns a boolean indicating if they are equal.
+// Equal compares a and b then returns true if they are exactly equal or false
+// otherwise.
 func (a *Line3D) Equal(b *Line3D) bool {
 	l1dx, l1dy, l1dz := a.P2.X-a.P1.X, a.P2.Y-a.P1.Y, a.P2.Z-a.P1.Z
 	d := 1 / (l1dx*l1dx + l1dy*l1dy + l1dz*l1dz)
@@ -24,8 +25,8 @@ func (a *Line3D) Equal(b *Line3D) bool {
 		l1dz*il1dx == (b.P2.Z-b.P1.Z)*il2dx
 }
 
-// FuzzyEqual compares a and b and returns a boolean indicating if they are
-// very close.
+// FuzzyEqual compares a and b and returns true if they are very close or false
+// otherwise.
 func (a *Line3D) FuzzyEqual(b *Line3D) bool {
 	l1dx, l1dy, l1dz := a.P2.X-a.P1.X, a.P2.Y-a.P1.Y, a.P2.Z-a.P1.Z
 	d := 1 / (l1dx*l1dx + l1dy*l1dy + l1dz*l1dz)
@@ -41,7 +42,7 @@ func (a *Line3D) FuzzyEqual(b *Line3D) bool {
 		dzr*dzr < 0.000000000001*0.000000000001
 }
 
-// LineBetween sets z to the shortest line between a and b and returns z. This
+// LineBetween sets z to the shortest line between a and b then returns z. This
 // function is intended as a replacement for intersection (which can be still
 // be tested by z.P1 == z.P2).
 func (z *Line3D) LineBetween(a, b *Line3D) *Line3D {
@@ -65,23 +66,23 @@ func (z *Line3D) LineBetween(a, b *Line3D) *Line3D {
 	return z
 }
 
-// Length returns the length of l as if is a line segment.
-func (a *Line3D) Length() float64 {
-	dx, dy, dz := a.P2.X-a.P1.X, a.P2.Y-a.P1.Y, a.P2.Z-a.P1.Z
+// Length returns the length of line segment x.
+func (x *Line3D) Length() float64 {
+	dx, dy, dz := x.P2.X-x.P1.X, x.P2.Y-x.P1.Y, x.P2.Z-x.P1.Z
 	return math.Sqrt(dx*dx + dy*dy + dz*dz)
 }
 
-// LengthSquared returns the length squared of l as if is a line segment.
-func (a *Line3D) LengthSquared() float64 {
-	dx, dy, dz := a.P2.X-a.P1.X, a.P2.Y-a.P1.Y, a.P2.Z-a.P1.Z
+// LengthSquared returns the squared length of line segment x.
+func (x *Line3D) LengthSquared() float64 {
+	dx, dy, dz := x.P2.X-x.P1.X, x.P2.Y-x.P1.Y, x.P2.Z-x.P1.Z
 	return dx*dx + dy*dy + dz*dz
 }
 
-// Midpoint sets z to the segment l's midpoint and returns z.
-func (a *Line3D) Midpoint(z *Vector3D) *Vector3D {
-	z.X = (a.P1.X + a.P2.X) * 0.5
-	z.Y = (a.P1.Y + a.P2.Y) * 0.5
-	z.Z = (a.P1.Z + a.P2.Z) * 0.5
+// Midpoint sets point z to the line segment x's midpoint, then returns z.
+func (x *Line3D) Midpoint(z *Vector3D) *Vector3D {
+	z.X = (x.P1.X + x.P2.X) * 0.5
+	z.Y = (x.P1.Y + x.P2.Y) * 0.5
+	z.Z = (x.P1.Z + x.P2.Z) * 0.5
 	return z
 }
 
@@ -96,7 +97,7 @@ func (a *Line3D) PointDistance(b *Vector3D) float64 {
 }
 
 // PointDistanceSquared returns the squared distance point b is from line a.
-func (a *Line3D) PointSquaredDistance(b *Vector3D) float64 {
+func (a *Line3D) PointDistanceSquared(b *Vector3D) float64 {
 	// http://local.wasp.uwa.edu.au/~pbourke/geometry/pointline/
 	ldx, ldy, ldz := a.P2.X-a.P1.X, a.P2.Y-a.P1.Y, a.P2.Z-a.P1.Z
 	u := (ldx*(b.X-a.P1.X) + ldy*(b.Y-a.P1.Y) + ldz*(b.Z-a.P1.Z)) /
@@ -105,14 +106,14 @@ func (a *Line3D) PointSquaredDistance(b *Vector3D) float64 {
 	return x*x + y*y + z*z
 }
 
-// SegmentEqual compares a and b as line segments and returns a boolean
-// indicating if they are equal.
+// SegmentEqual compares line segments a and b and returns true if they are
+// exactly equal or false otherwise.
 func (a *Line3D) SegmentEqual(b *Line3D) bool {
 	return (a.P1 == b.P1 && a.P2 == b.P2) || (a.P1 == b.P2 && a.P2 == b.P1)
 }
 
-// SegmentFuzzyEqual compares a and b as line segments and returns a boolean
-// indicating if they are very close.
+// SegmentFuzzyEqual compares line segments a and b and returns true if they
+// are very close and false otherwise.
 func (a *Line3D) SegmentFuzzyEqual(b *Line3D) bool {
 	dx1, dy1, dz1 := a.P1.X-b.P1.X, a.P1.Y-b.P1.Y, a.P1.Z-b.P1.Z
 	dx2, dy2, dz2 := a.P2.X-b.P2.X, a.P2.Y-b.P2.Y, a.P2.Z-b.P2.Z
@@ -126,8 +127,8 @@ func (a *Line3D) SegmentFuzzyEqual(b *Line3D) bool {
 		dx2*dx2+dy2*dy2+dz2*dz2 < 0.000000000001*0.000000000001
 }
 
-// SegmentIntersection sets z to the shortest line between a and b and returns
-// a boolean indicating if both z's end points lie on line segments a and b.
+// SegmentIntersection sets z to the shortest line segment between a and b then
+// returns z and true if z's end points lie on both a and b or false otherwise.
 // This function is intended as a replacement for intersection (which can be
 // still be tested by z.P1 == z.P2).
 

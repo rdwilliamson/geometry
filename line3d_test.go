@@ -163,19 +163,19 @@ func Benchmark_Line3D_PointDistance(b *testing.B) {
 	}
 }
 
-func TestLine3DPointSquaredDistance(t *testing.T) {
+func TestLine3DPointDistanceSquared(t *testing.T) {
 	l := Line3D{Vector3D{0, 0, 0}, Vector3D{1, 0, 0}}
 	p := &Vector3D{0, 1, 0}
-	if l.PointSquaredDistance(p) != 1 {
-		t.Error("Line3D.PointSquaredDistance")
+	if l.PointDistanceSquared(p) != 1 {
+		t.Error("Line3D.PointDistanceSquared")
 	}
 }
 
-func Benchmark_Line3D_PointSquaredDistance(b *testing.B) {
+func Benchmark_Line3D_PointDistanceSquared(b *testing.B) {
 	l := Line3D{Vector3D{0, 0, 0}, Vector3D{1, 0, 0}}
 	p := &Vector3D{0, 1, 0}
 	for i := 0; i < b.N; i++ {
-		l.PointSquaredDistance(p)
+		l.PointDistanceSquared(p)
 	}
 }
 

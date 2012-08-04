@@ -31,31 +31,31 @@ func Benchmark_Vector3D_Add(b *testing.B) {
 	}
 }
 
-func TestVector3DAngleDifference(t *testing.T) {
+func TestVector3DAngularDifference(t *testing.T) {
 	v1, v2 := &Vector3D{1, 0, 0}, &Vector3D{0, 0, 1}
-	if v1.AngleDifference(v2) != math.Pi/2 {
-		t.Error("Vector3D.AngleDifference")
+	if v1.AngularDifference(v2) != math.Pi/2 {
+		t.Error("Vector3D.AngularDifference")
 	}
 }
 
-func Benchmark_Vector3D_AngleDifference(b *testing.B) {
+func Benchmark_Vector3D_AngularDifference(b *testing.B) {
 	v1, v2 := &Vector3D{1, 2, 5}, &Vector3D{3, 4, 6}
 	for i := 0; i < b.N; i++ {
-		v1.AngleDifference(v2)
+		v1.AngularDifference(v2)
 	}
 }
 
-func TestVector3DAngleCosSquaredDifference(t *testing.T) {
+func TestVector3DAngularCosSquaredDifference(t *testing.T) {
 	v1, v2 := &Vector3D{1, 0, 0}, &Vector3D{0, 0, 1}
-	if FuzzyEqual(v1.AngleCosSquaredDifference(v2), math.Cos(math.Pi/2)) {
-		t.Error("Vector3D.AngleCosSquaredDifference")
+	if FuzzyEqual(v1.AngularCosSquaredDifference(v2), math.Cos(math.Pi/2)) {
+		t.Error("Vector3D.AngularCosSquaredDifference")
 	}
 }
 
-func Benchmark_Vector3D_AngleCosSquaredDifference(b *testing.B) {
+func Benchmark_Vector3D_AngularCosSquaredDifference(b *testing.B) {
 	v1, v2 := &Vector3D{1, 2, 5}, &Vector3D{3, 4, 6}
 	for i := 0; i < b.N; i++ {
-		v1.AngleCosSquaredDifference(v2)
+		v1.AngularCosSquaredDifference(v2)
 	}
 }
 

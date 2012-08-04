@@ -31,31 +31,31 @@ func Benchmark_Vector2D_Add(b *testing.B) {
 	}
 }
 
-func TestVector2DAngleDifference(t *testing.T) {
+func TestVector2DAngularDifference(t *testing.T) {
 	v1, v2 := &Vector2D{1, 0}, &Vector2D{0, 1}
-	if v1.AngleDifference(v2) != math.Pi/2 {
-		t.Error("Vector2D.AngleDifference")
+	if v1.AngularDifference(v2) != math.Pi/2 {
+		t.Error("Vector2D.AngularDifference")
 	}
 }
 
-func Benchmark_Vector2D_AngleDifference(b *testing.B) {
+func Benchmark_Vector2D_AngularDifference(b *testing.B) {
 	v1, v2 := &Vector2D{1, 2}, &Vector2D{3, 4}
 	for i := 0; i < b.N; i++ {
-		v1.AngleDifference(v2)
+		v1.AngularDifference(v2)
 	}
 }
 
-func TestVector2DAngleCosSquaredDifference(t *testing.T) {
+func TestVector2DAngularCosSquaredDifference(t *testing.T) {
 	v1, v2 := &Vector2D{1, 0}, &Vector2D{0, 1}
-	if FuzzyEqual(v1.AngleCosSquaredDifference(v2), math.Cos(math.Pi/2)) {
-		t.Error("Vector2D.AngleCosSquaredDifference")
+	if FuzzyEqual(v1.AngularCosSquaredDifference(v2), math.Cos(math.Pi/2)) {
+		t.Error("Vector2D.AngularCosSquaredDifference")
 	}
 }
 
-func Benchmark_Vector2D_AngleCosSquaredDifference(b *testing.B) {
+func Benchmark_Vector2D_AngularCosSquaredDifference(b *testing.B) {
 	v1, v2 := &Vector2D{1, 2}, &Vector2D{3, 4}
 	for i := 0; i < b.N; i++ {
-		v1.AngleCosSquaredDifference(v2)
+		v1.AngularCosSquaredDifference(v2)
 	}
 }
 
