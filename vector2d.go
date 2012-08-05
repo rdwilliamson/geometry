@@ -35,17 +35,14 @@ func (a *Vector2D) AngularCosSquaredDifference(b *Vector2D) float64 {
 // DirectionEqual compares the direction of a and b then returns true if they
 // are exactly equal or false otherwise.
 func (a *Vector2D) DirectionEqual(b *Vector2D) bool {
-	u := (a.X*b.X + a.Y*b.Y) / (a.X*a.X + a.Y*a.Y)
-	x, y := b.X-a.X*u, b.Y-a.Y*u
-	return x*x+y*y == 0
+	return a.Y == (a.X/b.X)*b.Y
 }
 
 // DirectionFuzzyEqual compares the direction of a and b then returns true if
 // they are very close or false otherwise.
 func (a *Vector2D) DirectionFuzzyEqual(b *Vector2D) bool {
-	u := (a.X*b.X + a.Y*b.Y) / (a.X*a.X + a.Y*a.Y)
-	x, y := b.X-a.X*u, b.Y-a.Y*u
-	return x*x+y*y < 0.000000000001*0.000000000001
+	dy := a.Y - (a.X/b.X)*b.Y
+	return dy*dy < 1e-12*1e-12
 }
 
 // Distance returns the distance between points a and b.

@@ -44,17 +44,22 @@ func (z *Vector3D) CrossProduct(a, b *Vector3D) *Vector3D {
 // DirectionEqual compares the direction of a and b then returns true if they
 // are exactly equal or false otherwise.
 func (a *Vector3D) DirectionEqual(b *Vector3D) bool {
-	u := (a.X*b.X + a.Y*b.Y + a.Z*b.Z) / (a.X*a.X + a.Y*a.Y + a.Z*a.Z)
-	x, y, z := b.X-a.X*u, b.Y-a.Y*u, b.X-a.Z*u
-	return x*x+y*y+z*z == 0
+	s := a.X / b.X
+	if a.Y != s*b.Y {
+		return false
+	}
+	return a.Z == s*b.Z
 }
 
 // DirectionFuzzyEqual compares the direction of a and b then returns true if
 //they are very close or false otherwise.
 func (a *Vector3D) DirectionFuzzyEqual(b *Vector3D) bool {
-	u := (a.X*b.X + a.Y*b.Y + a.Z*b.Z) / (a.X*a.X + a.Y*a.Y + a.Z*a.Z)
-	x, y, z := b.X-a.X*u, b.Y-a.Y*u, b.X-a.Z*u
-	return x*x+y*y+z*z < 0.000000000001*0.000000000001
+	s := a.X / b.X
+	if dy := a.Y - s*b.Y; dy*dy >= 1e-11*1e-11 {
+		return false
+	}
+	dz := a.Z - s*b.Z
+	return dz*dz < 1e-11*1e-11
 }
 
 // Distance returns the distance between points a and b.

@@ -77,7 +77,7 @@ func Benchmark_Vector2D_DirectionEqual(b *testing.B) {
 }
 
 func TestVector2DDirectionFuzzyEqual(t *testing.T) {
-	v1, v2 := &Vector2D{1, 1}, &Vector2D{2, 2.000000000001}
+	v1, v2 := &Vector2D{1, 1}, &Vector2D{2, 2.0000000000001}
 	if !v1.DirectionFuzzyEqual(v2) {
 		t.Error("Vector2D.DirectionFuzzyEqual")
 	}

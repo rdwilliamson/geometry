@@ -84,7 +84,7 @@ func TestVector3DDirectionFuzzyEqual(t *testing.T) {
 	if !v2.DirectionFuzzyEqual(v1) {
 		t.Error("Vector3D.DirectionFuzzyEqual")
 	}
-	v2.Z = 2.00000000001
+	v2.Z = 2.0000000001
 	if v1.DirectionFuzzyEqual(v2) {
 		t.Error("Vector3D.DirectionFuzzyEqual")
 	}
