@@ -10,5 +10,5 @@ import (
 
 // Check if a and b are very close.
 func FuzzyEqual(a, b float64) bool {
-	return math.Abs(a-b) <= 0.000000000001*math.Min(math.Abs(a), math.Abs(b))
+	return math.Abs(a-b) <= 1e-12*math.Min(math.Abs(a), math.Abs(b))
 }
