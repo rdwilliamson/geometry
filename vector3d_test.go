@@ -47,7 +47,7 @@ func Benchmark_Vector3D_AngularDifference(b *testing.B) {
 
 func TestVector3DAngularCosSquaredDifference(t *testing.T) {
 	v1, v2 := &Vector3D{1, 0, 0}, &Vector3D{0, 0, 1}
-	if FuzzyEqual(v1.AngularCosSquaredDifference(v2), math.Cos(math.Pi/2)) {
+	if FuzzyEqual(v1.AngularCosSquaredDifference(v2), math.Sqrt2/2) {
 		t.Error("Vector3D.AngularCosSquaredDifference")
 	}
 }

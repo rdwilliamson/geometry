@@ -47,7 +47,7 @@ func Benchmark_Vector2D_AngularDifference(b *testing.B) {
 
 func TestVector2DAngularCosSquaredDifference(t *testing.T) {
 	v1, v2 := &Vector2D{1, 0}, &Vector2D{0, 1}
-	if FuzzyEqual(v1.AngularCosSquaredDifference(v2), math.Cos(math.Pi/2)) {
+	if FuzzyEqual(v1.AngularCosSquaredDifference(v2), math.Sqrt2/2) {
 		t.Error("Vector2D.AngularCosSquaredDifference")
 	}
 }
