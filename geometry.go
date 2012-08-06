@@ -4,11 +4,23 @@
 // All angles are in radians.
 package geometry
 
-import (
-	"math"
-)
-
 // Check if a and b are very close.
 func FuzzyEqual(a, b float64) bool {
-	return math.Abs(a-b) <= 1e-12*math.Min(math.Abs(a), math.Abs(b))
+	// TODO handle case when a and b are near zero and on oposite sides of it
+	absA := a
+	if absA < 0 {
+		absA = -absA
+	}
+	absB := b
+	if absB < 0 {
+		absB = -absB
+	}
+	if absA < 1 || absB < 1 {
+		absA += 1
+		absB += 1
+	}
+	if absA < absB {
+		return absB-absA <= 1e-12*absA
+	}
+	return absA-absB <= 1e-12*absB
 }
