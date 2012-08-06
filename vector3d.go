@@ -45,7 +45,7 @@ func (z *Vector3D) CrossProduct(a, b *Vector3D) *Vector3D {
 // are exactly equal or false otherwise.
 func (a *Vector3D) DirectionEqual(b *Vector3D) bool {
 	s := a.X / b.X
-	if a.Y != s*b.Y {
+	if s < 0 || a.Y != s*b.Y {
 		return false
 	}
 	return a.Z == s*b.Z
@@ -55,6 +55,9 @@ func (a *Vector3D) DirectionEqual(b *Vector3D) bool {
 //they are very close or false otherwise.
 func (a *Vector3D) DirectionFuzzyEqual(b *Vector3D) bool {
 	s := a.X / b.X
+	if s < 0 {
+		return false
+	}
 	if dy := a.Y - s*b.Y; dy*dy >= 1e-11*1e-11 {
 		return false
 	}

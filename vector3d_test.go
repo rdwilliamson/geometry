@@ -67,6 +67,13 @@ func TestVector3DDirectionEqual(t *testing.T) {
 	if !v2.DirectionEqual(v1) {
 		t.Error("Vector3D.DirectionEqual")
 	}
+	*v2 = Vector3D{-2, -2, -2}
+	if v1.DirectionEqual(v2) {
+		t.Error("Vector3D.DirectionEqual")
+	}
+	if v2.DirectionEqual(v1) {
+		t.Error("Vector3D.DirectionEqual")
+	}
 }
 
 func Benchmark_Vector3D_DirectionEqual(b *testing.B) {
@@ -85,6 +92,13 @@ func TestVector3DDirectionFuzzyEqual(t *testing.T) {
 		t.Error("Vector3D.DirectionFuzzyEqual")
 	}
 	v2.Z = 2.0000000001
+	if v1.DirectionFuzzyEqual(v2) {
+		t.Error("Vector3D.DirectionFuzzyEqual")
+	}
+	if v2.DirectionFuzzyEqual(v1) {
+		t.Error("Vector3D.DirectionFuzzyEqual")
+	}
+	*v2 = Vector3D{-2, -2, -2.000000000001}
 	if v1.DirectionFuzzyEqual(v2) {
 		t.Error("Vector3D.DirectionFuzzyEqual")
 	}
