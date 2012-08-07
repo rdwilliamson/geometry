@@ -5,22 +5,30 @@
 package geometry
 
 // Check if a and b are very close.
+
+// Check if a and b are very close.
 func FuzzyEqual(a, b float64) bool {
-	// TODO handle case when a and b are near zero and on oposite sides of it
-	absA := a
-	if absA < 0 {
-		absA = -absA
+	// handle case when a and b are near zero and on opposite sides of it
+	if a*b < 0 {
+		a += 1
+		b += 1
 	}
-	absB := b
-	if absB < 0 {
-		absB = -absB
+
+	if a < 0 {
+		a = -a
 	}
-	if absA < 1 || absB < 1 {
-		absA += 1
-		absB += 1
+	if b < 0 {
+		b = -b
 	}
-	if absA < absB {
-		return absB-absA <= 1e-12*absA
+
+	// if values are small compare around one instead of zero
+	if a < 1 || b < 1 {
+		a += 1
+		b += 1
 	}
-	return absA-absB <= 1e-12*absB
+
+	if a < b {
+		return b-a <= 1e-12*a
+	}
+	return a-b <= 1e-12*b
 }

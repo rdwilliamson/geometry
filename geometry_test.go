@@ -2,192 +2,51 @@ package geometry
 
 import "testing"
 
+type fuzzyTestData struct {
+	a    float64 // any value
+	far  float64 // value far enough from a that the two are not equal
+	near float64 // value near enough to a that the two are equal
+}
+
+var fuzzyTestValues = []fuzzyTestData{
+	{0, 1e-12, 1e-13},
+	{1e-12, -1e-12, -1e-13},
+	{1 + 1e-12, 1, 1 - 1e-13},
+	{1e-12, 0, -1e-13},
+	{1e-12, -1e-12, -1e-13},
+	{1e11, 1e11 + 1e-1, 1e11 + 1e-2},
+}
+
+func testFuzzyEqual(a, far, near float64, t *testing.T) {
+	if a == far {
+		t.Fatalf("geometry.FuzzyEqual: far input is exactly equal")
+	}
+	if a == near {
+		t.Fatalf("geometry.FuzzyEqual: near input is exactly equal")
+	}
+	if FuzzyEqual(a, far) {
+		t.Errorf("geometry.FuzzyEqual: %f == %f", a, far)
+	}
+	if FuzzyEqual(far, a) {
+		t.Errorf("geometry.FuzzyEqual: %f == %f", a, far)
+	}
+	if !FuzzyEqual(a, near) {
+		t.Errorf("geometry.FuzzyEqual: %f != %f", a, near)
+	}
+	if !FuzzyEqual(near, a) {
+		t.Errorf("geometry.FuzzyEqual: %f != %f", a, near)
+	}
+}
+
 func TestFuzzyEqual(t *testing.T) {
-	n1 := 0.0
-	n2 := 1e-12
-	n3 := 1e-13
-	if n1 == n2 {
-		t.Fatal("geometry.FuzzyEqual")
-	}
-	if n1 == n3 {
-		t.Fatal("geometry.FuzzyEqual")
-	}
-	if FuzzyEqual(n1, n2) {
-		t.Error("geometry.FuzzyEqual")
-	}
-	if !FuzzyEqual(n1, n3) {
-		t.Error("geometry.FuzzyEqual")
-	}
-	if FuzzyEqual(n2, n1) {
-		t.Error("geometry.FuzzyEqual")
-	}
-	if !FuzzyEqual(n3, n1) {
-		t.Error("geometry.FuzzyEqual")
-	}
-	n1 = -n1
-	n2 = -n2
-	n3 = -n3
-	if n1 == n2 {
-		t.Fatal("geometry.FuzzyEqual")
-	}
-	if n1 == n3 {
-		t.Fatal("geometry.FuzzyEqual")
-	}
-	if FuzzyEqual(n1, n2) {
-		t.Error("geometry.FuzzyEqual")
-	}
-	if !FuzzyEqual(n1, n3) {
-		t.Error("geometry.FuzzyEqual")
-	}
-	if FuzzyEqual(n2, n1) {
-		t.Error("geometry.FuzzyEqual")
-	}
-	if !FuzzyEqual(n3, n1) {
-		t.Error("geometry.FuzzyEqual")
-	}
-	n1 = 1e-12
-	n2 = 0
-	n3 = -1e-13
-	if n1 == n2 {
-		t.Fatal("geometry.FuzzyEqual")
-	}
-	if n1 == n3 {
-		t.Fatal("geometry.FuzzyEqual")
-	}
-	if FuzzyEqual(n1, n2) {
-		t.Error("geometry.FuzzyEqual")
-	}
-	if !FuzzyEqual(n1, n3) {
-		t.Error("geometry.FuzzyEqual")
-	}
-	if FuzzyEqual(n2, n1) {
-		t.Error("geometry.FuzzyEqual")
-	}
-	if !FuzzyEqual(n3, n1) {
-		t.Error("geometry.FuzzyEqual")
-	}
-	n1 = -n1
-	n2 = -n2
-	n3 = -n3
-	if n1 == n2 {
-		t.Fatal("geometry.FuzzyEqual")
-	}
-	if n1 == n3 {
-		t.Fatal("geometry.FuzzyEqual")
-	}
-	if FuzzyEqual(n1, n2) {
-		t.Error("geometry.FuzzyEqual")
-	}
-	if !FuzzyEqual(n1, n3) {
-		t.Error("geometry.FuzzyEqual")
-	}
-	if FuzzyEqual(n2, n1) {
-		t.Error("geometry.FuzzyEqual")
-	}
-	if !FuzzyEqual(n3, n1) {
-		t.Error("geometry.FuzzyEqual")
-	}
-	n1 = 1 + 1e-12
-	n2 = 1 //- 1e-12
-	n3 = 1 - 1e-13
-	if n1 == n2 {
-		t.Fatal("geometry.FuzzyEqual")
-	}
-	if n1 == n3 {
-		t.Fatal("geometry.FuzzyEqual")
-	}
-	if FuzzyEqual(n1, n2) {
-		t.Error("geometry.FuzzyEqual")
-	}
-	if !FuzzyEqual(n1, n3) {
-		t.Error("geometry.FuzzyEqual")
-	}
-	if FuzzyEqual(n2, n1) {
-		t.Error("geometry.FuzzyEqual")
-	}
-	if !FuzzyEqual(n3, n1) {
-		t.Error("geometry.FuzzyEqual")
-	}
-	n1 = 1e11
-	n2 = 1e11 + 1e-1
-	n3 = 1e11 + 1e-2
-	if n1 == n2 {
-		t.Fatal("geometry.FuzzyEqual")
-	}
-	if n1 == n3 {
-		t.Fatal("geometry.FuzzyEqual")
-	}
-	if FuzzyEqual(n1, n2) {
-		t.Error("geometry.FuzzyEqual")
-	}
-	if !FuzzyEqual(n1, n3) {
-		t.Error("geometry.FuzzyEqual")
-	}
-	if FuzzyEqual(n2, n1) {
-		t.Error("geometry.FuzzyEqual")
-	}
-	if !FuzzyEqual(n3, n1) {
-		t.Error("geometry.FuzzyEqual")
+	for _, v := range fuzzyTestValues {
+		testFuzzyEqual(v.a, v.far, v.near, t)
+		testFuzzyEqual(-v.a, -v.far, -v.near, t)
 	}
 }
 
-func Benchmark_FuzzyEqual_1(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		FuzzyEqual(1, 1+1e-13)
-	}
-}
-
-func Benchmark_FuzzyEqual_2(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		FuzzyEqual(-1, -1+1e-13)
-	}
-}
-
-func Benchmark_FuzzyEqual_3(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		FuzzyEqual(1+1e-13, 1)
-	}
-}
-
-func Benchmark_FuzzyEqual_4(b *testing.B) {
+func Benchmark_FuzzyEqual(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		FuzzyEqual(-1+1e-13, -1)
-	}
-}
-
-func Benchmark_FuzzyEqual_5(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		FuzzyEqual(-1e-13, 0)
-	}
-}
-
-func Benchmark_FuzzyEqual_6(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		FuzzyEqual(0, -1e-13)
-	}
-}
-
-func Benchmark_FuzzyEqual_7(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		FuzzyEqual(1e-13, 0)
-	}
-}
-
-func Benchmark_FuzzyEqual_8(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		FuzzyEqual(0, 1e-13)
-	}
-}
-
-func Benchmark_FuzzyEqual_All(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		FuzzyEqual(1+1e-13, 1)
-		FuzzyEqual(-1, -1+1e-13)
-		FuzzyEqual(1+1e-13, 1)
-		FuzzyEqual(-1+1e-13, -1)
-		FuzzyEqual(1e-13, 0)
-		FuzzyEqual(0, 1e-13)
-		FuzzyEqual(-1e-13, 0)
-		FuzzyEqual(0, -1e-13)
 	}
 }
