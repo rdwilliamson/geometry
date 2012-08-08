@@ -2,13 +2,13 @@ package geometry
 
 import "testing"
 
-type fuzzyTestData struct {
+type fuzzyEqualTestData struct {
 	a    float64 // any value
 	far  float64 // value far enough from a that the two are not equal
 	near float64 // value near enough to a that the two are equal
 }
 
-var fuzzyTestValues = []fuzzyTestData{
+var fuzzyEqualTestValues = []fuzzyEqualTestData{
 	{0, 1e-12, 1e-13},
 	{1e-12, -1e-12, -1e-13},
 	{1 + 1e-12, 1, 1 - 1e-13},
@@ -39,7 +39,7 @@ func testFuzzyEqual(a, far, near float64, t *testing.T) {
 }
 
 func TestFuzzyEqual(t *testing.T) {
-	for _, v := range fuzzyTestValues {
+	for _, v := range fuzzyEqualTestValues {
 		testFuzzyEqual(v.a, v.far, v.near, t)
 		testFuzzyEqual(-v.a, -v.far, -v.near, t)
 	}

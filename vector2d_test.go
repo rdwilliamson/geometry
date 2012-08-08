@@ -83,27 +83,30 @@ func Benchmark_Vector2D_DirectionEqual(b *testing.B) {
 	}
 }
 
+type vector2DDirectionFuzzyEqualData struct {
+	v1, v2 Vector2D
+	equal  bool
+}
+
+var vector2DDirectionFuzzyEqualValues = []vector2DDirectionFuzzyEqualData{
+	{Vector2D{1, 1}, Vector2D{2, 2 + 2e-12}, false},
+	{Vector2D{1, 1}, Vector2D{2 + 2e-12, 2}, false},
+	{Vector2D{1, 1}, Vector2D{2, 2 + 2e-13}, true},
+	{Vector2D{1, 1}, Vector2D{2 + 2e-13, 2}, true},
+}
+
+func testVector2DDirectionFuzzyEqual(d vector2DDirectionFuzzyEqualData, t *testing.T) {
+	if d.v1.DirectionFuzzyEqual(&d.v2) != d.equal {
+		t.Error("Vector2D.DirectionFuzzyEqual:", d.v1, d.v2, d.equal)
+	}
+	if d.v2.DirectionFuzzyEqual(&d.v1) != d.equal {
+		t.Error("Vector2D.DirectionFuzzyEqual:", d.v2, d.v1, d.equal)
+	}
+}
+
 func TestVector2DDirectionFuzzyEqual(t *testing.T) {
-	v1, v2 := &Vector2D{1, 1}, &Vector2D{2, 2.0000000000001}
-	if !v1.DirectionFuzzyEqual(v2) {
-		t.Error("Vector2D.DirectionFuzzyEqual")
-	}
-	if !v2.DirectionFuzzyEqual(v1) {
-		t.Error("Vector2D.DirectionFuzzyEqual")
-	}
-	v2.Y = 2.00000000001
-	if v1.DirectionFuzzyEqual(v2) {
-		t.Error("Vector2D.DirectionFuzzyEqual")
-	}
-	if v2.DirectionFuzzyEqual(v1) {
-		t.Error("Vector2D.DirectionFuzzyEqual")
-	}
-	*v2 = Vector2D{-2, -2.0000000000001}
-	if v1.DirectionFuzzyEqual(v2) {
-		t.Error("Vector2D.DirectionFuzzyEqual")
-	}
-	if v2.DirectionFuzzyEqual(v1) {
-		t.Error("Vector2D.DirectionFuzzyEqual")
+	for _, v := range vector2DDirectionFuzzyEqualValues {
+		testVector2DDirectionFuzzyEqual(v, t)
 	}
 }
 
@@ -202,14 +205,25 @@ func Benchmark_Vector2D_Equal(b *testing.B) {
 	}
 }
 
-func TestVector2DFuzzyEqual(t *testing.T) {
-	v1, v2 := &Vector2D{}, &Vector2D{0.000000000001, 0}
-	if v1.FuzzyEqual(v2) {
-		t.Error("Vector2D.FuzzyEqual")
+type fuzzyEqualData struct {
+	v1, v2 Vector2D
+	equal  bool
+}
+
+var fuzzyEqualValues = []fuzzyEqualData{
+	{Vector2D{}, Vector2D{0, 1e-12}, false},
+	{Vector2D{}, Vector2D{0, 1e-13}, true},
+}
+
+func testVector2DFuzzyEqual(d fuzzyEqualData, t *testing.T) {
+	if d.v1.FuzzyEqual(&d.v2) != d.equal {
+		t.Error("Vector2D.FuzzyEqual", d.v1, d.v2, d.equal)
 	}
-	v2.X = 0.0000000000001
-	if !v1.FuzzyEqual(v2) {
-		t.Error("Vector2D.FuzzyEqual")
+}
+
+func TestVector2DFuzzyEqual(t *testing.T) {
+	for _, v := range fuzzyEqualValues {
+		testVector2DFuzzyEqual(v, t)
 	}
 }
 

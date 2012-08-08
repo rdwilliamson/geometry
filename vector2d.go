@@ -45,12 +45,18 @@ func (a *Vector2D) DirectionEqual(b *Vector2D) bool {
 // DirectionFuzzyEqual compares the direction of a and b then returns true if
 // they are very close or false otherwise.
 func (a *Vector2D) DirectionFuzzyEqual(b *Vector2D) bool {
-	s := a.X / b.X
+	if a.X > b.X {
+		s := a.X / b.X
+		if s < 0 {
+			return false
+		}
+		return FuzzyEqual(a.Y, s*b.Y)
+	}
+	s := b.X / a.X
 	if s < 0 {
 		return false
 	}
-	dy := a.Y - s*b.Y
-	return dy*dy < 1e-12*1e-12
+	return FuzzyEqual(s*a.Y, b.Y)
 }
 
 // Distance returns the distance between points a and b.
@@ -86,8 +92,7 @@ func (a *Vector2D) Equal(b *Vector2D) bool {
 // FuzzyEqual compares a and b then returns true if they are very close or
 // false otherwise.
 func (a *Vector2D) FuzzyEqual(b *Vector2D) bool {
-	dx, dy := b.X-a.X, b.Y-a.Y
-	return dx*dx+dy*dy < 0.000000000001*0.000000000001
+	return FuzzyEqual(a.X, b.X) && FuzzyEqual(a.Y, b.Y)
 }
 
 // Magnitude returns the magnitude of x.
