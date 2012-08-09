@@ -369,6 +369,33 @@ func Benchmark_Line2D_Set(b *testing.B) {
 	}
 }
 
+type line2DSlopeData struct {
+	l     Line2D
+	slope float64
+}
+
+var line2DSlopeValues = []line2DSlopeData{
+	{Line2D{Vector2D{}, Vector2D{1, 1}}, 1},
+	{Line2D{Vector2D{}, Vector2D{1, -1}}, -1},
+	{Line2D{Vector2D{}, Vector2D{-1, 1}}, -1},
+	{Line2D{Vector2D{}, Vector2D{-1, -1}}, 1},
+	{Line2D{Vector2D{}, Vector2D{1, 0}}, 0},
+	{Line2D{Vector2D{}, Vector2D{0, 1}}, math.Inf(1)},
+	{Line2D{Vector2D{}, Vector2D{0, -1}}, math.Inf(-1)},
+}
+
+func testLine2DSlope(d line2DSlopeData, t *testing.T) {
+	if d.l.Slope() != d.slope {
+		t.Error("Line2D.Slope", d.l, d.slope)
+	}
+}
+
+func TestLine2DSlope(t *testing.T) {
+	for _, v := range line2DSlopeValues {
+		testLine2DSlope(v, t)
+	}
+}
+
 func TestLine2DToVector(t *testing.T) {
 	l, v := &Line2D{Vector2D{1, 2}, Vector2D{3, 4}}, &Vector2D{}
 	if !l.ToVector(v).Equal(&Vector2D{2, 2}) {

@@ -198,6 +198,11 @@ func (z *Line2D) Set(x *Line2D) *Line2D {
 	return z
 }
 
+// Slope returns the slope of x.
+func (x *Line2D) Slope() float64 {
+	return (x.P2.Y - x.P1.Y) / (x.P2.X - x.P1.X)
+}
+
 // ToVector sets z to the vector from l.P1 to l.P2 and returns z.
 func (x *Line2D) ToVector(z *Vector2D) *Vector2D {
 	z.X = x.P2.X - x.P1.X
