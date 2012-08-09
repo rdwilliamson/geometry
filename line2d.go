@@ -21,28 +21,15 @@ func NewLine2D(x1, y1, x2, y2 float64) *Line2D {
 // Equal compares a and b and returns true if they are exactly equal or false
 // otherwise.
 func (a *Line2D) Equal(b *Line2D) bool {
-	ldx, ldy := a.P2.X-a.P1.X, a.P2.Y-a.P1.Y
-	d := 1.0 / (ldx*ldx + ldy*ldy)
-	u := (ldx*(b.P1.X-a.P1.X) + ldy*(b.P1.Y-a.P1.Y)) * d
-	x, y := b.P1.X-(a.P1.X+ldx*u), b.P1.Y-(a.P1.Y+ldy*u)
-	if x*x+y*y != 0 {
-		return false
-	}
-	return ldy/ldx == (b.P2.Y-b.P1.Y)/(b.P2.X-b.P1.X)
+	am, bm := (a.P2.Y-a.P1.Y)/(a.P2.X-a.P1.X), (b.P2.Y-b.P1.Y)/(b.P2.X-b.P1.X)
+	return am == bm && a.P1.Y-am*a.P1.X == b.P1.Y-bm*b.P1.X
 }
 
 // FuzzyEqual compares a and b and returns true of they are very close or false
 // otherwise.
 func (a *Line2D) FuzzyEqual(b *Line2D) bool {
-	ldx, ldy := a.P2.X-a.P1.X, a.P2.Y-a.P1.Y
-	d := 1.0 / (ldx*ldx + ldy*ldy)
-	u := (ldx*(b.P1.X-a.P1.X) + ldy*(b.P1.Y-a.P1.Y)) * d
-	x, y := b.P1.X-(a.P1.X+ldx*u), b.P1.Y-(a.P1.Y+ldy*u)
-	if x*x+y*y >= 0.000000000001*0.000000000001 {
-		return false
-	}
-	dr := (ldy / ldx) - ((b.P2.Y - b.P1.Y) / (b.P2.X - b.P1.X))
-	return dr*dr < 0.000000000001*0.000000000001
+	am, bm := (a.P2.Y-a.P1.Y)/(a.P2.X-a.P1.X), (b.P2.Y-b.P1.Y)/(b.P2.X-b.P1.X)
+	return FuzzyEqual(am, bm) && FuzzyEqual(a.P1.Y-am*a.P1.X, b.P1.Y-bm*b.P1.X)
 }
 
 // Intersection sets point z to the intersection of a and b, then returns z.
@@ -136,12 +123,8 @@ func (a *Line2D) SegmentEqual(b *Line2D) bool {
 // SegmentFuzzyEqual compares a and b as line segments and returns true if they
 // are very close and false otherwise.
 func (a *Line2D) SegmentFuzzyEqual(b *Line2D) bool {
-	dx, dy := b.P1.X-a.P1.X, b.P1.Y-a.P1.Y
-	if dx*dx+dy*dy >= 0.000000000001*0.000000000001 {
-		return false
-	}
-	dx, dy = b.P2.X-a.P2.X, b.P2.Y-a.P2.Y
-	return dx*dx+dy*dy < 0.000000000001*0.000000000001
+	return (a.P1.FuzzyEqual(&b.P1) && a.P2.FuzzyEqual(&b.P2)) ||
+		(a.P1.FuzzyEqual(&b.P2) && a.P2.FuzzyEqual(&b.P1))
 }
 
 // SegmentIntersection sets point z to the intersection of a and b as if they

@@ -33,15 +33,43 @@ func Benchmark_Line2D_Equal(b *testing.B) {
 	}
 }
 
-func TestLine2DFuzzyEqual(t *testing.T) {
-	l1 := &Line2D{Vector2D{1, 2}, Vector2D{3, 4}}
-	l2 := &Line2D{Vector2D{-3, -2}, Vector2D{5, 6.00000000001}}
-	if l1.FuzzyEqual(l2) {
-		t.Error("Line2D.FuzzyEqual")
+type line2DFuzzyEqualData struct {
+	l1, l2 Line2D
+	equal  bool
+}
+
+var line2DFuzzyEqualValues = []line2DFuzzyEqualData{
+	{Line2D{Vector2D{1, 2}, Vector2D{3, 4}}, Line2D{Vector2D{-3, -2}, Vector2D{5, 6 + 1e-11}}, false},
+	{Line2D{Vector2D{1, 2}, Vector2D{3, 4}}, Line2D{Vector2D{-3, -2}, Vector2D{5, 6 + 1e-12}}, true},
+	{Line2D{Vector2D{1, 2}, Vector2D{3, 4}}, Line2D{Vector2D{2, 2}, Vector2D{4, 4}}, false},
+}
+
+func testLine2DFuzzyEqual(d line2DFuzzyEqualData, t *testing.T) {
+	if d.l1.FuzzyEqual(&d.l2) != d.equal {
+		t.Error("Line2D.FuzzyEqual", d.l1, d.l2, d.equal)
 	}
-	l2.P2.Y = 6.000000000001
-	if !l1.FuzzyEqual(l2) {
-		t.Error("Line2D.FuzzyEqual")
+	if d.l2.FuzzyEqual(&d.l1) != d.equal {
+		t.Error("Line2D.FuzzyEqual", d.l2, d.l1, d.equal)
+	}
+	d.l1.P1, d.l1.P2 = d.l1.P2, d.l1.P1
+	if d.l1.FuzzyEqual(&d.l2) != d.equal {
+		t.Error("Line2D.FuzzyEqual", d.l1, d.l2, d.equal)
+	}
+	if d.l2.FuzzyEqual(&d.l1) != d.equal {
+		t.Error("Line2D.FuzzyEqual", d.l2, d.l1, d.equal)
+	}
+	d.l2.P1, d.l2.P2 = d.l2.P2, d.l2.P1
+	if d.l1.FuzzyEqual(&d.l2) != d.equal {
+		t.Error("Line2D.FuzzyEqual", d.l1, d.l2, d.equal)
+	}
+	if d.l2.FuzzyEqual(&d.l1) != d.equal {
+		t.Error("Line2D.FuzzyEqual", d.l2, d.l1, d.equal)
+	}
+}
+
+func TestLine2DFuzzyEqual(t *testing.T) {
+	for _, v := range line2DFuzzyEqualValues {
+		testLine2DFuzzyEqual(v, t)
 	}
 }
 
@@ -209,21 +237,49 @@ func Benchmark_Line2D_SegmentEqual(b *testing.B) {
 	}
 }
 
-func TestLine2DSegmentFuzzyEqual(t *testing.T) {
-	l1 := &Line2D{Vector2D{1, 2}, Vector2D{3, 4}}
-	l2 := &Line2D{Vector2D{1, 2}, Vector2D{3, 4.000000000001}}
-	if l1.SegmentFuzzyEqual(l2) {
-		t.Error("Line2D.SegmentFuzzyEqual")
+type line2DSegmentFuzzyEqualData struct {
+	l1, l2 Line2D
+	equal  bool
+}
+
+var line2DSegmentFuzzyEqualValues = []line2DSegmentFuzzyEqualData{
+	{Line2D{Vector2D{1, 2}, Vector2D{3, 4}}, Line2D{Vector2D{1, 2}, Vector2D{3, 4 + 1e-11}}, false},
+	{Line2D{Vector2D{1, 2}, Vector2D{3, 4}}, Line2D{Vector2D{1, 2}, Vector2D{3, 4 + 1e-12}}, true},
+	{Line2D{Vector2D{1, 2}, Vector2D{3, 4}}, Line2D{Vector2D{2, 3}, Vector2D{4, 5}}, false},
+}
+
+func testLine2DSegmentFuzzyEqual(d line2DSegmentFuzzyEqualData, t *testing.T) {
+	if d.l1.SegmentFuzzyEqual(&d.l2) != d.equal {
+		t.Error("Line2D.SegmentFuzzyEqual", d.l1, d.l2, d.equal)
 	}
-	l2.P2.Y = 4.0000000000001
-	if !l1.SegmentFuzzyEqual(l2) {
-		t.Error("Line2D.SegmentFuzzyEqual")
+	if d.l2.SegmentFuzzyEqual(&d.l1) != d.equal {
+		t.Error("Line2D.SegmentFuzzyEqual", d.l2, d.l1, d.equal)
+	}
+	d.l1.P1, d.l1.P2 = d.l1.P2, d.l1.P1
+	if d.l1.SegmentFuzzyEqual(&d.l2) != d.equal {
+		t.Error("Line2D.SegmentFuzzyEqual", d.l1, d.l2, d.equal)
+	}
+	if d.l2.SegmentFuzzyEqual(&d.l1) != d.equal {
+		t.Error("Line2D.SegmentFuzzyEqual", d.l2, d.l1, d.equal)
+	}
+	d.l2.P1, d.l2.P2 = d.l2.P2, d.l2.P1
+	if d.l1.SegmentFuzzyEqual(&d.l2) != d.equal {
+		t.Error("Line2D.SegmentFuzzyEqual", d.l1, d.l2, d.equal)
+	}
+	if d.l2.SegmentFuzzyEqual(&d.l1) != d.equal {
+		t.Error("Line2D.SegmentFuzzyEqual", d.l2, d.l1, d.equal)
+	}
+}
+
+func TestLine2DSegmentFuzzyEqual(t *testing.T) {
+	for _, v := range line2DSegmentFuzzyEqualValues {
+		testLine2DSegmentFuzzyEqual(v, t)
 	}
 }
 
 func Benchmark_Line2D_SegmentFuzzyEqual(b *testing.B) {
 	l1 := &Line2D{Vector2D{1, 2}, Vector2D{3, 4}}
-	l2 := &Line2D{Vector2D{2, 2}, Vector2D{3, 4}}
+	l2 := &Line2D{Vector2D{1, 2}, Vector2D{3, 4}}
 	for i := 0; i < b.N; i++ {
 		l1.SegmentFuzzyEqual(l2)
 	}
