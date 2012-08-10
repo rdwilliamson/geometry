@@ -41,6 +41,8 @@ type line2DFuzzyEqualData struct {
 var line2DFuzzyEqualValues = []line2DFuzzyEqualData{
 	{Line2D{Vector2D{1, 2}, Vector2D{3, 4}}, Line2D{Vector2D{-3, -2}, Vector2D{5, 6 + 1e-11}}, false},
 	{Line2D{Vector2D{1, 2}, Vector2D{3, 4}}, Line2D{Vector2D{-3, -2}, Vector2D{5, 6 + 1e-12}}, true},
+	{Line2D{Vector2D{1, 2}, Vector2D{3, 4}}, Line2D{Vector2D{-3, -2}, Vector2D{5 + 1e-11, 6}}, false},
+	{Line2D{Vector2D{1, 2}, Vector2D{3, 4}}, Line2D{Vector2D{-3, -2}, Vector2D{5 + 1e-12, 6}}, true},
 	{Line2D{Vector2D{1, 2}, Vector2D{3, 4}}, Line2D{Vector2D{2, 2}, Vector2D{4, 4}}, false},
 }
 

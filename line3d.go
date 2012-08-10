@@ -32,14 +32,13 @@ func (a *Line3D) FuzzyEqual(b *Line3D) bool {
 	d := 1 / (l1dx*l1dx + l1dy*l1dy + l1dz*l1dz)
 	u := (l1dx*(b.P1.X-a.P1.X) + l1dy*(b.P1.Y-a.P1.Y) + l1dz*(b.P1.Z-a.P1.Z)) * d
 	x, y, z := b.P1.X-(a.P1.X+l1dx*u), b.P1.Y-(a.P1.Y+l1dy*u), b.P1.Z-(a.P1.Z+l1dz*u)
-	if x*x+y*y+z*z >= 0.000000000001*0.000000000001 {
+	if !FuzzyEqual(x, 0) || !FuzzyEqual(y, 0) || !FuzzyEqual(z, 0) {
 		return false
 	}
 	il1dx, il2dx := 1/l1dx, 1/(b.P2.X-b.P1.X)
 	dyr := l1dy*il1dx - (b.P2.Y-b.P1.Y)*il2dx
 	dzr := l1dz*il1dx - (b.P2.Z-b.P1.Z)*il2dx
-	return dyr*dyr < 0.000000000001*0.000000000001 &&
-		dzr*dzr < 0.000000000001*0.000000000001
+	return FuzzyEqual(dyr, 0) && FuzzyEqual(dzr, 0)
 }
 
 // LineBetween sets z to the shortest line between a and b then returns z. This
@@ -115,16 +114,8 @@ func (a *Line3D) SegmentEqual(b *Line3D) bool {
 // SegmentFuzzyEqual compares line segments a and b and returns true if they
 // are very close and false otherwise.
 func (a *Line3D) SegmentFuzzyEqual(b *Line3D) bool {
-	dx1, dy1, dz1 := a.P1.X-b.P1.X, a.P1.Y-b.P1.Y, a.P1.Z-b.P1.Z
-	dx2, dy2, dz2 := a.P2.X-b.P2.X, a.P2.Y-b.P2.Y, a.P2.Z-b.P2.Z
-	if dx1*dx1+dy1*dy1+dz1*dz1 < 0.000000000001*0.000000000001 &&
-		dx2*dx2+dy2*dy2+dz2*dz2 < 0.000000000001*0.000000000001 {
-		return true
-	}
-	dx1, dy1, dz1 = a.P1.X-b.P2.X, a.P1.Y-b.P2.Y, a.P1.Z-b.P2.Z
-	dx2, dy2, dz2 = a.P2.X-b.P1.X, a.P2.Y-b.P1.Y, a.P2.Z-b.P1.Z
-	return dx1*dx1+dy1*dy1+dz1*dz1 < 0.000000000001*0.000000000001 &&
-		dx2*dx2+dy2*dy2+dz2*dz2 < 0.000000000001*0.000000000001
+	return (a.P1.FuzzyEqual(&b.P1) && a.P2.FuzzyEqual(&b.P2)) ||
+		(a.P1.FuzzyEqual(&b.P2) && a.P2.FuzzyEqual(&b.P1))
 }
 
 // SegmentIntersection sets z to the shortest line segment between a and b then
