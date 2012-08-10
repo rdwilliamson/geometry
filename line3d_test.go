@@ -41,21 +41,21 @@ func testLine3DFuzzyEqual(d line3DFuzzyEqualData, t *testing.T) {
 		t.Error("Line3D.FuzzyEqual", d.l1, d.l2, d.equal)
 	}
 	if d.l2.FuzzyEqual(&d.l1) != d.equal {
-		t.Error("Line3D.FuzzyEqual", d.l2, d.l2, d.equal)
+		t.Error("Line3D.FuzzyEqual", d.l2, d.l1, d.equal)
 	}
 	d.l1.P1, d.l1.P2 = d.l1.P2, d.l1.P1
 	if d.l1.FuzzyEqual(&d.l2) != d.equal {
 		t.Error("Line3D.FuzzyEqual", d.l1, d.l2, d.equal)
 	}
 	if d.l2.FuzzyEqual(&d.l1) != d.equal {
-		t.Error("Line3D.FuzzyEqual", d.l2, d.l2, d.equal)
+		t.Error("Line3D.FuzzyEqual", d.l2, d.l1, d.equal)
 	}
 	d.l2.P1, d.l2.P2 = d.l2.P2, d.l2.P1
 	if d.l1.FuzzyEqual(&d.l2) != d.equal {
 		t.Error("Line3D.FuzzyEqual", d.l1, d.l2, d.equal)
 	}
 	if d.l2.FuzzyEqual(&d.l1) != d.equal {
-		t.Error("Line3D.FuzzyEqual", d.l2, d.l2, d.equal)
+		t.Error("Line3D.FuzzyEqual", d.l2, d.l1, d.equal)
 	}
 }
 

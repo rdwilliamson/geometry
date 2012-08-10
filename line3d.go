@@ -14,34 +14,34 @@ type Line3D struct {
 // otherwise.
 func (a *Line3D) Equal(b *Line3D) bool {
 	// check if b.P1 lies on a
-	l1dx, l1dy, l1dz := a.P2.X-a.P1.X, a.P2.Y-a.P1.Y, a.P2.Z-a.P1.Z
-	d := 1 / (l1dx*l1dx + l1dy*l1dy + l1dz*l1dz)
-	u := (l1dx*(b.P1.X-a.P1.X) + l1dy*(b.P1.Y-a.P1.Y) + l1dz*(b.P1.Z-a.P1.Z)) * d
-	x, y, z := b.P1.X-(a.P1.X+l1dx*u), b.P1.Y-(a.P1.Y+l1dy*u), b.P1.Z-(a.P1.Z+l1dz*u)
-	if x+y+z != 0 {
+	adx, ady, adz := a.P2.X-a.P1.X, a.P2.Y-a.P1.Y, a.P2.Z-a.P1.Z
+	u := (adx*(b.P1.X-a.P1.X) + ady*(b.P1.Y-a.P1.Y) + adz*(b.P1.Z-a.P1.Z)) /
+		(adx*adx + ady*ady + adz*adz)
+	if b.P1.X != (a.P1.X+adx*u) || b.P1.Y != (a.P1.Y+adx*u) ||
+		b.P1.Z != (a.P1.Z+adx*u) {
 		return false
 	}
 	// check if the direction of the two lines is equal
-	il1dx, il2dx := 1/l1dx, 1/(b.P2.X-b.P1.X)
-	return l1dy*il1dx == (b.P2.Y-b.P1.Y)*il2dx &&
-		l1dz*il1dx == (b.P2.Z-b.P1.Z)*il2dx
+	iadx, ibdx := 1/adx, 1/(b.P2.X-b.P1.X)
+	return ady*iadx == (b.P2.Y-b.P1.Y)*ibdx &&
+		adz*iadx == (b.P2.Z-b.P1.Z)*ibdx
 }
 
 // FuzzyEqual compares a and b and returns true if they are very close or false
 // otherwise.
 func (a *Line3D) FuzzyEqual(b *Line3D) bool {
 	// check if b.P1 lies on a
-	l1dx, l1dy, l1dz := a.P2.X-a.P1.X, a.P2.Y-a.P1.Y, a.P2.Z-a.P1.Z
-	d := 1 / (l1dx*l1dx + l1dy*l1dy + l1dz*l1dz)
-	u := (l1dx*(b.P1.X-a.P1.X) + l1dy*(b.P1.Y-a.P1.Y) + l1dz*(b.P1.Z-a.P1.Z)) * d
-	x, y, z := b.P1.X-(a.P1.X+l1dx*u), b.P1.Y-(a.P1.Y+l1dy*u), b.P1.Z-(a.P1.Z+l1dz*u)
-	if !FuzzyEqual(x, 0) || !FuzzyEqual(y, 0) || !FuzzyEqual(z, 0) {
+	adx, ady, adz := a.P2.X-a.P1.X, a.P2.Y-a.P1.Y, a.P2.Z-a.P1.Z
+	u := (adx*(b.P1.X-a.P1.X) + ady*(b.P1.Y-a.P1.Y) + adz*(b.P1.Z-a.P1.Z)) /
+		(adx*adx + ady*ady + adz*adz)
+	if !FuzzyEqual(b.P1.X, a.P1.X+adx*u) || !FuzzyEqual(b.P1.Y, a.P1.Y+ady*u) ||
+		!FuzzyEqual(b.P1.Z, a.P1.Z+adz*u) {
 		return false
 	}
 	// check if the direction of the two lines is equal
-	il1dx, il2dx := 1/l1dx, 1/(b.P2.X-b.P1.X)
-	dyr := l1dy*il1dx - (b.P2.Y-b.P1.Y)*il2dx
-	dzr := l1dz*il1dx - (b.P2.Z-b.P1.Z)*il2dx
+	iadx, ibdx := 1/adx, 1/(b.P2.X-b.P1.X)
+	dyr := ady*iadx - (b.P2.Y-b.P1.Y)*ibdx
+	dzr := adz*iadx - (b.P2.Z-b.P1.Z)*ibdx
 	return FuzzyEqual(dyr, 0) && FuzzyEqual(dzr, 0)
 }
 
