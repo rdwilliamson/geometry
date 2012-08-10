@@ -54,15 +54,18 @@ func (a *Vector3D) DirectionEqual(b *Vector3D) bool {
 // DirectionFuzzyEqual compares the direction of a and b then returns true if
 //they are very close or false otherwise.
 func (a *Vector3D) DirectionFuzzyEqual(b *Vector3D) bool {
-	s := a.X / b.X
+	if a.X > b.X {
+		s := a.X / b.X
+		if s < 0 {
+			return false
+		}
+		return FuzzyEqual(a.Y, s*b.Y) && FuzzyEqual(a.Z, s*b.Z)
+	}
+	s := b.X / a.X
 	if s < 0 {
 		return false
 	}
-	if dy := a.Y - s*b.Y; dy*dy >= 1e-11*1e-11 {
-		return false
-	}
-	dz := a.Z - s*b.Z
-	return dz*dz < 1e-11*1e-11
+	return FuzzyEqual(s*a.Y, b.Y) && FuzzyEqual(s*a.Z, b.Z)
 }
 
 // Distance returns the distance between points a and b.

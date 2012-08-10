@@ -114,10 +114,10 @@ var vector2DDirectionFuzzyEqualValues = []vector2DDirectionFuzzyEqualData{
 
 func testVector2DDirectionFuzzyEqual(d vector2DDirectionFuzzyEqualData, t *testing.T) {
 	if d.v1.DirectionFuzzyEqual(&d.v2) != d.equal {
-		t.Error("Vector2D.DirectionFuzzyEqual:", d.v1, d.v2, d.equal)
+		t.Error("Vector2D.DirectionFuzzyEqual:", d.v1, d.v2, "want", d.equal, "got", !d.equal)
 	}
 	if d.v2.DirectionFuzzyEqual(&d.v1) != d.equal {
-		t.Error("Vector2D.DirectionFuzzyEqual:", d.v2, d.v1, d.equal)
+		t.Error("Vector2D.DirectionFuzzyEqual:", d.v2, d.v1, "want", d.equal, "got", !d.equal)
 	}
 }
 
