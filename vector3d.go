@@ -102,8 +102,7 @@ func (a *Vector3D) Equal(b *Vector3D) bool {
 // FuzzyEqual compares a and b and returns true if they are very cose or false
 // otherwise.
 func (a *Vector3D) FuzzyEqual(b *Vector3D) bool {
-	dx, dy, dz := b.X-a.X, b.Y-a.Y, b.Z-a.Z
-	return dx*dx+dy*dy+dz*dz < 0.000000000001*0.000000000001
+	return FuzzyEqual(a.X, b.X) && FuzzyEqual(a.Y, b.Y) && FuzzyEqual(a.Z, b.Z)
 }
 
 // Magnitude returns the magnitude of x.

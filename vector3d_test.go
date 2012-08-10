@@ -223,14 +223,32 @@ func Benchmark_Vector3D_Equal(b *testing.B) {
 	}
 }
 
-func TestVector3DFuzzyEqual(t *testing.T) {
-	v1, v2 := &Vector3D{}, &Vector3D{0.000000000001, 0, 0}
-	if v1.FuzzyEqual(v2) {
-		t.Error("Vector3D.FuzzyEqual")
+type vector3DFuzzyEqualData struct {
+	v1, v2 Vector3D
+	equal  bool
+}
+
+var vector3DFuzzyEqualValues = []vector3DFuzzyEqualData{
+	{Vector3D{1, 1, 1}, Vector3D{1, 1, 1 + 1e-12}, false},
+	{Vector3D{1, 1, 1}, Vector3D{1, 1, 1 + 1e-13}, true},
+	{Vector3D{1, 1, 1}, Vector3D{1, 1 + 1e-12, 1}, false},
+	{Vector3D{1, 1, 1}, Vector3D{1, 1 + 1e-13, 1}, true},
+	{Vector3D{1, 1, 1}, Vector3D{1 + 1e-12, 1, 1}, false},
+	{Vector3D{1, 1, 1}, Vector3D{1 + 1e-13, 1, 1}, true},
+}
+
+func testVector3DFuzzyEqual(d vector3DFuzzyEqualData, t *testing.T) {
+	if d.v1.FuzzyEqual(&d.v2) != d.equal {
+		t.Error("Vector3D.FuzzyEqual", d.v1, d.v2, d.equal)
 	}
-	v2.X = 0.0000000000001
-	if !v1.FuzzyEqual(v2) {
-		t.Error("Vector3D.FuzzyEqual")
+	if d.v2.FuzzyEqual(&d.v1) != d.equal {
+		t.Error("Vector3D.FuzzyEqual", d.v2, d.v1, d.equal)
+	}
+}
+
+func TestVector3DFuzzyEqual(t *testing.T) {
+	for _, v := range vector3DFuzzyEqualValues {
+		testVector3DFuzzyEqual(v, t)
 	}
 }
 
