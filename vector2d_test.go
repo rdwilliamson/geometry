@@ -5,6 +5,23 @@ import (
 	"testing"
 )
 
+// Treats converts -inf to +inf to simplify test code.
+func (a *Vector2D) infEqual(b *Vector2D) bool {
+	if math.IsInf(a.X, -1) {
+		a.X = math.Inf(1)
+	}
+	if math.IsInf(a.Y, -1) {
+		a.Y = math.Inf(1)
+	}
+	if math.IsInf(b.X, -1) {
+		b.X = math.Inf(1)
+	}
+	if math.IsInf(b.Y, -1) {
+		b.Y = math.Inf(1)
+	}
+	return a.Equal(b)
+}
+
 func TestNewVector2D(t *testing.T) {
 	if !NewVector2D(1, 2).Equal(&Vector2D{1, 2}) {
 		t.Error("NewVector2D")

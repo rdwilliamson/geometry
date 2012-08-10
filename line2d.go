@@ -37,13 +37,9 @@ func (a *Line2D) Intersection(b *Line2D, z *Vector2D) *Vector2D {
 	// http://local.wasp.uwa.edu.au/~pbourke/geometry/lineline2d/
 	l1dx, l1dy := a.P2.X-a.P1.X, a.P2.Y-a.P1.Y
 	l2dx, l2dy := b.P2.X-b.P1.X, b.P2.Y-b.P1.Y
-	d := l2dy*l1dx - l2dx*l1dy
-	if d == 0 {
-		z.X = math.Inf(1)
-		z.Y = math.Inf(1)
-		return z
-	}
-	ua := (l2dx*a.P1.Y - b.P1.Y - l2dy*a.P1.X - b.P1.X) / d
+	// d := l2dy*l1dx - l2dx*l1dy
+	// ua := (l2dx*(a.P1.Y-b.P1.Y) - l2dy*(a.P1.X-b.P1.X)) / d
+	ua := (l2dx*(a.P1.Y-b.P1.Y) - l2dy*(a.P1.X-b.P1.X)) / (l2dy*l1dx - l2dx*l1dy)
 	z.X = a.P1.X + ua*l1dx
 	z.Y = a.P1.Y + ua*l1dy
 	return z
@@ -127,26 +123,22 @@ func (a *Line2D) SegmentFuzzyEqual(b *Line2D) bool {
 		(a.P1.FuzzyEqual(&b.P2) && a.P2.FuzzyEqual(&b.P1))
 }
 
-// SegmentIntersection sets point z to the intersection of a and b as if they
-// were lines, then returns z and true if the intersection occured on both line
-// segments a and b or false otherwise.
-func (a *Line2D) SegmentIntersection(b *Line2D, z *Vector2D) (intersection *Vector2D, onBothLines bool) {
+// SegmentIntersection sets point z (if not nil) to the intersection of a and b
+// as if they were lines, then returns true if the intersection occured on both
+// line segments a and b or false otherwise.
+func (a *Line2D) SegmentIntersection(b *Line2D, z *Vector2D) bool {
 	// http://local.wasp.uwa.edu.au/~pbourke/geometry/lineline2d/
 	l1dx, l1dy := a.P2.X-a.P1.X, a.P2.Y-a.P1.Y
 	l2dx, l2dy := b.P2.X-b.P1.X, b.P2.Y-b.P1.Y
-	d := l2dy*l1dx - l2dx*l1dy
-	if d == 0 {
-		z.X = math.Inf(1)
-		z.Y = math.Inf(1)
-		return z, false
-	}
-	d = 1 / d
+	d := 1 / (l2dy*l1dx - l2dx*l1dy)
 	dx, dy := a.P1.X-b.P1.X, a.P1.Y-b.P1.Y
 	ua := (l2dx*dy - l2dy*dx) * d
 	ub := (l1dx*dy - l1dy*dx) * d
-	z.X = a.P1.X + ua*l1dx
-	z.Y = a.P1.Y + ua*l1dy
-	return z, 0 <= ua && ua <= 1 && 0 <= ub && ub <= 1
+	if z != nil {
+		z.X = a.P1.X + ua*l1dx
+		z.Y = a.P1.Y + ua*l1dy
+	}
+	return 0 <= ua && ua <= 1 && 0 <= ub && ub <= 1
 }
 
 // SegmentPointDistance returns the distance between line segment a and point
