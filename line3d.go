@@ -13,13 +13,15 @@ type Line3D struct {
 // Equal compares a and b then returns true if they are exactly equal or false
 // otherwise.
 func (a *Line3D) Equal(b *Line3D) bool {
+	// check if b.P1 lies on a
 	l1dx, l1dy, l1dz := a.P2.X-a.P1.X, a.P2.Y-a.P1.Y, a.P2.Z-a.P1.Z
 	d := 1 / (l1dx*l1dx + l1dy*l1dy + l1dz*l1dz)
 	u := (l1dx*(b.P1.X-a.P1.X) + l1dy*(b.P1.Y-a.P1.Y) + l1dz*(b.P1.Z-a.P1.Z)) * d
 	x, y, z := b.P1.X-(a.P1.X+l1dx*u), b.P1.Y-(a.P1.Y+l1dy*u), b.P1.Z-(a.P1.Z+l1dz*u)
-	if x*x+y*y+z*z != 0 {
+	if x+y+z != 0 {
 		return false
 	}
+	// check if the direction of the two lines is equal
 	il1dx, il2dx := 1/l1dx, 1/(b.P2.X-b.P1.X)
 	return l1dy*il1dx == (b.P2.Y-b.P1.Y)*il2dx &&
 		l1dz*il1dx == (b.P2.Z-b.P1.Z)*il2dx
@@ -28,6 +30,7 @@ func (a *Line3D) Equal(b *Line3D) bool {
 // FuzzyEqual compares a and b and returns true if they are very close or false
 // otherwise.
 func (a *Line3D) FuzzyEqual(b *Line3D) bool {
+	// check if b.P1 lies on a
 	l1dx, l1dy, l1dz := a.P2.X-a.P1.X, a.P2.Y-a.P1.Y, a.P2.Z-a.P1.Z
 	d := 1 / (l1dx*l1dx + l1dy*l1dy + l1dz*l1dz)
 	u := (l1dx*(b.P1.X-a.P1.X) + l1dy*(b.P1.Y-a.P1.Y) + l1dz*(b.P1.Z-a.P1.Z)) * d
@@ -35,6 +38,7 @@ func (a *Line3D) FuzzyEqual(b *Line3D) bool {
 	if !FuzzyEqual(x, 0) || !FuzzyEqual(y, 0) || !FuzzyEqual(z, 0) {
 		return false
 	}
+	// check if the direction of the two lines is equal
 	il1dx, il2dx := 1/l1dx, 1/(b.P2.X-b.P1.X)
 	dyr := l1dy*il1dx - (b.P2.Y-b.P1.Y)*il2dx
 	dzr := l1dz*il1dx - (b.P2.Z-b.P1.Z)*il2dx
@@ -118,10 +122,9 @@ func (a *Line3D) SegmentFuzzyEqual(b *Line3D) bool {
 		(a.P1.FuzzyEqual(&b.P2) && a.P2.FuzzyEqual(&b.P1))
 }
 
-// SegmentIntersection sets z to the shortest line segment between a and b then
-// returns z and true if z's end points lie on both a and b or false otherwise.
-// This function is intended as a replacement for intersection (which can be
-// still be tested by z.P1 == z.P2).
+// SegmentLineBetween sets z to the shortest line segment between a and b then
+// returns z. This function is intended as a replacement for intersection
+// (which can be still be tested by z.P1 == z.P2).
 
 // SegmentPointDistance returns the distance between line segment a and point
 // b.
