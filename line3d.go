@@ -50,7 +50,7 @@ func (a *Line3D) FuzzyEqual(b *Line3D) bool {
 // LineBetween sets z to the shortest line between a and b then returns z. This
 // function is intended as a replacement for intersection (which can be still
 // be tested by z.P1 == z.P2).
-func (z *Line3D) LineBetween(a, b *Line3D) *Line3D {
+func (a *Line3D) LineBetween(b, z *Line3D) *Line3D {
 	// http://local.wasp.uwa.edu.au/~pbourke/geometry/lineline3d/
 	adx, ady, adz := a.P2.X-a.P1.X, a.P2.Y-a.P1.Y, a.P2.Z-a.P1.Z
 	bdx, bdy, bdz := b.P2.X-b.P1.X, b.P2.Y-b.P1.Y, b.P2.Z-b.P1.Z
@@ -127,7 +127,7 @@ func (a *Line3D) SegmentFuzzyEqual(b *Line3D) bool {
 // SegmentLineBetween sets z to the shortest line segment between a and b then
 // returns z. This function is intended as a replacement for intersection
 // (which can be still be tested by z.P1 == z.P2).
-func (z *Line3D) SegmentLineBetween(a, b *Line3D) *Line3D {
+func (a *Line3D) SegmentLineBetween(b, z *Line3D) *Line3D {
 	// http://local.wasp.uwa.edu.au/~pbourke/geometry/lineline3d/
 	adx, ady, adz := a.P2.X-a.P1.X, a.P2.Y-a.P1.Y, a.P2.Z-a.P1.Z
 	bdx, bdy, bdz := b.P2.X-b.P1.X, b.P2.Y-b.P1.Y, b.P2.Z-b.P1.Z

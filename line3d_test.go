@@ -101,24 +101,24 @@ var line3DLineBetweenValues = []line3DLineBetweenData{
 
 func testLine3DLineBetween(d line3DLineBetweenData, t *testing.T) {
 	var l Line3D
-	if !l.LineBetween(&d.l1, &d.l2).SegmentFuzzyEqual(&d.lb) {
+	if !d.l1.LineBetween(&d.l2, &l).SegmentFuzzyEqual(&d.lb) {
 		t.Error("Line3D.LineBetween", d.l1, d.l2, "want", d.lb, "got", l)
 	}
-	if !l.LineBetween(&d.l2, &d.l1).SegmentFuzzyEqual(&d.lb) {
+	if !d.l2.LineBetween(&d.l1, &l).SegmentFuzzyEqual(&d.lb) {
 		t.Error("Line3D.LineBetween", d.l2, d.l1, "want", d.lb, "got", l)
 	}
 	d.l1.P1, d.l1.P2 = d.l1.P2, d.l1.P1
-	if !l.LineBetween(&d.l1, &d.l2).SegmentFuzzyEqual(&d.lb) {
+	if !d.l1.LineBetween(&d.l2, &l).SegmentFuzzyEqual(&d.lb) {
 		t.Error("Line3D.LineBetween", d.l1, d.l2, "want", d.lb, "got", l)
 	}
-	if !l.LineBetween(&d.l2, &d.l1).SegmentFuzzyEqual(&d.lb) {
+	if !d.l2.LineBetween(&d.l1, &l).SegmentFuzzyEqual(&d.lb) {
 		t.Error("Line3D.LineBetween", d.l2, d.l1, "want", d.lb, "got", l)
 	}
 	d.l2.P1, d.l2.P2 = d.l2.P2, d.l2.P1
-	if !l.LineBetween(&d.l1, &d.l2).SegmentFuzzyEqual(&d.lb) {
+	if !d.l1.LineBetween(&d.l2, &l).SegmentFuzzyEqual(&d.lb) {
 		t.Error("Line3D.LineBetween", d.l1, d.l2, "want", d.lb, "got", l)
 	}
-	if !l.LineBetween(&d.l2, &d.l1).SegmentFuzzyEqual(&d.lb) {
+	if !d.l2.LineBetween(&d.l1, &l).SegmentFuzzyEqual(&d.lb) {
 		t.Error("Line3D.LineBetween", d.l2, d.l1, "want", d.lb, "got", l)
 	}
 }
@@ -313,24 +313,24 @@ var line3DSegmentLineBetweenValues = []line3DSegmentLineBetweenData{
 
 func testLine3DSegmentLineBetween(d line3DSegmentLineBetweenData, t *testing.T) {
 	var l Line3D
-	if !l.SegmentLineBetween(&d.l1, &d.l2).SegmentFuzzyEqual(&d.lb) {
+	if !d.l1.SegmentLineBetween(&d.l2, &l).SegmentFuzzyEqual(&d.lb) {
 		t.Error("Line3D.SegmentLineBetween", d.l1, d.l2, "want", d.lb, "got", l)
 	}
-	if !l.SegmentLineBetween(&d.l2, &d.l1).SegmentFuzzyEqual(&d.lb) {
+	if !d.l2.SegmentLineBetween(&d.l1, &l).SegmentFuzzyEqual(&d.lb) {
 		t.Error("Line3D.SegmentLineBetween", d.l2, d.l1, "want", d.lb, "got", l)
 	}
 	d.l1.P1, d.l1.P2 = d.l1.P2, d.l1.P1
-	if !l.SegmentLineBetween(&d.l1, &d.l2).SegmentFuzzyEqual(&d.lb) {
+	if !d.l1.SegmentLineBetween(&d.l2, &l).SegmentFuzzyEqual(&d.lb) {
 		t.Error("Line3D.SegmentLineBetween", d.l1, d.l2, "want", d.lb, "got", l)
 	}
-	if !l.SegmentLineBetween(&d.l2, &d.l1).SegmentFuzzyEqual(&d.lb) {
+	if !d.l2.SegmentLineBetween(&d.l1, &l).SegmentFuzzyEqual(&d.lb) {
 		t.Error("Line3D.SegmentLineBetween", d.l2, d.l1, "want", d.lb, "got", l)
 	}
 	d.l2.P1, d.l2.P2 = d.l2.P2, d.l2.P1
-	if !l.SegmentLineBetween(&d.l1, &d.l2).SegmentFuzzyEqual(&d.lb) {
+	if !d.l1.SegmentLineBetween(&d.l2, &l).SegmentFuzzyEqual(&d.lb) {
 		t.Error("Line3D.SegmentLineBetween", d.l1, d.l2, "want", d.lb, "got", l)
 	}
-	if !l.SegmentLineBetween(&d.l2, &d.l1).SegmentFuzzyEqual(&d.lb) {
+	if !d.l2.SegmentLineBetween(&d.l1, &l).SegmentFuzzyEqual(&d.lb) {
 		t.Error("Line3D.SegmentLineBetween", d.l2, d.l1, "want", d.lb, "got", l)
 	}
 }
