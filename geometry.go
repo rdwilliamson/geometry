@@ -5,8 +5,6 @@
 package geometry
 
 // Check if a and b are very close.
-
-// Check if a and b are very close.
 func FuzzyEqual(a, b float64) bool {
 	// handle case when a and b are near zero and on opposite sides of it
 	if a*b < 0 {
