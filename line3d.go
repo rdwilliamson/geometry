@@ -170,9 +170,37 @@ func (z *Line3D) SegmentLineBetween(a, b *Line3D) *Line3D {
 
 // SegmentPointDistance returns the distance between line segment a and point
 // b.
+func (a *Line3D) SegmentPointDistance(b *Vector3D) float64 {
+	adx, ady, adz := a.P2.X-a.P1.X, a.P2.Y-a.P1.Y, a.P2.Z-a.P1.Z
+	b1dx, b1dy, b1dz := b.X-a.P1.X, b.Y-a.P1.Y, b.Z-a.P1.Z
+	u := (adx*b1dx + ady*b1dy + adz*b1dz) / (adx*adx + ady*ady + adz*adz)
+	var x, y, z float64
+	if u < 0 {
+		x, y, z = b1dx, b1dy, b1dz
+	} else if u > 1 {
+		x, y, z = b.X-a.P2.X, b.Y-a.P2.Y, b.Z-a.P2.Z
+	} else {
+		x, y, z = b.X-(a.P1.X+adx*u), b.Y-(a.P1.Y+ady*u), b.Z-(a.P1.Z+adz*u)
+	}
+	return math.Sqrt(x*x + y*y + z*z)
+}
 
 // SegmentPointDistanceSquared returns the squared distance between line
 // segment a and point b.
+func (a *Line3D) SegmentPointDistanceSquared(b *Vector3D) float64 {
+	adx, ady, adz := a.P2.X-a.P1.X, a.P2.Y-a.P1.Y, a.P2.Z-a.P1.Z
+	b1dx, b1dy, b1dz := b.X-a.P1.X, b.Y-a.P1.Y, b.Z-a.P1.Z
+	u := (adx*b1dx + ady*b1dy + adz*b1dz) / (adx*adx + ady*ady + adz*adz)
+	var x, y, z float64
+	if u < 0 {
+		x, y, z = b1dx, b1dy, b1dz
+	} else if u > 1 {
+		x, y, z = b.X-a.P2.X, b.Y-a.P2.Y, b.Z-a.P2.Z
+	} else {
+		x, y, z = b.X-(a.P1.X+adx*u), b.Y-(a.P1.Y+ady*u), b.Z-(a.P1.Z+adz*u)
+	}
+	return x*x + y*y + z*z
+}
 
 // Set sets z to x and returns z.
 func (z *Line3D) Set(x *Line3D) *Line3D {

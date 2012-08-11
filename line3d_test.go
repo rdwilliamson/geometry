@@ -289,22 +289,6 @@ func Benchmark_Line3D_PointDistanceSquared(b *testing.B) {
 	}
 }
 
-func TestLine3DSet(t *testing.T) {
-	l1 := &Line3D{Vector3D{1, 2, 3}, Vector3D{1, 1, 1}}
-	l2 := &Line3D{Vector3D{}, Vector3D{}}
-	if !l2.Set(l1).Equal(l1) {
-		t.Error("Line3D.Set")
-	}
-}
-
-func Benchmark_Line3D_Set(b *testing.B) {
-	l1 := &Line3D{Vector3D{1, 2, 3}, Vector3D{1, 1, 1}}
-	l2 := &Line3D{Vector3D{}, Vector3D{}}
-	for i := 0; i < b.N; i++ {
-		l2.Set(l1)
-	}
-}
-
 type line3DSegmentLineBetweenData struct {
 	l1, l2, lb Line3D
 }
@@ -363,6 +347,76 @@ func Benchmark_Line3D_SegmentLineBetween(b *testing.B) {
 	r := &Line3D{}
 	for i := 0; i < b.N; i++ {
 		r.SegmentLineBetween(l1, l2)
+	}
+}
+
+type line3DSegmentPointDistanceData struct {
+	l Line3D
+	p Vector3D
+	d float64
+}
+
+var line3DSegmentPointDistanceValues = []line3DSegmentPointDistanceData{
+	{Line3D{Vector3D{}, Vector3D{1, 0, 0}}, Vector3D{0, 2, 0}, 2},
+	{Line3D{Vector3D{}, Vector3D{1, 0, 0}}, Vector3D{0, 0, 2}, 2},
+	{Line3D{Vector3D{}, Vector3D{1, 0, 0}}, Vector3D{3, 0, 0}, 2},
+	{Line3D{Vector3D{}, Vector3D{1, 0, 0}}, Vector3D{-2, 0, 0}, 2},
+	{Line3D{Vector3D{}, Vector3D{1, 0, 0}}, Vector3D{0.5, 0, 0}, 0},
+}
+
+func testLine3DSegmentPointDistance(d line3DSegmentPointDistanceData, t *testing.T) {
+	if got := d.l.SegmentPointDistance(&d.p); got != d.d {
+		t.Error("Line3D.SegmentPointDistance", d.l, d.p, "want", d.d, "got", got)
+	}
+}
+
+func TestLine3DSegmentPointDistance(t *testing.T) {
+	for _, v := range line3DSegmentPointDistanceValues {
+		testLine3DSegmentPointDistance(v, t)
+	}
+}
+
+func Benchmark_Line3D_SegmentPointDistance(b *testing.B) {
+	l := &Line3D{Vector3D{}, Vector3D{1, 1, 1}}
+	p := &Vector3D{1, 2, 3}
+	for i := 0; i < b.N; i++ {
+		l.SegmentPointDistance(p)
+	}
+}
+
+func testLine3DSegmentPointDistanceSquared(d line3DSegmentPointDistanceData, t *testing.T) {
+	if got := d.l.SegmentPointDistanceSquared(&d.p); got != d.d*d.d {
+		t.Error("Line3D.SegmentPointDistanceSquared", d.l, d.p, "want", d.d*d.d, "got", got)
+	}
+}
+
+func TestLine3DSegmentPointDistanceSquared(t *testing.T) {
+	for _, v := range line3DSegmentPointDistanceValues {
+		testLine3DSegmentPointDistanceSquared(v, t)
+	}
+}
+
+func Benchmark_Line3D_SegmentPointDistanceSquared(b *testing.B) {
+	l := &Line3D{Vector3D{}, Vector3D{1, 1, 1}}
+	p := &Vector3D{1, 2, 3}
+	for i := 0; i < b.N; i++ {
+		l.SegmentPointDistanceSquared(p)
+	}
+}
+
+func TestLine3DSet(t *testing.T) {
+	l1 := &Line3D{Vector3D{1, 2, 3}, Vector3D{1, 1, 1}}
+	l2 := &Line3D{Vector3D{}, Vector3D{}}
+	if !l2.Set(l1).Equal(l1) {
+		t.Error("Line3D.Set")
+	}
+}
+
+func Benchmark_Line3D_Set(b *testing.B) {
+	l1 := &Line3D{Vector3D{1, 2, 3}, Vector3D{1, 1, 1}}
+	l2 := &Line3D{Vector3D{}, Vector3D{}}
+	for i := 0; i < b.N; i++ {
+		l2.Set(l1)
 	}
 }
 
