@@ -34,8 +34,10 @@ func (a *Line3D) FuzzyEqual(b *Line3D) bool {
 	adx, ady, adz := a.P2.X-a.P1.X, a.P2.Y-a.P1.Y, a.P2.Z-a.P1.Z
 	u := (adx*(b.P1.X-a.P1.X) + ady*(b.P1.Y-a.P1.Y) + adz*(b.P1.Z-a.P1.Z)) /
 		(adx*adx + ady*ady + adz*adz)
-	if !FuzzyEqual(b.P1.X, a.P1.X+adx*u) || !FuzzyEqual(b.P1.Y, a.P1.Y+ady*u) ||
-		!FuzzyEqual(b.P1.Z, a.P1.Z+adz*u) {
+	d := math.Abs(b.P1.X - (a.P1.X + adx*u))
+	d += math.Abs(b.P1.Y - (a.P1.Y + ady*u))
+	d += math.Abs(b.P1.Z - (a.P1.Z + adz*u))
+	if !FuzzyEqual(d, 0) {
 		return false
 	}
 	// check if the direction of the two lines is equal

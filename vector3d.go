@@ -30,7 +30,8 @@ func (a *Vector3D) AngularDifference(b *Vector3D) float64 {
 // and b.
 func (a *Vector3D) AngularCosSquaredDifference(b *Vector3D) float64 {
 	dot := (a.X*b.X + a.Y*b.Y + a.Z*b.Z)
-	return dot * dot / ((a.X*a.X + a.Y*a.Y + a.Z*a.Z) * (b.X*b.X + b.Y*b.Y + b.Z*b.Z))
+	return dot * dot /
+		((a.X*a.X + a.Y*a.Y + a.Z*a.Z) * (b.X*b.X + b.Y*b.Y + b.Z*b.Z))
 }
 
 // CrossProduct sets z to the cross product of a and b then returns z.
