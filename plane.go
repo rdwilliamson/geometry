@@ -41,6 +41,19 @@ func (a *Plane) FuzzyEqual(b *Plane) bool {
 		a.D*a.D*(b.A*b.A+b.B*b.B+b.C*b.C))
 }
 
+// LineIntersection sets z to the intersecion of plane a and line b, then
+// returns z.
+func (a *Plane) LineIntersection(b *Line3D, z *Vector3D) *Vector3D {
+	// http://paulbourke.net/geometry/planeline/
+	bdx, bdy, bdz := b.P1.X-b.P2.X, b.P1.Y-b.P2.Y, b.P1.Z-b.P2.Z
+	u := (a.A*b.P1.X + a.B*b.P1.Y + a.C*b.P1.Z + a.D) /
+		(a.A*bdx + a.B*bdy + a.C*bdz)
+	z.X = b.P1.X - u*bdx
+	z.Y = b.P1.Y - u*bdy
+	z.Z = b.P1.Z - u*bdz
+	return z
+}
+
 // Nomrmal sets z to x's normal then returns z.
 func (x *Plane) Normal(z *Vector3D) *Vector3D {
 	z.X = x.A
@@ -93,5 +106,22 @@ func (z *Plane) Set(x *Plane) *Plane {
 	z.B = x.B
 	z.C = x.C
 	z.D = x.D
+	return z
+}
+
+// SetFromPoints set z to the plane through the three points, then returns z.
+func (z *Plane) SetFromPoints(p1, p2, p3 Vector3D) *Plane {
+	return z
+}
+
+// ThreePlaneIntersection sets z to the intersection of planes a, b, and c,
+// then returns z.
+func (a *Plane) ThreePlaneIntersection(b, c *Plane, z *Vector3D) *Vector3D {
+	return z
+}
+
+// TwoPlaneIntersection sets z to the intersection of planes a and b, then
+// returns z.
+func (a *Plane) TwoPlaneIntersection(b *Plane, z *Line3D) *Line3D {
 	return z
 }
