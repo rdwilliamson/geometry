@@ -19,23 +19,19 @@ func NewPlane(a, b, c, d float64) *Plane {
 	return &Plane{a, b, c, d}
 }
 
-// Equal compares plane a and b then returns true if they are exactly equal or
-// false otherwise.
+// Equal returns true if the two planes are exactly equal or false otherwise.
 func (a *Plane) Equal(b *Plane) bool {
-	// check normal direction, allowing for exact opposite direction
+	// check normal and distance from origin direction
 	s := a.A / b.A
-	if a.B != s*b.B || a.C != s*b.C {
+	if a.B != s*b.B || a.C != s*b.C || s*a.D*b.D < 0 {
 		return false
 	}
-	// check distance (squared) from origin, if vectors were in opposite
-	// directions swap sign of one of the distances
-	t := b.D * b.D * (a.A*a.A + a.B*a.B + a.C*a.C)
-	if s < 0 {
-		t = -t
-	}
-	return a.D*a.D*(b.A*b.A+b.B*b.B+b.C*b.C) == t
+	// check distance (squared) from origin
+	return b.D*b.D*(a.A*a.A+a.B*a.B+a.C*a.C) ==
+		a.D*a.D*(b.A*b.A+b.B*b.B+b.C*b.C)
 }
 
+// FuzzyEqual returns true if the two planes are very close or false otherwise.
 func (a *Plane) FuzzyEqual(b *Plane) bool {
 	return false
 }
