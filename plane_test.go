@@ -4,6 +4,20 @@ import (
 	"testing"
 )
 
+func TestNewPlane(t *testing.T) {
+	p := NewPlane(1, 2, 3, 4)
+	if !p.NormalizedEqual(&Plane{1, 2, 3, 4}) {
+		t.Error("NewPlane")
+	}
+}
+
+func TestNormalizedEqual(t *testing.T) {
+	p := Plane{1, 2, 3, 4}
+	if !p.NormalizedEqual(&Plane{1, 2, 3, 4}) {
+		t.Error("Plane.NormalizedEqual")
+	}
+}
+
 func Benchmark_Plane_NormalizedPointDistance(b *testing.B) {
 	pl := &Plane{1, 2, 3, 4}
 	pl.Normalize(pl)
