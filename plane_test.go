@@ -191,3 +191,17 @@ func Benchmark_Plane_PointDistanceSquared(b *testing.B) {
 		pl.PointDistanceSquared(pt)
 	}
 }
+
+func TestPlaneSet(t *testing.T) {
+	p1, p2 := &Plane{2, -2, 5, 8}, &Plane{}
+	if !p2.Set(p1).NormalizedEqual(p1) {
+		t.Error("Plane.Set")
+	}
+}
+
+func Benchmark_Plane_Set(b *testing.B) {
+	p1, p2 := &Plane{2, -2, 5, 8}, &Plane{}
+	for i := 0; i < b.N; i++ {
+		p2.Set(p1)
+	}
+}

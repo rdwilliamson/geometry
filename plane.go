@@ -86,3 +86,12 @@ func (a *Plane) PointDistanceSquared(b *Vector3D) float64 {
 	n := a.A*b.X + a.B*b.Y + a.C*b.Z + a.D
 	return (n * n) / (a.A*a.A + a.B*a.B + a.C*a.C)
 }
+
+// Set sets z to x then returns z.
+func (z *Plane) Set(x *Plane) *Plane {
+	z.A = x.A
+	z.B = x.B
+	z.C = x.C
+	z.D = x.D
+	return z
+}
