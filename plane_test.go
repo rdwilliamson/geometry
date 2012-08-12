@@ -51,6 +51,47 @@ func Benchmark_Plane_Equal(b *testing.B) {
 	}
 }
 
+type planeFuzzyEqualData struct {
+	p1, p2 Plane
+	equal  bool
+}
+
+var planeFuzzyEqualValues = []planeFuzzyEqualData{
+	{Plane{-1, -2, -3, -4}, Plane{1 + 1e-12, 2, 3, 4}, false},
+	{Plane{-1, -2, -3, -4}, Plane{1 + 1e-13, 2, 3, 4}, true},
+	{Plane{-1, -2, -3, -4}, Plane{1, 2 + 1e-11, 3, 4}, false},
+	{Plane{-1, -2, -3, -4}, Plane{1, 2 + 1e-12, 3, 4}, true},
+	{Plane{-1, -2, -3, -4}, Plane{1, 2, 3 + 1e-11, 4}, false},
+	{Plane{-1, -2, -3, -4}, Plane{1, 2, 3 + 1e-12, 4}, true},
+	{Plane{-1, -2, -3, -4}, Plane{1, 2, 3, 4 + 1e-11}, false},
+	{Plane{-1, -2, -3, -4}, Plane{1, 2, 3, 4 + 1e-12}, true},
+	{Plane{-1, -2, -3, -4}, Plane{1, -2, 3, 4}, false},
+	{Plane{-1, -2, -3, -4}, Plane{1, 2, 3, -4}, false},
+	{Plane{2, 4, 6, 8}, Plane{1, 2, 3, 4}, true},
+}
+
+func testPlaneFuzzyEqual(d planeFuzzyEqualData, t *testing.T) {
+	if d.p1.FuzzyEqual(&d.p2) != d.equal {
+		t.Error("Plane.FuzzyEqual", d.p1, d.p2, d.equal)
+	}
+	if d.p2.FuzzyEqual(&d.p1) != d.equal {
+		t.Error("Plane.FuzzyEqual", d.p2, d.p1, d.equal)
+	}
+}
+
+func TestPlaneFuzzyEqual(t *testing.T) {
+	for _, v := range planeFuzzyEqualValues {
+		testPlaneFuzzyEqual(v, t)
+	}
+}
+
+func Benchmark_Plane_FuzzyEqual(b *testing.B) {
+	p1, p2 := &Plane{1, 2, 3, 4}, &Plane{1, 2, 3, 4}
+	for i := 0; i < b.N; i++ {
+		p1.FuzzyEqual(p2)
+	}
+}
+
 func TestNormalizedEqual(t *testing.T) {
 	p := Plane{1, 2, 3, 4}
 	if !p.NormalizedEqual(&Plane{1, 2, 3, 4}) {

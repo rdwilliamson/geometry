@@ -33,7 +33,12 @@ func (a *Plane) Equal(b *Plane) bool {
 
 // FuzzyEqual returns true if the two planes are very close or false otherwise.
 func (a *Plane) FuzzyEqual(b *Plane) bool {
-	return false
+	s := a.A / b.A
+	if s*a.D*b.D < 0 || !FuzzyEqual(a.B, s*b.B) || !FuzzyEqual(a.C, s*b.C) {
+		return false
+	}
+	return FuzzyEqual(b.D*b.D*(a.A*a.A+a.B*a.B+a.C*a.C),
+		a.D*a.D*(b.A*b.A+b.B*b.B+b.C*b.C))
 }
 
 // Nomrmal sets z to x's normal then returns z.
