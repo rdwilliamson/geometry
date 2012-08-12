@@ -1,6 +1,7 @@
 package geometry
 
 import (
+	"math"
 	"testing"
 )
 
@@ -92,17 +93,112 @@ func Benchmark_Plane_FuzzyEqual(b *testing.B) {
 	}
 }
 
+func TestNormal(t *testing.T) {
+	p := &Plane{1, 2, 3, 4}
+	v := &Vector3D{}
+	if !p.Normal(v).Equal(&Vector3D{1, 2, 3}) {
+		t.Error("Plane.Normal")
+	}
+}
+
+func Benchmark_Plane_Normal(b *testing.B) {
+	p := &Plane{1, 2, 3, 4}
+	v := &Vector3D{}
+	for i := 0; i < b.N; i++ {
+		p.Normal(v)
+	}
+}
+
+func TestPlaneNormalize(t *testing.T) {
+	s := 1 / math.Sqrt(29)
+	p1, p2 := &Plane{2, 3, 4, 5}, &Plane{s * 2, s * 3, s * 4, s * 5}
+	if !p1.Normalize(p1).NormalizedEqual(p2) {
+		t.Error("Plane.Normalize")
+	}
+}
+
+func Benchmark_Plane_Normalize(b *testing.B) {
+	p1, p2 := &Plane{2, 3, 4, -5}, &Plane{}
+	for i := 0; i < b.N; i++ {
+		p1.Normalize(p2)
+	}
+}
+
 func TestNormalizedEqual(t *testing.T) {
-	p := Plane{1, 2, 3, 4}
-	if !p.NormalizedEqual(&Plane{1, 2, 3, 4}) {
+	s := 1 / math.Sqrt(14)
+	p, pe := &Plane{1, 2, 3, 4}, &Plane{s * 1, s * 2, s * 3, s * 4}
+	p.Normalize(p)
+	if !p.NormalizedEqual(pe) {
+		t.Error("Plane.NormalizedEqual")
+	}
+	*p = Plane{-1, -2, -3, -4}
+	p.Normalize(p)
+	if !p.NormalizedEqual(pe) {
 		t.Error("Plane.NormalizedEqual")
 	}
 }
 
 func Benchmark_Plane_NormalizedEqual(b *testing.B) {
-	p1, p2 := &Plane{1, 2, 3, 4}, &Plane{1, 2, 3, 4}
+	p1, p2 := &Plane{1, 2, 3, 4}, &Plane{-1, -2, -3, -4}
 	for i := 0; i < b.N; i++ {
 		p1.NormalizedEqual(p2)
+	}
+}
+
+type planeNormalizedFuzzyEqualData struct {
+	p1, p2 Plane
+	equal  bool
+}
+
+var planeNormalizedFuzzyEqualValues = []planeNormalizedFuzzyEqualData{
+	{Plane{1 / math.Sqrt(14), 2 / math.Sqrt(14), 3 / math.Sqrt(14), 4 / math.Sqrt(14)},
+		Plane{1/math.Sqrt(14) + 1e-11, 2 / math.Sqrt(14), 3 / math.Sqrt(14), 4 / math.Sqrt(14)},
+		false},
+	{Plane{1 / math.Sqrt(14), 2 / math.Sqrt(14), 3 / math.Sqrt(14), 4 / math.Sqrt(14)},
+		Plane{1/math.Sqrt(14) + 1e-12, 2 / math.Sqrt(14), 3 / math.Sqrt(14), 4 / math.Sqrt(14)},
+		true},
+	{Plane{1 / math.Sqrt(14), 2 / math.Sqrt(14), 3 / math.Sqrt(14), 4 / math.Sqrt(14)},
+		Plane{1 / math.Sqrt(14), 2/math.Sqrt(14) + 1e-11, 3 / math.Sqrt(14), 4 / math.Sqrt(14)},
+		false},
+	{Plane{1 / math.Sqrt(14), 2 / math.Sqrt(14), 3 / math.Sqrt(14), 4 / math.Sqrt(14)},
+		Plane{1 / math.Sqrt(14), 2/math.Sqrt(14) + 1e-12, 3 / math.Sqrt(14), 4 / math.Sqrt(14)},
+		true},
+	{Plane{1 / math.Sqrt(14), 2 / math.Sqrt(14), 3 / math.Sqrt(14), 4 / math.Sqrt(14)},
+		Plane{1 / math.Sqrt(14), 2 / math.Sqrt(14), 3/math.Sqrt(14) + 1e-11, 4 / math.Sqrt(14)},
+		false},
+	{Plane{1 / math.Sqrt(14), 2 / math.Sqrt(14), 3 / math.Sqrt(14), 4 / math.Sqrt(14)},
+		Plane{1 / math.Sqrt(14), 2 / math.Sqrt(14), 3/math.Sqrt(14) + 1e-12, 4 / math.Sqrt(14)},
+		true},
+	{Plane{1 / math.Sqrt(14), 2 / math.Sqrt(14), 3 / math.Sqrt(14), 4 / math.Sqrt(14)},
+		Plane{1 / math.Sqrt(14), 2 / math.Sqrt(14), 3 / math.Sqrt(14), 4/math.Sqrt(14) + 1e-11},
+		false},
+	{Plane{1 / math.Sqrt(14), 2 / math.Sqrt(14), 3 / math.Sqrt(14), 4 / math.Sqrt(14)},
+		Plane{1 / math.Sqrt(14), 2 / math.Sqrt(14), 3 / math.Sqrt(14), 4/math.Sqrt(14) + 1e-12},
+		true},
+	{Plane{-1 / math.Sqrt(14), -2 / math.Sqrt(14), -3 / math.Sqrt(14), -4 / math.Sqrt(14)},
+		Plane{1 / math.Sqrt(14), 2 / math.Sqrt(14), 3 / math.Sqrt(14), 4 / math.Sqrt(14)},
+		true},
+}
+
+func testPlaneNormalizedFuzzyEqual(d planeNormalizedFuzzyEqualData, t *testing.T) {
+	if d.p1.NormalizedFuzzyEqual(&d.p2) != d.equal {
+		t.Error("Plane.NormalizedFuzzyEqual", d.p1, d.p2, d.equal)
+	}
+	if d.p2.NormalizedFuzzyEqual(&d.p1) != d.equal {
+		t.Error("Plane.NormalizedFuzzyEqual", d.p2, d.p1, d.equal)
+	}
+}
+
+func TestPlaneNormalizedFuzzyEqual(t *testing.T) {
+	for _, v := range planeNormalizedFuzzyEqualValues {
+		testPlaneNormalizedFuzzyEqual(v, t)
+	}
+}
+
+func Benchmark_Plane_NormalizedFuzzyEqual(b *testing.B) {
+	p1, p2 := &Plane{1, 2, 3, 4}, &Plane{-1, -2, -3, -4}
+	for i := 0; i < b.N; i++ {
+		p1.NormalizedFuzzyEqual(p2)
 	}
 }
 

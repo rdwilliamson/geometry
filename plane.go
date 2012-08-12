@@ -52,7 +52,7 @@ func (x *Plane) Normal(z *Vector3D) *Vector3D {
 // Normalize sets z to the Hessian normal form of x where the normal is a unit
 // vector and D is the distance from the origin, then returns z.
 func (x *Plane) Normalize(z *Plane) *Plane {
-	s := x.A*x.A + x.B*x.B + x.C*x.C
+	s := 1 / math.Sqrt(x.A*x.A+x.B*x.B+x.C*x.C)
 	z.A = x.A * s
 	z.B = x.B * s
 	z.C = x.C * s
@@ -60,11 +60,22 @@ func (x *Plane) Normalize(z *Plane) *Plane {
 	return z
 }
 
+// NormalizedEqual returns true if the two planes (assumed to be in Hessian
+// normal form) are exactly equal or false otherwise.
 func (a *Plane) NormalizedEqual(b *Plane) bool {
+	if a.D*b.D < 0 {
+		return -a.A == b.A && -a.B == b.B && -a.C == b.C && -a.D == b.D
+	}
 	return a.A == b.A && a.B == b.B && a.C == b.C && a.D == b.D
 }
 
+// NormalizedFuzzyEqual returns true if the two planes (assumed to be in
+// Hessian normal form) are very close or false otherwise.
 func (a *Plane) NormalizedFuzzyEqual(b *Plane) bool {
+	if a.D*b.D < 0 {
+		return FuzzyEqual(-a.A, b.A) && FuzzyEqual(-a.B, b.B) &&
+			FuzzyEqual(-a.C, b.C) && FuzzyEqual(-a.D, b.D)
+	}
 	return FuzzyEqual(a.A, b.A) && FuzzyEqual(a.B, b.B) &&
 		FuzzyEqual(a.C, b.C) && FuzzyEqual(a.D, b.D)
 }
