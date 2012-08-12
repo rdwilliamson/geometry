@@ -176,34 +176,6 @@ func Benchmark_Vector2D_DotProduct(b *testing.B) {
 	}
 }
 
-func TestVector2DMagnitude(t *testing.T) {
-	v := &Vector2D{3, 4}
-	if v.Magnitude() != 5 {
-		t.Error("Vector2D.Magnitude")
-	}
-}
-
-func Benchmark_Vector2D_Magnitude(b *testing.B) {
-	v := &Vector2D{3, 4}
-	for i := 0; i < b.N; i++ {
-		v.Magnitude()
-	}
-}
-
-func TestVector2DMagnitudeSquared(t *testing.T) {
-	v := &Vector2D{3, 4}
-	if v.MagnitudeSquared() != 25 {
-		t.Error("Vector2D.MagnitudeSquared")
-	}
-}
-
-func Benchmark_Vector2D_MagnitudeSquared(b *testing.B) {
-	v := &Vector2D{3, 4}
-	for i := 0; i < b.N; i++ {
-		v.MagnitudeSquared()
-	}
-}
-
 func TestVector2DEqual(t *testing.T) {
 	v1, v2 := &Vector2D{}, &Vector2D{1, 0}
 	if v1.Equal(v2) {
@@ -248,6 +220,34 @@ func Benchmark_Vector2D_FuzzyEqual(b *testing.B) {
 	v1, v2 := &Vector2D{}, &Vector2D{1, 0}
 	for i := 0; i < b.N; i++ {
 		v1.FuzzyEqual(v2)
+	}
+}
+
+func TestVector2DMagnitude(t *testing.T) {
+	v := &Vector2D{3, 4}
+	if v.Magnitude() != 5 {
+		t.Error("Vector2D.Magnitude")
+	}
+}
+
+func Benchmark_Vector2D_Magnitude(b *testing.B) {
+	v := &Vector2D{3, 4}
+	for i := 0; i < b.N; i++ {
+		v.Magnitude()
+	}
+}
+
+func TestVector2DMagnitudeSquared(t *testing.T) {
+	v := &Vector2D{3, 4}
+	if v.MagnitudeSquared() != 25 {
+		t.Error("Vector2D.MagnitudeSquared")
+	}
+}
+
+func Benchmark_Vector2D_MagnitudeSquared(b *testing.B) {
+	v := &Vector2D{3, 4}
+	for i := 0; i < b.N; i++ {
+		v.MagnitudeSquared()
 	}
 }
 

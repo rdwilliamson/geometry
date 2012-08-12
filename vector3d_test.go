@@ -59,6 +59,20 @@ func Benchmark_Vector3D_AngularCosSquaredDifference(b *testing.B) {
 	}
 }
 
+func TestVector3DCrossProduct(t *testing.T) {
+	r, v1, v2 := &Vector3D{}, &Vector3D{1, 2, 3}, &Vector3D{4, 5, 6}
+	if !r.CrossProduct(v1, v2).Equal(&Vector3D{-3, 6, -3}) {
+		t.Error("Vector3D.CrossProduct")
+	}
+}
+
+func Benchmark_Vector3D_CrossProduct(b *testing.B) {
+	r, v1, v2 := &Vector3D{}, &Vector3D{1, 2, 3}, &Vector3D{4, 5, 6}
+	for i := 0; i < b.N; i++ {
+		r.CrossProduct(v1, v2)
+	}
+}
+
 func TestVector3DDirectionEqual(t *testing.T) {
 	v1, v2 := &Vector3D{1, 1, 1}, &Vector3D{2, 2, 2}
 	if !v1.DirectionEqual(v2) {
@@ -121,20 +135,6 @@ func Benchmark_Vector3D_DirectionFuzzyEqual(b *testing.B) {
 	}
 }
 
-func TestVector3DCrossProduct(t *testing.T) {
-	r, v1, v2 := &Vector3D{}, &Vector3D{1, 2, 3}, &Vector3D{4, 5, 6}
-	if !r.CrossProduct(v1, v2).Equal(&Vector3D{-3, 6, -3}) {
-		t.Error("Vector3D.CrossProduct")
-	}
-}
-
-func Benchmark_Vector3D_CrossProduct(b *testing.B) {
-	r, v1, v2 := &Vector3D{}, &Vector3D{1, 2, 3}, &Vector3D{4, 5, 6}
-	for i := 0; i < b.N; i++ {
-		r.CrossProduct(v1, v2)
-	}
-}
-
 func TestVector3DDistance(t *testing.T) {
 	v1, v2 := &Vector3D{}, &Vector3D{1, 0, 0}
 	if v1.Distance(v2) != 1 {
@@ -174,34 +174,6 @@ func Benchmark_Vector3D_DotProduct(b *testing.B) {
 	v1, v2 := &Vector3D{1, 2, 5}, &Vector3D{3, 4, 6}
 	for i := 0; i < b.N; i++ {
 		v1.DotProduct(v2)
-	}
-}
-
-func TestVector3DMagnitude(t *testing.T) {
-	v := &Vector3D{3, 4, 5}
-	if v.Magnitude() != math.Sqrt(50) {
-		t.Error("Vector3D.Magnitude")
-	}
-}
-
-func Benchmark_Vector3D_Magnitude(b *testing.B) {
-	v := &Vector3D{3, 4, 5}
-	for i := 0; i < b.N; i++ {
-		v.Magnitude()
-	}
-}
-
-func TestVector3DMagnitudeSquared(t *testing.T) {
-	v := &Vector3D{3, 4, 5}
-	if v.MagnitudeSquared() != 50 {
-		t.Error("Vector3D.MagnitudeSquared")
-	}
-}
-
-func Benchmark_Vector3D_MagnitudeSquared(b *testing.B) {
-	v := &Vector3D{3, 4, 5}
-	for i := 0; i < b.N; i++ {
-		v.MagnitudeSquared()
 	}
 }
 
@@ -256,6 +228,34 @@ func Benchmark_Vector3D_FuzzyEqual(b *testing.B) {
 	v1, v2 := &Vector3D{}, &Vector3D{1, 0, 0}
 	for i := 0; i < b.N; i++ {
 		v1.FuzzyEqual(v2)
+	}
+}
+
+func TestVector3DMagnitude(t *testing.T) {
+	v := &Vector3D{3, 4, 5}
+	if v.Magnitude() != math.Sqrt(50) {
+		t.Error("Vector3D.Magnitude")
+	}
+}
+
+func Benchmark_Vector3D_Magnitude(b *testing.B) {
+	v := &Vector3D{3, 4, 5}
+	for i := 0; i < b.N; i++ {
+		v.Magnitude()
+	}
+}
+
+func TestVector3DMagnitudeSquared(t *testing.T) {
+	v := &Vector3D{3, 4, 5}
+	if v.MagnitudeSquared() != 50 {
+		t.Error("Vector3D.MagnitudeSquared")
+	}
+}
+
+func Benchmark_Vector3D_MagnitudeSquared(b *testing.B) {
+	v := &Vector3D{3, 4, 5}
+	for i := 0; i < b.N; i++ {
+		v.MagnitudeSquared()
 	}
 }
 
