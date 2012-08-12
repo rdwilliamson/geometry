@@ -154,11 +154,25 @@ func Benchmark_Plane_NormalizedPointDistance(b *testing.B) {
 	}
 }
 
+func TestPlanePointDistance(t *testing.T) {
+	pl, pt := &Plane{2, -2, 5, 8}, &Vector3D{4, -4, 3}
+	if d := pl.PointDistance(pt); d != 39/math.Sqrt(33) {
+		t.Error("Plane.PointDistance", *pl, *pt, "want", 39/math.Sqrt(33), "got", d)
+	}
+}
+
 func Benchmark_Plane_PointDistance(b *testing.B) {
 	pl := &Plane{1, 2, 3, 4}
 	pt := &Vector3D{5, 6, 7}
 	for i := 0; i < b.N; i++ {
 		pl.PointDistance(pt)
+	}
+}
+
+func TestPlanePointDistanceSquared(t *testing.T) {
+	pl, pt := &Plane{2, -2, 5, 8}, &Vector3D{4, -4, 3}
+	if d := pl.PointDistanceSquared(pt); d != 39.0*39.0/33.0 {
+		t.Error("Plane.PointDistanceSquared", *pl, *pt, "want", 39.0*39.0/33.0, "got", d)
 	}
 }
 
