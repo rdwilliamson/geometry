@@ -251,6 +251,20 @@ func Benchmark_Vector2D_MagnitudeSquared(b *testing.B) {
 	}
 }
 
+func TestVector2DNormalize(t *testing.T) {
+	v1, v2 := &Vector2D{3, 4}, &Vector2D{3.0 / 5.0, 4.0 / 5.0}
+	if !v1.Normalize(v1).FuzzyEqual(v2) {
+		t.Error("Vector2D.Normalize")
+	}
+}
+
+func Benchmark_Vector2D_Normalize(b *testing.B) {
+	v1, v2 := &Vector2D{3, 4}, &Vector2D{}
+	for i := 0; i < b.N; i++ {
+		v1.Normalize(v2)
+	}
+}
+
 func TestVector2DSet(t *testing.T) {
 	v1, v2 := &Vector2D{}, &Vector2D{1, 0}
 	if !v1.Set(v2).Equal(v2) {
