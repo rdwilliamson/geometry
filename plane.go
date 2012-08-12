@@ -69,19 +69,16 @@ func (a *Plane) NormalizedEqual(b *Plane) bool {
 	return a.A == b.A && a.B == b.B && a.C == b.C && a.D == b.D
 }
 
-// PointDistance returns the distance point b is from plane a assuming it is
-// normalized.
+// PointDistance returns the distance (may be negative) point b is from plane a
+// assuming it is normalized.
 func (a *Plane) NormalizedPointDistance(b *Vector3D) float64 {
 	return a.A*b.X + a.B*b.Y + a.C*b.Z + a.D
 }
 
-// PointDistance returns the distance point b is from plane a.
+// PointDistance returns the distance (may be negative) point b is from plane a.
 func (a *Plane) PointDistance(b *Vector3D) float64 {
-	n := a.A*b.X + a.B*b.Y + a.C*b.Z + a.D
-	if n < 0 {
-		n = -n
-	}
-	return n / math.Sqrt(a.A*a.A+a.B*a.B+a.C*a.C)
+	return (a.A*b.X + a.B*b.Y + a.C*b.Z + a.D) /
+		math.Sqrt(a.A*a.A+a.B*a.B+a.C*a.C)
 }
 
 // PointDistance returns the squared distance point b is from plane a.
