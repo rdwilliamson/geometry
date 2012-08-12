@@ -69,17 +69,6 @@ func (a *Plane) NormalizedEqual(b *Plane) bool {
 	return a.A == b.A && a.B == b.B && a.C == b.C && a.D == b.D
 }
 
-// NormalizedFuzzyEqual returns true if the two planes (assumed to be in
-// Hessian normal form) are very close or false otherwise.
-func (a *Plane) NormalizedFuzzyEqual(b *Plane) bool {
-	if a.D*b.D < 0 {
-		return FuzzyEqual(-a.A, b.A) && FuzzyEqual(-a.B, b.B) &&
-			FuzzyEqual(-a.C, b.C) && FuzzyEqual(-a.D, b.D)
-	}
-	return FuzzyEqual(a.A, b.A) && FuzzyEqual(a.B, b.B) &&
-		FuzzyEqual(a.C, b.C) && FuzzyEqual(a.D, b.D)
-}
-
 // PointDistance returns the distance point b is from plane a assuming it is
 // normalized.
 func (a *Plane) NormalizedPointDistance(b *Vector3D) float64 {

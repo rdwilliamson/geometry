@@ -145,63 +145,6 @@ func Benchmark_Plane_NormalizedEqual(b *testing.B) {
 	}
 }
 
-type planeNormalizedFuzzyEqualData struct {
-	p1, p2 Plane
-	equal  bool
-}
-
-var planeNormalizedFuzzyEqualValues = []planeNormalizedFuzzyEqualData{
-	{Plane{1 / math.Sqrt(14), 2 / math.Sqrt(14), 3 / math.Sqrt(14), 4 / math.Sqrt(14)},
-		Plane{1/math.Sqrt(14) + 1e-11, 2 / math.Sqrt(14), 3 / math.Sqrt(14), 4 / math.Sqrt(14)},
-		false},
-	{Plane{1 / math.Sqrt(14), 2 / math.Sqrt(14), 3 / math.Sqrt(14), 4 / math.Sqrt(14)},
-		Plane{1/math.Sqrt(14) + 1e-12, 2 / math.Sqrt(14), 3 / math.Sqrt(14), 4 / math.Sqrt(14)},
-		true},
-	{Plane{1 / math.Sqrt(14), 2 / math.Sqrt(14), 3 / math.Sqrt(14), 4 / math.Sqrt(14)},
-		Plane{1 / math.Sqrt(14), 2/math.Sqrt(14) + 1e-11, 3 / math.Sqrt(14), 4 / math.Sqrt(14)},
-		false},
-	{Plane{1 / math.Sqrt(14), 2 / math.Sqrt(14), 3 / math.Sqrt(14), 4 / math.Sqrt(14)},
-		Plane{1 / math.Sqrt(14), 2/math.Sqrt(14) + 1e-12, 3 / math.Sqrt(14), 4 / math.Sqrt(14)},
-		true},
-	{Plane{1 / math.Sqrt(14), 2 / math.Sqrt(14), 3 / math.Sqrt(14), 4 / math.Sqrt(14)},
-		Plane{1 / math.Sqrt(14), 2 / math.Sqrt(14), 3/math.Sqrt(14) + 1e-11, 4 / math.Sqrt(14)},
-		false},
-	{Plane{1 / math.Sqrt(14), 2 / math.Sqrt(14), 3 / math.Sqrt(14), 4 / math.Sqrt(14)},
-		Plane{1 / math.Sqrt(14), 2 / math.Sqrt(14), 3/math.Sqrt(14) + 1e-12, 4 / math.Sqrt(14)},
-		true},
-	{Plane{1 / math.Sqrt(14), 2 / math.Sqrt(14), 3 / math.Sqrt(14), 4 / math.Sqrt(14)},
-		Plane{1 / math.Sqrt(14), 2 / math.Sqrt(14), 3 / math.Sqrt(14), 4/math.Sqrt(14) + 1e-11},
-		false},
-	{Plane{1 / math.Sqrt(14), 2 / math.Sqrt(14), 3 / math.Sqrt(14), 4 / math.Sqrt(14)},
-		Plane{1 / math.Sqrt(14), 2 / math.Sqrt(14), 3 / math.Sqrt(14), 4/math.Sqrt(14) + 1e-12},
-		true},
-	{Plane{-1 / math.Sqrt(14), -2 / math.Sqrt(14), -3 / math.Sqrt(14), -4 / math.Sqrt(14)},
-		Plane{1 / math.Sqrt(14), 2 / math.Sqrt(14), 3 / math.Sqrt(14), 4 / math.Sqrt(14)},
-		true},
-}
-
-func testPlaneNormalizedFuzzyEqual(d planeNormalizedFuzzyEqualData, t *testing.T) {
-	if d.p1.NormalizedFuzzyEqual(&d.p2) != d.equal {
-		t.Error("Plane.NormalizedFuzzyEqual", d.p1, d.p2, d.equal)
-	}
-	if d.p2.NormalizedFuzzyEqual(&d.p1) != d.equal {
-		t.Error("Plane.NormalizedFuzzyEqual", d.p2, d.p1, d.equal)
-	}
-}
-
-func TestPlaneNormalizedFuzzyEqual(t *testing.T) {
-	for _, v := range planeNormalizedFuzzyEqualValues {
-		testPlaneNormalizedFuzzyEqual(v, t)
-	}
-}
-
-func Benchmark_Plane_NormalizedFuzzyEqual(b *testing.B) {
-	p1, p2 := &Plane{1, 2, 3, 4}, &Plane{-1, -2, -3, -4}
-	for i := 0; i < b.N; i++ {
-		p1.NormalizedFuzzyEqual(p2)
-	}
-}
-
 func Benchmark_Plane_NormalizedPointDistance(b *testing.B) {
 	pl := &Plane{1, 2, 3, 4}
 	pl.Normalize(pl)
