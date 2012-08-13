@@ -223,3 +223,21 @@ func Benchmark_Plane_Set(b *testing.B) {
 		p2.Set(p1)
 	}
 }
+
+func TestPlaneSetFromPoints(t *testing.T) {
+	got, want := Plane{}, &Plane{28, 11, -26, 38}
+	pt1, pt2 := &Vector3D{1, -6, 0}, &Vector3D{-4, 2, -2}
+	pt3 := &Vector3D{-2, 4, 1}
+	if !got.SetFromPoints(pt1, pt2, pt3).NormalizedEqual(want) {
+		t.Error("Plane.SetFromPoints")
+	}
+}
+
+func Benchmark_Plane_SetFromPoints(b *testing.B) {
+	pl := Plane{}
+	pt1, pt2 := &Vector3D{1, -6, 0}, &Vector3D{-4, 2, -2}
+	pt3 := &Vector3D{-2, 4, 1}
+	for i := 0; i < b.N; i++ {
+		pl.SetFromPoints(pt1, pt2, pt3)
+	}
+}

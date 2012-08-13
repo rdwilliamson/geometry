@@ -110,7 +110,12 @@ func (z *Plane) Set(x *Plane) *Plane {
 }
 
 // SetFromPoints set z to the plane through the three points, then returns z.
-func (z *Plane) SetFromPoints(p1, p2, p3 Vector3D) *Plane {
+func (z *Plane) SetFromPoints(p1, p2, p3 *Vector3D) *Plane {
+	z.A = p1.Y*(p2.Z-p3.Z) + p2.Y*(p3.Z-p1.Z) + p3.Y*(p1.Z-p2.Z)
+	z.B = p1.Z*(p2.X-p3.X) + p2.Z*(p3.X-p1.X) + p3.Z*(p1.X-p2.X)
+	z.C = p1.X*(p2.Y-p3.Y) + p2.X*(p3.Y-p1.Y) + p3.X*(p1.Y-p2.Y)
+	z.D = -(p1.X*(p2.Y*p3.Z-p3.Y*p2.Z) + p2.X*(p3.Y*p1.Z-p1.Y*p3.Z) +
+		p3.X*(p1.Y*p2.Z-p2.Y*p1.Z))
 	return z
 }
 
