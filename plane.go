@@ -124,6 +124,19 @@ func (z *Plane) SetFromPoints(p1, p2, p3 *Vector3D) *Plane {
 // then returns z.
 func (a *Plane) ThreePlaneIntersection(b, c *Plane, z *Vector3D) *Vector3D {
 	// http://paulbourke.net/geometry/3planes/
+	n2n3x := b.B*c.C - b.C*c.B
+	n2n3y := b.C*c.A - b.A*c.C
+	n2n3z := b.A*c.B - b.B*c.A
+	n3n1x := c.B*a.C - c.C*a.B
+	n3n1y := c.C*a.A - c.A*a.C
+	n3n1z := c.A*a.B - c.B*a.A
+	n1n2x := a.B*b.C - a.C*b.B
+	n1n2y := a.C*b.A - a.A*b.C
+	n1n2z := a.A*b.B - a.B*b.A
+	d := -1 / (a.A*n2n3x + a.B*n2n3y + a.C*n2n3z)
+	z.X = (a.D*n2n3x + b.D*n3n1x + c.D*n1n2x) * d
+	z.Y = (a.D*n2n3y + b.D*n3n1y + c.D*n1n2y) * d
+	z.Z = (a.D*n2n3z + b.D*n3n1z + c.D*n1n2z) * d
 	return z
 }
 

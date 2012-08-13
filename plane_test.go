@@ -226,8 +226,7 @@ func Benchmark_Plane_Set(b *testing.B) {
 
 func TestPlaneSetFromPoints(t *testing.T) {
 	got, want := Plane{}, &Plane{28, 11, -26, 38}
-	pt1, pt2 := &Vector3D{1, -6, 0}, &Vector3D{-4, 2, -2}
-	pt3 := &Vector3D{-2, 4, 1}
+	pt1, pt2, pt3 := &Vector3D{1, -6, 0}, &Vector3D{-4, 2, -2}, &Vector3D{-2, 4, 1}
 	if !got.SetFromPoints(pt1, pt2, pt3).NormalizedEqual(want) {
 		t.Error("Plane.SetFromPoints")
 	}
@@ -235,10 +234,25 @@ func TestPlaneSetFromPoints(t *testing.T) {
 
 func Benchmark_Plane_SetFromPoints(b *testing.B) {
 	pl := Plane{}
-	pt1, pt2 := &Vector3D{1, -6, 0}, &Vector3D{-4, 2, -2}
-	pt3 := &Vector3D{-2, 4, 1}
+	pt1, pt2, pt3 := &Vector3D{1, -6, 0}, &Vector3D{-4, 2, -2}, &Vector3D{-2, 4, 1}
 	for i := 0; i < b.N; i++ {
 		pl.SetFromPoints(pt1, pt2, pt3)
+	}
+}
+
+func TestPlaneThreePlaneIntersection(t *testing.T) {
+	p1, p2, p3 := &Plane{1, -3, 3, 4}, &Plane{2, 3, -1, -15}, &Plane{4, -3, -1, -19}
+	got, want := &Vector3D{}, &Vector3D{5, 1, -2}
+	if !p1.ThreePlaneIntersection(p2, p3, got).FuzzyEqual(want) {
+		t.Error("Plane.ThreePlaneIntersection", *p1, *p2, *p3, "want", want, "got", got)
+	}
+}
+
+func Benchmark_Plane_ThreePlaneIntersection(b *testing.B) {
+	p1, p2, p3 := &Plane{1, -3, 3, 4}, &Plane{2, 3, -1, -15}, &Plane{4, -3, -1, -19}
+	pt := &Vector3D{}
+	for i := 0; i < b.N; i++ {
+		p1.ThreePlaneIntersection(p2, p3, pt)
 	}
 }
 
