@@ -1,6 +1,8 @@
 package geometry
 
-import "math"
+import (
+	"math"
+)
 
 // A Line3D representes a 3D line by two points P1 and P2 (represented by
 // vectors) on the line. The line is treated as an infinite line unless a

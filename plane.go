@@ -111,6 +111,7 @@ func (z *Plane) Set(x *Plane) *Plane {
 
 // SetFromPoints set z to the plane through the three points, then returns z.
 func (z *Plane) SetFromPoints(p1, p2, p3 *Vector3D) *Plane {
+	// http://paulbourke.net/geometry/planeeq/
 	z.A = p1.Y*(p2.Z-p3.Z) + p2.Y*(p3.Z-p1.Z) + p3.Y*(p1.Z-p2.Z)
 	z.B = p1.Z*(p2.X-p3.X) + p2.Z*(p3.X-p1.X) + p3.Z*(p1.X-p2.X)
 	z.C = p1.X*(p2.Y-p3.Y) + p2.X*(p3.Y-p1.Y) + p3.X*(p1.Y-p2.Y)
@@ -122,11 +123,25 @@ func (z *Plane) SetFromPoints(p1, p2, p3 *Vector3D) *Plane {
 // ThreePlaneIntersection sets z to the intersection of planes a, b, and c,
 // then returns z.
 func (a *Plane) ThreePlaneIntersection(b, c *Plane, z *Vector3D) *Vector3D {
+	// http://paulbourke.net/geometry/3planes/
 	return z
 }
 
 // TwoPlaneIntersection sets z to the intersection of planes a and b, then
 // returns z.
 func (a *Plane) TwoPlaneIntersection(b *Plane, z *Line3D) *Line3D {
+	// http://paulbourke.net/geometry/planeplane/
+	n1n1 := a.A*a.A + a.B*a.B + a.C*a.C
+	n2n2 := b.A*b.A + b.B*b.B + b.C*b.C
+	n1n2 := a.A*b.A + a.B*b.B + a.C*b.C
+	d := 1 / (n1n1*n2n2 - n1n2*n1n2)
+	c1 := (b.D*n1n2 - a.D*n2n2) * d
+	c2 := (a.D*n1n2 - b.D*n1n1) * d
+	z.P1.X = c1*a.A + c2*b.A
+	z.P1.Y = c1*a.B + c2*b.B
+	z.P1.Z = c1*a.C + c2*b.C
+	z.P2.X = z.P1.X + (a.B*b.C - a.C*b.B)
+	z.P2.Y = z.P1.Y + (a.C*b.A - a.A*b.C)
+	z.P2.Z = z.P1.Z + (a.A*b.B - a.B*b.A)
 	return z
 }

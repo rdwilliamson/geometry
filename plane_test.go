@@ -241,3 +241,19 @@ func Benchmark_Plane_SetFromPoints(b *testing.B) {
 		pl.SetFromPoints(pt1, pt2, pt3)
 	}
 }
+
+func TestPlaneTwoPlaneIntersection(t *testing.T) {
+	p1, p2 := &Plane{1, 1, 1, 1}, &Plane{1, 2, 3, 4}
+	got, want := &Line3D{}, &Line3D{Vector3D{3, -5, 1}, Vector3D{4, -7, 2}}
+	if !p1.TwoPlaneIntersection(p2, got).FuzzyEqual(want) {
+		t.Error("Plane.TwoPlaneIntersection", *p1, *p2, "want", want, "got", got)
+	}
+}
+
+func Benchmark_Plane_TwoPlaneIntersection(b *testing.B) {
+	p1, p2 := &Plane{1, 1, 1, 1}, &Plane{1, 2, 3, 4}
+	l := &Line3D{}
+	for i := 0; i < b.N; i++ {
+		p1.TwoPlaneIntersection(p2, l)
+	}
+}
