@@ -114,6 +114,56 @@ func Benchmark_Vector2D_DirectionEqual(b *testing.B) {
 	}
 }
 
+type vector2DFromLineIntersectionData struct {
+	l1, l2 Line2D
+	p      Vector2D
+}
+
+var vector2DFromLineIntersectionValues = []vector2DFromLineIntersectionData{
+	{Line2D{Vector2D{0, 0}, Vector2D{1, 1}}, Line2D{Vector2D{0, 1}, Vector2D{1, 0}}, Vector2D{0.5, 0.5}},
+	{Line2D{Vector2D{0, 0}, Vector2D{1, 1}}, Line2D{Vector2D{1, 0}, Vector2D{2, 1}}, Vector2D{math.Inf(1), math.Inf(1)}},
+	{Line2D{Vector2D{0, 0}, Vector2D{-1, -1}}, Line2D{Vector2D{0, 1}, Vector2D{1, 0}}, Vector2D{0.5, 0.5}},
+}
+
+func testVector2DFromLineIntersection(d vector2DFromLineIntersectionData, t *testing.T) {
+	var p Vector2D
+	if !p.FromLineIntersection(&d.l1, &d.l2).infEqual(&d.p) {
+		t.Error("Vector2D.FromLineIntersection", d.l1, d.l2, "want", d.p, "got", p)
+	}
+	if !p.FromLineIntersection(&d.l2, &d.l1).infEqual(&d.p) {
+		t.Error("Vector2D.FromLineIntersection", d.l2, d.l1, "want", d.p, "got", p)
+	}
+	d.l1.P1, d.l1.P2 = d.l1.P2, d.l1.P1
+	if !p.FromLineIntersection(&d.l1, &d.l2).infEqual(&d.p) {
+		t.Error("Vector2D.FromLineIntersection", d.l1, d.l2, "want", d.p, "got", p)
+	}
+	if !p.FromLineIntersection(&d.l2, &d.l1).infEqual(&d.p) {
+		t.Error("Vector2D.FromLineIntersection", d.l2, d.l1, "want", d.p, "got", p)
+	}
+	d.l2.P1, d.l2.P2 = d.l2.P2, d.l2.P1
+	if !p.FromLineIntersection(&d.l1, &d.l2).infEqual(&d.p) {
+		t.Error("Vector2D.FromLineIntersection", d.l1, d.l2, "want", d.p, "got", p)
+	}
+	if !p.FromLineIntersection(&d.l2, &d.l1).infEqual(&d.p) {
+		t.Error("Vector2D.FromLineIntersection", d.l2, d.l1, "want", d.p, "got", p)
+	}
+}
+
+func TestVector2DFromLineIntersection(t *testing.T) {
+	for _, v := range vector2DFromLineIntersectionValues {
+		testVector2DFromLineIntersection(v, t)
+	}
+}
+
+func Benchmark_Vector2D_FromLineIntersection(b *testing.B) {
+	l1 := &Line2D{Vector2D{0, 0}, Vector2D{1, 1}}
+	l2 := &Line2D{Vector2D{0, 1}, Vector2D{1, 0}}
+	p := &Vector2D{}
+	for i := 0; i < b.N; i++ {
+		p.FromLineIntersection(l1, l2)
+	}
+}
+
 type vector2DDirectionFuzzyEqualData struct {
 	v1, v2 Vector2D
 	equal  bool

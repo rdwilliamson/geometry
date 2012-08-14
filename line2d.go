@@ -41,18 +41,6 @@ func (a *Line2D) FuzzyEqual(b *Line2D) bool {
 	return FuzzyEqual(am, bm) && FuzzyEqual(a.P1.Y-am*a.P1.X, b.P1.Y-bm*b.P1.X)
 }
 
-// Intersection sets point z to the intersection of a and b, then returns z.
-func (a *Line2D) Intersection(b *Line2D, z *Vector2D) *Vector2D {
-	// http://local.wasp.uwa.edu.au/~pbourke/geometry/lineline2d/
-	l1dx, l1dy := a.P2.X-a.P1.X, a.P2.Y-a.P1.Y
-	l2dx, l2dy := b.P2.X-b.P1.X, b.P2.Y-b.P1.Y
-	ua := (l2dx*(a.P1.Y-b.P1.Y) - l2dy*(a.P1.X-b.P1.X)) /
-		(l2dy*l1dx - l2dx*l1dy)
-	z.X = a.P1.X + ua*l1dx
-	z.Y = a.P1.Y + ua*l1dy
-	return z
-}
-
 // Length returns the length of line segment x.
 func (x *Line2D) Length() float64 {
 	dx, dy := x.P2.X-x.P1.X, x.P2.Y-x.P1.Y

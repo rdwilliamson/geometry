@@ -96,6 +96,19 @@ func (a *Vector2D) Equal(b *Vector2D) bool {
 	return *a == *b
 }
 
+// FromLineIntersection sets point z to the intersection of a and b, then
+// returns z.
+func (z *Vector2D) FromLineIntersection(a, b *Line2D) *Vector2D {
+	// http://local.wasp.uwa.edu.au/~pbourke/geometry/lineline2d/
+	l1dx, l1dy := a.P2.X-a.P1.X, a.P2.Y-a.P1.Y
+	l2dx, l2dy := b.P2.X-b.P1.X, b.P2.Y-b.P1.Y
+	ua := (l2dx*(a.P1.Y-b.P1.Y) - l2dy*(a.P1.X-b.P1.X)) /
+		(l2dy*l1dx - l2dx*l1dy)
+	z.X = a.P1.X + ua*l1dx
+	z.Y = a.P1.Y + ua*l1dy
+	return z
+}
+
 // FuzzyEqual compares a and b then returns true if they are very close or
 // false otherwise.
 func (a *Vector2D) FuzzyEqual(b *Vector2D) bool {

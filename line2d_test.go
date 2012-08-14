@@ -97,56 +97,6 @@ func Benchmark_Line2D_FuzzyEqual(b *testing.B) {
 	}
 }
 
-type line2DIntersectionData struct {
-	l1, l2 Line2D
-	p      Vector2D
-}
-
-var line2DIntersectionValues = []line2DIntersectionData{
-	{Line2D{Vector2D{0, 0}, Vector2D{1, 1}}, Line2D{Vector2D{0, 1}, Vector2D{1, 0}}, Vector2D{0.5, 0.5}},
-	{Line2D{Vector2D{0, 0}, Vector2D{1, 1}}, Line2D{Vector2D{1, 0}, Vector2D{2, 1}}, Vector2D{math.Inf(1), math.Inf(1)}},
-	{Line2D{Vector2D{0, 0}, Vector2D{-1, -1}}, Line2D{Vector2D{0, 1}, Vector2D{1, 0}}, Vector2D{0.5, 0.5}},
-}
-
-func testLine2DIntersection(d line2DIntersectionData, t *testing.T) {
-	var p Vector2D
-	if !d.l1.Intersection(&d.l2, &p).infEqual(&d.p) {
-		t.Error("Line2D.Intersection", d.l1, d.l2, "want", d.p, "got", p)
-	}
-	if !d.l2.Intersection(&d.l1, &p).infEqual(&d.p) {
-		t.Error("Line2D.Intersection", d.l2, d.l1, "want", d.p, "got", p)
-	}
-	d.l1.P1, d.l1.P2 = d.l1.P2, d.l1.P1
-	if !d.l1.Intersection(&d.l2, &p).infEqual(&d.p) {
-		t.Error("Line2D.Intersection", d.l1, d.l2, "want", d.p, "got", p)
-	}
-	if !d.l2.Intersection(&d.l1, &p).infEqual(&d.p) {
-		t.Error("Line2D.Intersection", d.l2, d.l1, "want", d.p, "got", p)
-	}
-	d.l2.P1, d.l2.P2 = d.l2.P2, d.l2.P1
-	if !d.l1.Intersection(&d.l2, &p).infEqual(&d.p) {
-		t.Error("Line2D.Intersection", d.l1, d.l2, "want", d.p, "got", p)
-	}
-	if !d.l2.Intersection(&d.l1, &p).infEqual(&d.p) {
-		t.Error("Line2D.Intersection", d.l2, d.l1, "want", d.p, "got", p)
-	}
-}
-
-func TestLine2DIntersection(t *testing.T) {
-	for _, v := range line2DIntersectionValues {
-		testLine2DIntersection(v, t)
-	}
-}
-
-func Benchmark_Line2D_Intersection(b *testing.B) {
-	l1 := &Line2D{Vector2D{0, 0}, Vector2D{1, 1}}
-	l2 := &Line2D{Vector2D{0, 1}, Vector2D{1, 0}}
-	p := &Vector2D{}
-	for i := 0; i < b.N; i++ {
-		l1.Intersection(l2, p)
-	}
-}
-
 func TestLine2DLength(t *testing.T) {
 	l := &Line2D{Vector2D{1, 2}, Vector2D{4, 6}}
 	if l.Length() != 5 {
