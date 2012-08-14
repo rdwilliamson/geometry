@@ -93,6 +93,26 @@ func (x *Line3D) Midpoint(z *Vector3D) *Vector3D {
 	return z
 }
 
+// PointAngularDistance returns the angle the line segment a would have to
+// rotate about its midpoint to pass through point b.
+func (a *Line3D) PointAngularDistance(b *Vector3D) float64 {
+	mpx, mpy, mpz := (a.P1.X+a.P2.X)*0.5, (a.P1.Y+a.P2.Y)*0.5, (a.P1.Z+a.P2.Z)*0.5
+	l1dx, l1dy, l1dz := a.P1.X-mpx, a.P1.Y-mpy, a.P1.Z-mpz
+	l2dx, l2dy, l2dz := b.X-mpx, b.Y-mpy, b.Z-mpz
+	return math.Abs(math.Acos((l1dx*l2dx+l1dy*l2dy+l1dz*l2dz)/
+		math.Sqrt((l1dx*l1dx+l1dy*l1dy+l1dz*l1dz)*(l2dx*l2dx+l2dy*l2dy+l2dz*l2dz))) - math.Pi/2)
+}
+
+// PointAngularDistanceCosSquared returns the cos of the squared angle the line
+// segment a would have to rotate about its midpoint to pass through point b.
+func (a *Line3D) PointAngularDistanceCosSquared(b *Vector3D) float64 {
+	mpx, mpy, mpz := (a.P1.X+a.P2.X)*0.5, (a.P1.Y+a.P2.Y)*0.5, (a.P1.Z+a.P2.Z)*0.5
+	l1dx, l1dy, l1dz := a.P1.X-mpx, a.P1.Y-mpy, a.P1.Z-mpz
+	l2dx, l2dy, l2dz := b.X-mpx, b.Y-mpy, b.Z-mpz
+	dot := l1dx*l2dx + l1dy*l2dy + l1dz*l2dz
+	return dot * dot / ((l1dx*l1dx + l1dy*l1dy + l1dz*l1dz) * (l2dx*l2dx + l2dy*l2dy + l2dz*l2dz))
+}
+
 // PointDistance returns the distance point b is from line a.
 func (a *Line3D) PointDistance(b *Vector3D) float64 {
 	// http://local.wasp.uwa.edu.au/~pbourke/geometry/pointline/

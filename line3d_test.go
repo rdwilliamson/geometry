@@ -257,6 +257,38 @@ func Benchmark_Line3D_SegmentFuzzyEqual(b *testing.B) {
 	}
 }
 
+func TestLine3DPointAngularDistance(t *testing.T) {
+	l := Line3D{Vector3D{0, 0, 0}, Vector3D{1, 0, 0}}
+	p := &Vector3D{1, 0.5, 0}
+	if l.PointAngularDistance(p) != math.Pi/4 {
+		t.Error("Line3D.PointAngularDistance")
+	}
+}
+
+func Benchmark_Line3D_PointAngularDistance(b *testing.B) {
+	l := Line3D{Vector3D{0, 0, 0}, Vector3D{1, 0, 0}}
+	p := &Vector3D{1, 0.5, 0}
+	for i := 0; i < b.N; i++ {
+		l.PointAngularDistance(p)
+	}
+}
+
+func TestLine3DPointAngularDistanceCosSquared(t *testing.T) {
+	l := Line3D{Vector3D{0, 0, 0}, Vector3D{1, 0, 0}}
+	p := &Vector3D{1, 0.5, 0}
+	if l.PointAngularDistanceCosSquared(p) != 0.5 {
+		t.Error("Line3D.PointAngularDistanceCosSquared")
+	}
+}
+
+func Benchmark_Line3D_PointAngularDistanceCosSquared(b *testing.B) {
+	l := Line3D{Vector3D{0, 0, 0}, Vector3D{1, 0, 0}}
+	p := &Vector3D{1, 0.5, 0}
+	for i := 0; i < b.N; i++ {
+		l.PointAngularDistanceCosSquared(p)
+	}
+}
+
 func TestLine3DPointDistance(t *testing.T) {
 	l := Line3D{Vector3D{0, 0, 0}, Vector3D{1, 0, 0}}
 	p := &Vector3D{0, 1, 0}
