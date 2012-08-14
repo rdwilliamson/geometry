@@ -12,6 +12,17 @@ type Line3D struct {
 	P1, P2 Vector3D
 }
 
+// Copy sets z to x and returns z.
+func (z *Line3D) Copy(x *Line3D) *Line3D {
+	z.P1.X = x.P1.X
+	z.P1.Y = x.P1.Y
+	z.P1.Z = x.P1.Z
+	z.P2.X = x.P2.X
+	z.P2.Y = x.P2.Y
+	z.P2.Z = x.P2.Z
+	return z
+}
+
 // Equal compares a and b then returns true if they are exactly equal or false
 // otherwise.
 func (a *Line3D) Equal(b *Line3D) bool {
@@ -222,17 +233,6 @@ func (a *Line3D) SegmentPointDistanceSquared(b *Vector3D) float64 {
 		x, y, z = b.X-(a.P1.X+adx*u), b.Y-(a.P1.Y+ady*u), b.Z-(a.P1.Z+adz*u)
 	}
 	return x*x + y*y + z*z
-}
-
-// Set sets z to x and returns z.
-func (z *Line3D) Set(x *Line3D) *Line3D {
-	z.P1.X = x.P1.X
-	z.P1.Y = x.P1.Y
-	z.P1.Z = x.P1.Z
-	z.P2.X = x.P2.X
-	z.P2.Y = x.P2.Y
-	z.P2.Z = x.P2.Z
-	return z
 }
 
 // ToVector sets z to the vector from l.P1 to l.P2 and returns z.

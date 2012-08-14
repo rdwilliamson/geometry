@@ -76,6 +76,20 @@ func Benchmark_Vector2D_AngularCosSquaredDifference(b *testing.B) {
 	}
 }
 
+func TestVector2DCopy(t *testing.T) {
+	v1, v2 := &Vector2D{}, &Vector2D{1, 0}
+	if !v1.Copy(v2).Equal(v2) {
+		t.Error("Vector2D.Copy")
+	}
+}
+
+func Benchmark_Vector2D_Copy(b *testing.B) {
+	v1, v2 := &Vector2D{}, &Vector2D{1, 0}
+	for i := 0; i < b.N; i++ {
+		v1.Copy(v2)
+	}
+}
+
 func TestVector2DDirectionEqual(t *testing.T) {
 	v1, v2 := &Vector2D{1, 1}, &Vector2D{2, 2}
 	if !v1.DirectionEqual(v2) {
@@ -262,20 +276,6 @@ func Benchmark_Vector2D_Normalize(b *testing.B) {
 	v1, v2 := &Vector2D{3, 4}, &Vector2D{}
 	for i := 0; i < b.N; i++ {
 		v1.Normalize(v2)
-	}
-}
-
-func TestVector2DSet(t *testing.T) {
-	v1, v2 := &Vector2D{}, &Vector2D{1, 0}
-	if !v1.Set(v2).Equal(v2) {
-		t.Error("Vector2D.Set")
-	}
-}
-
-func Benchmark_Vector2D_Set(b *testing.B) {
-	v1, v2 := &Vector2D{}, &Vector2D{1, 0}
-	for i := 0; i < b.N; i++ {
-		v1.Set(v2)
 	}
 }
 

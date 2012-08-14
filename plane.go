@@ -19,6 +19,15 @@ func NewPlane(a, b, c, d float64) *Plane {
 	return &Plane{a, b, c, d}
 }
 
+// Copy sets z to x then returns z.
+func (z *Plane) Copy(x *Plane) *Plane {
+	z.A = x.A
+	z.B = x.B
+	z.C = x.C
+	z.D = x.D
+	return z
+}
+
 // Equal returns true if the two planes are exactly equal or false otherwise.
 func (a *Plane) Equal(b *Plane) bool {
 	// check normal and distance from origin direction
@@ -98,15 +107,6 @@ func (a *Plane) PointDistance(b *Vector3D) float64 {
 func (a *Plane) PointDistanceSquared(b *Vector3D) float64 {
 	n := a.A*b.X + a.B*b.Y + a.C*b.Z + a.D
 	return (n * n) / (a.A*a.A + a.B*a.B + a.C*a.C)
-}
-
-// Set sets z to x then returns z.
-func (z *Plane) Set(x *Plane) *Plane {
-	z.A = x.A
-	z.B = x.B
-	z.C = x.C
-	z.D = x.D
-	return z
 }
 
 // SetFromPoints set z to the plane through the three points, then returns z.

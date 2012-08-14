@@ -34,6 +34,14 @@ func (a *Vector3D) AngularCosSquaredDifference(b *Vector3D) float64 {
 		((a.X*a.X + a.Y*a.Y + a.Z*a.Z) * (b.X*b.X + b.Y*b.Y + b.Z*b.Z))
 }
 
+// Copy sets z to x then returns z.
+func (z *Vector3D) Copy(x *Vector3D) *Vector3D {
+	z.X = x.X
+	z.Y = x.Y
+	z.Z = x.Z
+	return z
+}
+
 // CrossProduct sets z to the cross product of a and b then returns z.
 func (z *Vector3D) CrossProduct(a, b *Vector3D) *Vector3D {
 	z.X = a.Y*b.Z - a.Z*b.Y
@@ -139,14 +147,6 @@ func (z *Vector3D) Projection(a, b *Vector3D) *Vector3D {
 	z.X = b.X * s
 	z.Y = b.Y * s
 	z.Z = b.Z * s
-	return z
-}
-
-// Set sets z to x then returns z.
-func (z *Vector3D) Set(x *Vector3D) *Vector3D {
-	z.X = x.X
-	z.Y = x.Y
-	z.Z = x.Z
 	return z
 }
 

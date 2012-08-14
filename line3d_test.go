@@ -13,6 +13,22 @@ func TestLine3DEqual(t *testing.T) {
 	}
 }
 
+func TestLine3DCopy(t *testing.T) {
+	l1 := &Line3D{Vector3D{1, 2, 3}, Vector3D{1, 1, 1}}
+	l2 := &Line3D{Vector3D{}, Vector3D{}}
+	if !l2.Copy(l1).Equal(l1) {
+		t.Error("Line3D.Copy")
+	}
+}
+
+func Benchmark_Line3D_Copy(b *testing.B) {
+	l1 := &Line3D{Vector3D{1, 2, 3}, Vector3D{1, 1, 1}}
+	l2 := &Line3D{Vector3D{}, Vector3D{}}
+	for i := 0; i < b.N; i++ {
+		l2.Copy(l1)
+	}
+}
+
 func Benchmark_Line3D_Equal(b *testing.B) {
 	l1 := &Line3D{Vector3D{1, 2, 3}, Vector3D{4, 5, 6}}
 	l2 := &Line3D{Vector3D{5, 6, 7}, Vector3D{0, 1, 2}}
@@ -433,22 +449,6 @@ func Benchmark_Line3D_SegmentPointDistanceSquared(b *testing.B) {
 	p := &Vector3D{1, 2, 3}
 	for i := 0; i < b.N; i++ {
 		l.SegmentPointDistanceSquared(p)
-	}
-}
-
-func TestLine3DSet(t *testing.T) {
-	l1 := &Line3D{Vector3D{1, 2, 3}, Vector3D{1, 1, 1}}
-	l2 := &Line3D{Vector3D{}, Vector3D{}}
-	if !l2.Set(l1).Equal(l1) {
-		t.Error("Line3D.Set")
-	}
-}
-
-func Benchmark_Line3D_Set(b *testing.B) {
-	l1 := &Line3D{Vector3D{1, 2, 3}, Vector3D{1, 1, 1}}
-	l2 := &Line3D{Vector3D{}, Vector3D{}}
-	for i := 0; i < b.N; i++ {
-		l2.Set(l1)
 	}
 }
 

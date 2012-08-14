@@ -32,6 +32,13 @@ func (a *Vector2D) AngularCosSquaredDifference(b *Vector2D) float64 {
 	return dot * dot / ((a.X*a.X + a.Y*a.Y) * (b.X*b.X + b.Y*b.Y))
 }
 
+// Copy sets z to x then returns z.
+func (z *Vector2D) Copy(x *Vector2D) *Vector2D {
+	z.X = x.X
+	z.Y = x.Y
+	return z
+}
+
 // DirectionEqual compares the direction of a and b then returns true if they
 // are exactly equal or false otherwise.
 func (a *Vector2D) DirectionEqual(b *Vector2D) bool {
@@ -125,13 +132,6 @@ func (z *Vector2D) Projection(a, b *Vector2D) *Vector2D {
 	s := (a.X*b.X + a.Y*b.Y) / (b.X*b.X + b.Y*b.Y)
 	z.X = b.X * s
 	z.Y = b.Y * s
-	return z
-}
-
-// Set sets z to x then returns z.
-func (z *Vector2D) Set(x *Vector2D) *Vector2D {
-	z.X = x.X
-	z.Y = x.Y
 	return z
 }
 

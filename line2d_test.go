@@ -17,6 +17,20 @@ func Benchmark_Line2D_New(b *testing.B) {
 	}
 }
 
+func TestLine2DCopy(t *testing.T) {
+	l1, l2 := &Line2D{}, &Line2D{Vector2D{1, 2}, Vector2D{3, 4}}
+	if !l1.Copy(l2).SegmentEqual(l2) {
+		t.Error("Line2D.Copy")
+	}
+}
+
+func Benchmark_Line2D_Copy(b *testing.B) {
+	l1, l2 := &Line2D{}, &Line2D{Vector2D{1, 2}, Vector2D{3, 4}}
+	for i := 0; i < b.N; i++ {
+		l1.Copy(l2)
+	}
+}
+
 func TestLine2DEqual(t *testing.T) {
 	l1 := &Line2D{Vector2D{1, 2}, Vector2D{3, 4}}
 	l2 := &Line2D{Vector2D{-3, -2}, Vector2D{5, 6}}
@@ -423,20 +437,6 @@ func Benchmark_Line2D_SegmentPointDistanceSquared(b *testing.B) {
 	p := &Vector2D{0.5, 0}
 	for i := 0; i < b.N; i++ {
 		l.SegmentPointDistanceSquared(p)
-	}
-}
-
-func TestLine2DSet(t *testing.T) {
-	l1, l2 := &Line2D{}, &Line2D{Vector2D{1, 2}, Vector2D{3, 4}}
-	if !l1.Set(l2).SegmentEqual(l2) {
-		t.Error("Line2D.Set")
-	}
-}
-
-func Benchmark_Line2D_Set(b *testing.B) {
-	l1, l2 := &Line2D{}, &Line2D{Vector2D{1, 2}, Vector2D{3, 4}}
-	for i := 0; i < b.N; i++ {
-		l1.Set(l2)
 	}
 }
 

@@ -59,6 +59,20 @@ func Benchmark_Vector3D_AngularCosSquaredDifference(b *testing.B) {
 	}
 }
 
+func TestVector3DCopy(t *testing.T) {
+	v1, v2 := &Vector3D{}, &Vector3D{1, 2, 3}
+	if !v1.Copy(v2).Equal(v2) {
+		t.Error("Vector3D.Copy")
+	}
+}
+
+func Benchmark_Vector3D_Copy(b *testing.B) {
+	v1, v2 := &Vector3D{}, &Vector3D{1, 2, 3}
+	for i := 0; i < b.N; i++ {
+		v1.Copy(v2)
+	}
+}
+
 func TestVector3DCrossProduct(t *testing.T) {
 	r, v1, v2 := &Vector3D{}, &Vector3D{1, 2, 3}, &Vector3D{4, 5, 6}
 	if !r.CrossProduct(v1, v2).Equal(&Vector3D{-3, 6, -3}) {
@@ -271,20 +285,6 @@ func Benchmark_Vector3D_Normalize(b *testing.B) {
 	v1, v2 := &Vector3D{2, 3, 4}, &Vector3D{}
 	for i := 0; i < b.N; i++ {
 		v1.Normalize(v2)
-	}
-}
-
-func TestVector3DSet(t *testing.T) {
-	v1, v2 := &Vector3D{}, &Vector3D{1, 2, 3}
-	if !v1.Set(v2).Equal(v2) {
-		t.Error("Vector3D.Set")
-	}
-}
-
-func Benchmark_Vector3D_Set(b *testing.B) {
-	v1, v2 := &Vector3D{}, &Vector3D{1, 2, 3}
-	for i := 0; i < b.N; i++ {
-		v1.Set(v2)
 	}
 }
 

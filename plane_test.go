@@ -18,6 +18,20 @@ func Benchmark_NewPlane(b *testing.B) {
 	}
 }
 
+func TestPlaneCopy(t *testing.T) {
+	p1, p2 := &Plane{2, -2, 5, 8}, &Plane{}
+	if !p2.Copy(p1).NormalizedEqual(p1) {
+		t.Error("Plane.Copy")
+	}
+}
+
+func Benchmark_Plane_Copy(b *testing.B) {
+	p1, p2 := &Plane{2, -2, 5, 8}, &Plane{}
+	for i := 0; i < b.N; i++ {
+		p2.Copy(p1)
+	}
+}
+
 type planeEqualData struct {
 	p1, p2 Plane
 	equal  bool
@@ -207,20 +221,6 @@ func Benchmark_Plane_PointDistanceSquared(b *testing.B) {
 	pt := &Vector3D{5, 6, 7}
 	for i := 0; i < b.N; i++ {
 		pl.PointDistanceSquared(pt)
-	}
-}
-
-func TestPlaneSet(t *testing.T) {
-	p1, p2 := &Plane{2, -2, 5, 8}, &Plane{}
-	if !p2.Set(p1).NormalizedEqual(p1) {
-		t.Error("Plane.Set")
-	}
-}
-
-func Benchmark_Plane_Set(b *testing.B) {
-	p1, p2 := &Plane{2, -2, 5, 8}, &Plane{}
-	for i := 0; i < b.N; i++ {
-		p2.Set(p1)
 	}
 }
 

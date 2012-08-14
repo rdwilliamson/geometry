@@ -18,6 +18,15 @@ func NewLine2D(x1, y1, x2, y2 float64) *Line2D {
 // Should rays have P1 be the end point and P2 treated as a vector or P2 as a
 // point on the ray? I never use rays so I'm not sure which is more convenient.
 
+// Copy sets z to x and returns z.
+func (z *Line2D) Copy(x *Line2D) *Line2D {
+	z.P1.X = x.P1.X
+	z.P1.Y = x.P1.Y
+	z.P2.X = x.P2.X
+	z.P2.Y = x.P2.Y
+	return z
+}
+
 // Equal compares a and b and returns true if they are exactly equal or false
 // otherwise.
 func (a *Line2D) Equal(b *Line2D) bool {
@@ -178,15 +187,6 @@ func (a *Line2D) SegmentPointDistanceSquared(b *Vector2D) float64 {
 	c1 /= c2
 	x, y := b.X-(a.P1.X+ldx*c1), b.Y-(a.P1.Y+ldy*c1)
 	return x*x + y*y
-}
-
-// Set sets z to x and returns z.
-func (z *Line2D) Set(x *Line2D) *Line2D {
-	z.P1.X = x.P1.X
-	z.P1.Y = x.P1.Y
-	z.P2.X = x.P2.X
-	z.P2.Y = x.P2.Y
-	return z
 }
 
 // Slope returns the slope of x.
