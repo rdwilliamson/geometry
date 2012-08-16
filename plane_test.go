@@ -125,22 +125,6 @@ func Benchmark_Plane_LineIntersection(b *testing.B) {
 	}
 }
 
-func TestNormal(t *testing.T) {
-	p := &Plane{1, 2, 3, 4}
-	v := &Vector3D{}
-	if !p.Normal(v).Equal(&Vector3D{1, 2, 3}) {
-		t.Error("Plane.Normal")
-	}
-}
-
-func Benchmark_Plane_Normal(b *testing.B) {
-	p := &Plane{1, 2, 3, 4}
-	v := &Vector3D{}
-	for i := 0; i < b.N; i++ {
-		p.Normal(v)
-	}
-}
-
 func TestPlaneNormalize(t *testing.T) {
 	s := 1 / math.Sqrt(29)
 	p1, p2 := &Plane{2, 3, 4, 5}, &Plane{s * 2, s * 3, s * 4, s * 5}
@@ -237,21 +221,5 @@ func Benchmark_Plane_FromPoints(b *testing.B) {
 	pt1, pt2, pt3 := &Vector3D{1, -6, 0}, &Vector3D{-4, 2, -2}, &Vector3D{-2, 4, 1}
 	for i := 0; i < b.N; i++ {
 		pl.FromPoints(pt1, pt2, pt3)
-	}
-}
-
-func TestPlaneThreePlaneIntersection(t *testing.T) {
-	p1, p2, p3 := &Plane{1, -3, 3, 4}, &Plane{2, 3, -1, -15}, &Plane{4, -3, -1, -19}
-	got, want := &Vector3D{}, &Vector3D{5, 1, -2}
-	if !p1.ThreePlaneIntersection(p2, p3, got).FuzzyEqual(want) {
-		t.Error("Plane.ThreePlaneIntersection", *p1, *p2, *p3, "want", want, "got", got)
-	}
-}
-
-func Benchmark_Plane_ThreePlaneIntersection(b *testing.B) {
-	p1, p2, p3 := &Plane{1, -3, 3, 4}, &Plane{2, 3, -1, -15}, &Plane{4, -3, -1, -19}
-	pt := &Vector3D{}
-	for i := 0; i < b.N; i++ {
-		p1.ThreePlaneIntersection(p2, p3, pt)
 	}
 }
