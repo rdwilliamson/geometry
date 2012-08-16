@@ -109,6 +109,22 @@ func (z *Vector2D) FromLineIntersection(a, b *Line2D) *Vector2D {
 	return z
 }
 
+// FromLineSegmentIntersection sets point z (if not nil) to the intersection of
+// a and b as if they were lines, then returns true if the intersection occured
+// on both line segments a and b or false otherwise.
+func (z *Vector2D) FromLineSegmentIntersection(a, b *Line2D) bool {
+	// http://local.wasp.uwa.edu.au/~pbourke/geometry/lineline2d/
+	l1dx, l1dy := a.P2.X-a.P1.X, a.P2.Y-a.P1.Y
+	l2dx, l2dy := b.P2.X-b.P1.X, b.P2.Y-b.P1.Y
+	d := 1 / (l2dy*l1dx - l2dx*l1dy)
+	dx, dy := a.P1.X-b.P1.X, a.P1.Y-b.P1.Y
+	ua := (l2dx*dy - l2dy*dx) * d
+	ub := (l1dx*dy - l1dy*dx) * d
+	z.X = a.P1.X + ua*l1dx
+	z.Y = a.P1.Y + ua*l1dy
+	return 0 <= ua && ua <= 1 && 0 <= ub && ub <= 1
+}
+
 // FuzzyEqual compares a and b then returns true if they are very close or
 // false otherwise.
 func (a *Vector2D) FuzzyEqual(b *Vector2D) bool {
