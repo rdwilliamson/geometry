@@ -224,19 +224,19 @@ func Benchmark_Plane_PointDistanceSquared(b *testing.B) {
 	}
 }
 
-func TestPlaneSetFromPoints(t *testing.T) {
+func TestPlaneFromPoints(t *testing.T) {
 	got, want := Plane{}, &Plane{28, 11, -26, 38}
 	pt1, pt2, pt3 := &Vector3D{1, -6, 0}, &Vector3D{-4, 2, -2}, &Vector3D{-2, 4, 1}
-	if !got.SetFromPoints(pt1, pt2, pt3).NormalizedEqual(want) {
-		t.Error("Plane.SetFromPoints")
+	if !got.FromPoints(pt1, pt2, pt3).NormalizedEqual(want) {
+		t.Error("Plane.FromPoints")
 	}
 }
 
-func Benchmark_Plane_SetFromPoints(b *testing.B) {
+func Benchmark_Plane_FromPoints(b *testing.B) {
 	pl := Plane{}
 	pt1, pt2, pt3 := &Vector3D{1, -6, 0}, &Vector3D{-4, 2, -2}, &Vector3D{-2, 4, 1}
 	for i := 0; i < b.N; i++ {
-		pl.SetFromPoints(pt1, pt2, pt3)
+		pl.FromPoints(pt1, pt2, pt3)
 	}
 }
 

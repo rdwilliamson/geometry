@@ -40,6 +40,17 @@ func (a *Plane) Equal(b *Plane) bool {
 		a.D*a.D*(b.A*b.A+b.B*b.B+b.C*b.C)
 }
 
+// FromPoints set z to the plane through the three points, then returns z.
+func (z *Plane) FromPoints(p1, p2, p3 *Vector3D) *Plane {
+	// http://paulbourke.net/geometry/planeeq/
+	z.A = p1.Y*(p2.Z-p3.Z) + p2.Y*(p3.Z-p1.Z) + p3.Y*(p1.Z-p2.Z)
+	z.B = p1.Z*(p2.X-p3.X) + p2.Z*(p3.X-p1.X) + p3.Z*(p1.X-p2.X)
+	z.C = p1.X*(p2.Y-p3.Y) + p2.X*(p3.Y-p1.Y) + p3.X*(p1.Y-p2.Y)
+	z.D = -(p1.X*(p2.Y*p3.Z-p3.Y*p2.Z) + p2.X*(p3.Y*p1.Z-p1.Y*p3.Z) +
+		p3.X*(p1.Y*p2.Z-p2.Y*p1.Z))
+	return z
+}
+
 // FuzzyEqual returns true if the two planes are very close or false otherwise.
 func (a *Plane) FuzzyEqual(b *Plane) bool {
 	s := a.A / b.A
@@ -107,17 +118,6 @@ func (a *Plane) PointDistance(b *Vector3D) float64 {
 func (a *Plane) PointDistanceSquared(b *Vector3D) float64 {
 	n := a.A*b.X + a.B*b.Y + a.C*b.Z + a.D
 	return (n * n) / (a.A*a.A + a.B*a.B + a.C*a.C)
-}
-
-// SetFromPoints set z to the plane through the three points, then returns z.
-func (z *Plane) SetFromPoints(p1, p2, p3 *Vector3D) *Plane {
-	// http://paulbourke.net/geometry/planeeq/
-	z.A = p1.Y*(p2.Z-p3.Z) + p2.Y*(p3.Z-p1.Z) + p3.Y*(p1.Z-p2.Z)
-	z.B = p1.Z*(p2.X-p3.X) + p2.Z*(p3.X-p1.X) + p3.Z*(p1.X-p2.X)
-	z.C = p1.X*(p2.Y-p3.Y) + p2.X*(p3.Y-p1.Y) + p3.X*(p1.Y-p2.Y)
-	z.D = -(p1.X*(p2.Y*p3.Z-p3.Y*p2.Z) + p2.X*(p3.Y*p1.Z-p1.Y*p3.Z) +
-		p3.X*(p1.Y*p2.Z-p2.Y*p1.Z))
-	return z
 }
 
 // ThreePlaneIntersection sets z to the intersection of planes a, b, and c,
