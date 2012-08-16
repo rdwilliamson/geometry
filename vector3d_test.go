@@ -111,6 +111,22 @@ func Benchmark_Vector3D_DirectionEqual(b *testing.B) {
 	}
 }
 
+func TestVector3DFromLine(t *testing.T) {
+	l := &Line3D{Vector3D{1, 2, 3}, Vector3D{1, 1, 1}}
+	v := &Vector3D{}
+	if !v.FromLine(l).Equal(&Vector3D{0, -1, -2}) {
+		t.Error("Vector3D.FromLine")
+	}
+}
+
+func Benchmark_Vector3D_FromLine(b *testing.B) {
+	l := &Line3D{Vector3D{1, 2, 3}, Vector3D{1, 1, 1}}
+	v := &Vector3D{}
+	for i := 0; i < b.N; i++ {
+		v.FromLine(l)
+	}
+}
+
 type vector3DDirectionFuzzyEqualData struct {
 	v1, v2 Vector3D
 	equal  bool

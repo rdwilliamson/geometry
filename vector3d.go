@@ -108,6 +108,14 @@ func (a *Vector3D) Equal(b *Vector3D) bool {
 	return *a == *b
 }
 
+// FromLine sets z to the vector from l.P1 to l.P2 and returns z.
+func (z *Vector3D) FromLine(x *Line3D) *Vector3D {
+	z.X = x.P2.X - x.P1.X
+	z.Y = x.P2.Y - x.P1.Y
+	z.Z = x.P2.Z - x.P1.Z
+	return z
+}
+
 // FuzzyEqual compares a and b and returns true if they are very cose or false
 // otherwise.
 func (a *Vector3D) FuzzyEqual(b *Vector3D) bool {
