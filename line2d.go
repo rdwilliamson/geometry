@@ -78,9 +78,9 @@ func (a *Line2D) PointAngularDistance(b *Vector2D) float64 {
 		math.Sqrt((l1dx*l1dx+l1dy*l1dy)*(l2dx*l2dx+l2dy*l2dy))) - math.Pi/2)
 }
 
-// PointAngularCosSquaredDistance returns the cos of the squared angle the line
+// PointAngularDistanceCosSquared returns the cos of the squared angle the line
 // segment a would have to rotate about its midpoint to pass through point b.
-func (a *Line2D) PointAngularCosSquaredDistance(b *Vector2D) float64 {
+func (a *Line2D) PointAngularDistanceCosSquared(b *Vector2D) float64 {
 	mpx, mpy := (a.P1.X+a.P2.X)*0.5, (a.P1.Y+a.P2.Y)*0.5
 	l1dx, l1dy := a.P1.X-mpx, a.P1.Y-mpy
 	l2dx, l2dy := b.X-mpx, b.Y-mpy

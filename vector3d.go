@@ -26,9 +26,9 @@ func (a *Vector3D) AngularDifference(b *Vector3D) float64 {
 		math.Sqrt((a.X*a.X+a.Y*a.Y+a.Z*a.Z)*(b.X*b.X+b.Y*b.Y+b.Z*b.Z)))
 }
 
-// AngularCosSquaredDifference returns the cos of the squared angle between a
+// AngularDifferenceCosSquared returns the cos of the squared angle between a
 // and b.
-func (a *Vector3D) AngularCosSquaredDifference(b *Vector3D) float64 {
+func (a *Vector3D) AngularDifferenceCosSquared(b *Vector3D) float64 {
 	dot := (a.X*b.X + a.Y*b.Y + a.Z*b.Z)
 	return dot * dot /
 		((a.X*a.X + a.Y*a.Y + a.Z*a.Z) * (b.X*b.X + b.Y*b.Y + b.Z*b.Z))

@@ -45,17 +45,17 @@ func Benchmark_Vector3D_AngularDifference(b *testing.B) {
 	}
 }
 
-func TestVector3DAngularCosSquaredDifference(t *testing.T) {
+func TestVector3DAngularDifferenceCosSquared(t *testing.T) {
 	v1, v2 := &Vector3D{1, 0, 0}, &Vector3D{0, 0, 1}
-	if FuzzyEqual(v1.AngularCosSquaredDifference(v2), math.Sqrt2/2) {
-		t.Error("Vector3D.AngularCosSquaredDifference")
+	if FuzzyEqual(v1.AngularDifferenceCosSquared(v2), math.Sqrt2/2) {
+		t.Error("Vector3D.AngularDifferenceCosSquared")
 	}
 }
 
-func Benchmark_Vector3D_AngularCosSquaredDifference(b *testing.B) {
+func Benchmark_Vector3D_AngularDifferenceCosSquared(b *testing.B) {
 	v1, v2 := &Vector3D{1, 2, 5}, &Vector3D{3, 4, 6}
 	for i := 0; i < b.N; i++ {
-		v1.AngularCosSquaredDifference(v2)
+		v1.AngularDifferenceCosSquared(v2)
 	}
 }
 

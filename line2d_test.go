@@ -172,22 +172,22 @@ func Benchmark_Line2D_PointAngularDistance(b *testing.B) {
 	}
 }
 
-func TestLine2DPointAngularCosSquaredDistance(t *testing.T) {
+func TestLine2DPointAngularDistanceCosSquared(t *testing.T) {
 	l := &Line2D{Vector2D{}, Vector2D{1, 1}}
 	p := &Vector2D{1, 0.5}
-	if l.PointAngularCosSquaredDistance(p) != 0.5 {
-		t.Error("Line2D.PointAngularCosSquaredDistance")
+	if l.PointAngularDistanceCosSquared(p) != 0.5 {
+		t.Error("Line2D.PointAngularDistanceCosSquared")
 	}
 	l.P1, l.P2 = l.P2, l.P1
-	if l.PointAngularCosSquaredDistance(p) != 0.5 {
-		t.Error("Line2D.PointAngularCosSquaredDistance")
+	if l.PointAngularDistanceCosSquared(p) != 0.5 {
+		t.Error("Line2D.PointAngularDistanceCosSquared")
 	}
 }
 
-func Benchmark_Line2D_PointAngularCosSquaredDistance(b *testing.B) {
+func Benchmark_Line2D_PointAngularDistanceCosSquared(b *testing.B) {
 	l, p := &Line2D{Vector2D{1, 1}, Vector2D{}}, &Vector2D{1, 0.5}
 	for i := 0; i < b.N; i++ {
-		l.PointAngularCosSquaredDistance(p)
+		l.PointAngularDistanceCosSquared(p)
 	}
 }
 
