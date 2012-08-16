@@ -156,6 +156,22 @@ func Benchmark_Line3D_FromLineSegmentBetween(b *testing.B) {
 	}
 }
 
+func TestLine3DFromPlanesIntersection(t *testing.T) {
+	p1, p2 := &Plane{1, 1, 1, 1}, &Plane{1, 2, 3, 4}
+	got, want := &Line3D{}, &Line3D{Vector3D{3, -5, 1}, Vector3D{4, -7, 2}}
+	if !got.FromPlanesIntersection(p1, p2).FuzzyEqual(want) {
+		t.Error("Plane.FromPlanesIntersection", *p1, *p2, "want", want, "got", got)
+	}
+}
+
+func Benchmark_Line3D_FromPlanesIntersection(b *testing.B) {
+	p1, p2 := &Plane{1, 1, 1, 1}, &Plane{1, 2, 3, 4}
+	l := &Line3D{}
+	for i := 0; i < b.N; i++ {
+		l.FromPlanesIntersection(p1, p2)
+	}
+}
+
 type line3DFuzzyEqualData struct {
 	l1, l2 Line3D
 	equal  bool
