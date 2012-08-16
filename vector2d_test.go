@@ -178,6 +178,20 @@ func Benchmark_Vector2D_FromLineIntersection(b *testing.B) {
 	}
 }
 
+func TestVector2DFromLineNormal(t *testing.T) {
+	l, v := &Line2D{Vector2D{1, 1}, Vector2D{3, 1}}, &Vector2D{}
+	if !v.FromLineNormal(l).Equal(&Vector2D{0, -2}) {
+		t.Error("Vector2D.FromLineNormal", v)
+	}
+}
+
+func Benchmark_Vector2D_FromLineNormal(b *testing.B) {
+	l, v := &Line2D{Vector2D{1, 1}, Vector2D{3, 1}}, &Vector2D{}
+	for i := 0; i < b.N; i++ {
+		v.FromLineNormal(l)
+	}
+}
+
 type vector2DFromLineSegmentIntersection struct {
 	l1, l2 Line2D
 	p      Vector2D

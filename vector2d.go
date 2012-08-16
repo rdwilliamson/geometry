@@ -116,6 +116,14 @@ func (z *Vector2D) FromLineIntersection(a, b *Line2D) *Vector2D {
 	return z
 }
 
+// FromLineNormal sets vector z to the normal of line x with a length equal to
+// x's as if it were a line segment, then returns z.
+func (z *Vector2D) FromLineNormal(x *Line2D) *Vector2D {
+	z.X = x.P2.Y - x.P1.Y
+	z.Y = x.P1.X - x.P2.X
+	return z
+}
+
 // FromLineSegmentIntersection sets point z (if not nil) to the intersection of
 // a and b as if they were lines, then returns true if the intersection occured
 // on both line segments a and b or false otherwise.
