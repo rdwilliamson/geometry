@@ -66,6 +66,22 @@ func Benchmark_Plane_Equal(b *testing.B) {
 	}
 }
 
+func TestPlaneFromPoints(t *testing.T) {
+	got, want := Plane{}, &Plane{28, 11, -26, 38}
+	pt1, pt2, pt3 := &Vector3D{1, -6, 0}, &Vector3D{-4, 2, -2}, &Vector3D{-2, 4, 1}
+	if !got.FromPoints(pt1, pt2, pt3).NormalizedEqual(want) {
+		t.Error("Plane.FromPoints")
+	}
+}
+
+func Benchmark_Plane_FromPoints(b *testing.B) {
+	pl := Plane{}
+	pt1, pt2, pt3 := &Vector3D{1, -6, 0}, &Vector3D{-4, 2, -2}, &Vector3D{-2, 4, 1}
+	for i := 0; i < b.N; i++ {
+		pl.FromPoints(pt1, pt2, pt3)
+	}
+}
+
 type planeFuzzyEqualData struct {
 	p1, p2 Plane
 	equal  bool
@@ -174,68 +190,5 @@ func Benchmark_Plane_NormalizedEqual(b *testing.B) {
 	p1, p2 := &Plane{1, 2, 3, 4}, &Plane{-1, -2, -3, -4}
 	for i := 0; i < b.N; i++ {
 		p1.NormalizedEqual(p2)
-	}
-}
-
-func TestPlaneNormalizedPointDistance(t *testing.T) {
-	pl, pt := &Plane{2, -2, 5, 8}, &Vector3D{4, -4, 3}
-	pl.Normalize(pl)
-	if d := pl.NormalizedPointDistance(pt); !FuzzyEqual(d, 39/math.Sqrt(33)) {
-		t.Error("Plane.NormalizedPointDistance", *pl, *pt, "want", 39/math.Sqrt(33), "got", d)
-	}
-}
-
-func Benchmark_Plane_NormalizedPointDistance(b *testing.B) {
-	pl := &Plane{1, 2, 3, 4}
-	pl.Normalize(pl)
-	pt := &Vector3D{5, 6, 7}
-	for i := 0; i < b.N; i++ {
-		pl.NormalizedPointDistance(pt)
-	}
-}
-
-func TestPlanePointDistance(t *testing.T) {
-	pl, pt := &Plane{2, -2, 5, 8}, &Vector3D{4, -4, 3}
-	if d := pl.PointDistance(pt); d != 39/math.Sqrt(33) {
-		t.Error("Plane.PointDistance", *pl, *pt, "want", 39/math.Sqrt(33), "got", d)
-	}
-}
-
-func Benchmark_Plane_PointDistance(b *testing.B) {
-	pl := &Plane{1, 2, 3, 4}
-	pt := &Vector3D{5, 6, 7}
-	for i := 0; i < b.N; i++ {
-		pl.PointDistance(pt)
-	}
-}
-
-func TestPlanePointDistanceSquared(t *testing.T) {
-	pl, pt := &Plane{2, -2, 5, 8}, &Vector3D{4, -4, 3}
-	if d := pl.PointDistanceSquared(pt); d != 39.0*39.0/33.0 {
-		t.Error("Plane.PointDistanceSquared", *pl, *pt, "want", 39.0*39.0/33.0, "got", d)
-	}
-}
-
-func Benchmark_Plane_PointDistanceSquared(b *testing.B) {
-	pl := &Plane{1, 2, 3, 4}
-	pt := &Vector3D{5, 6, 7}
-	for i := 0; i < b.N; i++ {
-		pl.PointDistanceSquared(pt)
-	}
-}
-
-func TestPlaneFromPoints(t *testing.T) {
-	got, want := Plane{}, &Plane{28, 11, -26, 38}
-	pt1, pt2, pt3 := &Vector3D{1, -6, 0}, &Vector3D{-4, 2, -2}, &Vector3D{-2, 4, 1}
-	if !got.FromPoints(pt1, pt2, pt3).NormalizedEqual(want) {
-		t.Error("Plane.FromPoints")
-	}
-}
-
-func Benchmark_Plane_FromPoints(b *testing.B) {
-	pl := Plane{}
-	pt1, pt2, pt3 := &Vector3D{1, -6, 0}, &Vector3D{-4, 2, -2}, &Vector3D{-2, 4, 1}
-	for i := 0; i < b.N; i++ {
-		pl.FromPoints(pt1, pt2, pt3)
 	}
 }
