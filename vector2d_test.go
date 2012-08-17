@@ -48,34 +48,6 @@ func Benchmark_Vector2D_Add(b *testing.B) {
 	}
 }
 
-func TestVector2DAngularDifference(t *testing.T) {
-	v1, v2 := &Vector2D{1, 0}, &Vector2D{0, 1}
-	if v1.AngularDifference(v2) != math.Pi/2 {
-		t.Error("Vector2D.AngularDifference")
-	}
-}
-
-func Benchmark_Vector2D_AngularDifference(b *testing.B) {
-	v1, v2 := &Vector2D{1, 2}, &Vector2D{3, 4}
-	for i := 0; i < b.N; i++ {
-		v1.AngularDifference(v2)
-	}
-}
-
-func TestVector2DAngularDifferenceCosSquared(t *testing.T) {
-	v1, v2 := &Vector2D{1, 0}, &Vector2D{0, 1}
-	if FuzzyEqual(v1.AngularDifferenceCosSquared(v2), math.Sqrt2/2) {
-		t.Error("Vector2D.AngularDifferenceCosSquared")
-	}
-}
-
-func Benchmark_Vector2D_AngularDifferenceCosSquared(b *testing.B) {
-	v1, v2 := &Vector2D{1, 2}, &Vector2D{3, 4}
-	for i := 0; i < b.N; i++ {
-		v1.AngularDifferenceCosSquared(v2)
-	}
-}
-
 func TestVector2DCopy(t *testing.T) {
 	v1, v2 := &Vector2D{}, &Vector2D{1, 0}
 	if !v1.Copy(v2).Equal(v2) {
@@ -246,34 +218,6 @@ func Benchmark_Vector2D_DirectionFuzzyEqual(b *testing.B) {
 	v1, v2 := &Vector2D{1, 1}, &Vector2D{2, 2}
 	for i := 0; i < b.N; i++ {
 		v1.DirectionFuzzyEqual(v2)
-	}
-}
-
-func TestVector2DDistance(t *testing.T) {
-	v1, v2 := &Vector2D{}, &Vector2D{1, 0}
-	if v1.Distance(v2) != 1 {
-		t.Error("Vector2D.Distance")
-	}
-}
-
-func Benchmark_Vector2D_Distance(b *testing.B) {
-	v1, v2 := &Vector2D{}, &Vector2D{1, 0}
-	for i := 0; i < b.N; i++ {
-		v1.Distance(v2)
-	}
-}
-
-func TestVector2DDistanceSquared(t *testing.T) {
-	v1, v2 := &Vector2D{}, &Vector2D{1, 0}
-	if v1.DistanceSquared(v2) != 1 {
-		t.Error("Vector2D.DistanceSquared")
-	}
-}
-
-func Benchmark_Vector2D_DistanceSquared(b *testing.B) {
-	v1, v2 := &Vector2D{}, &Vector2D{1, 0}
-	for i := 0; i < b.N; i++ {
-		v1.DistanceSquared(v2)
 	}
 }
 

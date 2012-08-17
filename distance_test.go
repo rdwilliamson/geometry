@@ -118,3 +118,60 @@ func Benchmark_Distance2D_LineSegmentPointSquared(b *testing.B) {
 		Distance2DLineSegmentPointSquared(l, p)
 	}
 }
+
+func TestDistance2DPointPoint(t *testing.T) {
+	p1, p2 := &Vector2D{}, &Vector2D{1, 0}
+	if Distance2DPointPoint(p1, p2) != 1 {
+		t.Error("Distance2D.PointPoint")
+	}
+}
+
+func Benchmark_Distance2D_PointPoint(b *testing.B) {
+	p1, p2 := &Vector2D{}, &Vector2D{1, 0}
+	for i := 0; i < b.N; i++ {
+		Distance2DPointPoint(p1, p2)
+	}
+}
+
+func TestDistance2DPointPointSquared(t *testing.T) {
+	p1, p2 := &Vector2D{}, &Vector2D{1, 0}
+	if Distance2DPointPointSquared(p1, p2) != 1 {
+		t.Error("Distance2D.PointPointSquared")
+	}
+}
+
+func Benchmark_Distance2DPointPointSquared(b *testing.B) {
+	p1, p2 := &Vector2D{}, &Vector2D{1, 0}
+	for i := 0; i < b.N; i++ {
+		Distance2DPointPointSquared(p1, p2)
+	}
+}
+
+func TestDistance2DVectorVectorAngular(t *testing.T) {
+	v1, v2 := &Vector2D{1, 0}, &Vector2D{0, 1}
+	if Distance2DVectorVectorAngular(v1, v2) != math.Pi/2 {
+		t.Error("Distance2D.VectorVectorAngular")
+	}
+}
+
+func Benchmark_Distance2D_VectorVectorAngular(b *testing.B) {
+	v1, v2 := &Vector2D{1, 2}, &Vector2D{3, 4}
+	for i := 0; i < b.N; i++ {
+		Distance2DVectorVectorAngular(v1, v2)
+	}
+}
+
+func TestDistance2DVectorVectorAngularCosSquared(t *testing.T) {
+	v1, v2 := &Vector2D{1, 0}, &Vector2D{0, 1}
+	if FuzzyEqual(Distance2DVectorVectorAngularCosSquared(v1, v2),
+		math.Sqrt2/2) {
+		t.Error("Distance2D.VectorVectorAngularCosSquared")
+	}
+}
+
+func Benchmark_Distance2D_VectorVectorAngularCosSquared(b *testing.B) {
+	v1, v2 := &Vector2D{1, 2}, &Vector2D{3, 4}
+	for i := 0; i < b.N; i++ {
+		Distance2DVectorVectorAngularCosSquared(v1, v2)
+	}
+}
