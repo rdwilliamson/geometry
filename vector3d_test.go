@@ -111,38 +111,6 @@ func Benchmark_Vector3D_DirectionEqual(b *testing.B) {
 	}
 }
 
-func TestVector3DFromLine(t *testing.T) {
-	l := &Line3D{Vector3D{1, 2, 3}, Vector3D{1, 1, 1}}
-	v := &Vector3D{}
-	if !v.FromLine(l).Equal(&Vector3D{0, -1, -2}) {
-		t.Error("Vector3D.FromLine")
-	}
-}
-
-func Benchmark_Vector3D_FromLine(b *testing.B) {
-	l := &Line3D{Vector3D{1, 2, 3}, Vector3D{1, 1, 1}}
-	v := &Vector3D{}
-	for i := 0; i < b.N; i++ {
-		v.FromLine(l)
-	}
-}
-
-func TestVector3DFromPlaneNormal(t *testing.T) {
-	p := &Plane{1, 2, 3, 4}
-	v := &Vector3D{}
-	if !v.FromPlaneNormal(p).Equal(&Vector3D{1, 2, 3}) {
-		t.Error("Vector3D.FromPlaneNormal")
-	}
-}
-
-func Benchmark_Vector3D_FromPlaneNormal(b *testing.B) {
-	p := &Plane{1, 2, 3, 4}
-	v := &Vector3D{}
-	for i := 0; i < b.N; i++ {
-		v.FromPlaneNormal(p)
-	}
-}
-
 func TestVector3DFromPlanesIntersection(t *testing.T) {
 	p1, p2, p3 := &Plane{1, -3, 3, 4}, &Plane{2, 3, -1, -15}, &Plane{4, -3, -1, -19}
 	got, want := &Vector3D{}, &Vector3D{5, 1, -2}

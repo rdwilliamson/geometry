@@ -253,3 +253,11 @@ func (a *Line3D) SegmentPointDistanceSquared(b *Vector3D) float64 {
 	}
 	return x*x + y*y + z*z
 }
+
+// ToVector sets z to the vector from a.P1 to a.P2, then returns z.
+func (x *Line3D) ToVector(z *Vector3D) *Vector3D {
+	z.X = x.P2.X - x.P1.X
+	z.Y = x.P2.Y - x.P1.Y
+	z.Z = x.P2.Z - x.P1.Z
+	return z
+}

@@ -125,6 +125,22 @@ func Benchmark_Plane_LineIntersection(b *testing.B) {
 	}
 }
 
+func TestPlaneNormal(t *testing.T) {
+	p := &Plane{1, 2, 3, 4}
+	v := &Vector3D{}
+	if !p.Normal(v).Equal(&Vector3D{1, 2, 3}) {
+		t.Error("Plane.Normal")
+	}
+}
+
+func Benchmark_Plane_Normal(b *testing.B) {
+	p := &Plane{1, 2, 3, 4}
+	v := &Vector3D{}
+	for i := 0; i < b.N; i++ {
+		p.Normal(v)
+	}
+}
+
 func TestPlaneNormalize(t *testing.T) {
 	s := 1 / math.Sqrt(29)
 	p1, p2 := &Plane{2, 3, 4, 5}, &Plane{s * 2, s * 3, s * 4, s * 5}

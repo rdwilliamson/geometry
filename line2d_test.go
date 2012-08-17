@@ -139,6 +139,20 @@ func Benchmark_Line2D_Midpoint(b *testing.B) {
 	}
 }
 
+func TestLine2DNormal(t *testing.T) {
+	l, v := &Line2D{Vector2D{1, 1}, Vector2D{3, 1}}, &Vector2D{}
+	if !l.Normal(v).Equal(&Vector2D{0, -2}) {
+		t.Error("Line2D.Normal", v)
+	}
+}
+
+func Benchmark_Line2D_Normal(b *testing.B) {
+	l, v := &Line2D{Vector2D{1, 1}, Vector2D{3, 1}}, &Vector2D{}
+	for i := 0; i < b.N; i++ {
+		l.Normal(v)
+	}
+}
+
 func TestLine2DPointAngularDistance(t *testing.T) {
 	l := &Line2D{Vector2D{}, Vector2D{1, 1}}
 	p := &Vector2D{1, 0.5}
@@ -341,5 +355,19 @@ func testLine2DSlope(d line2DSlopeData, t *testing.T) {
 func TestLine2DSlope(t *testing.T) {
 	for _, v := range line2DSlopeValues {
 		testLine2DSlope(v, t)
+	}
+}
+
+func TestLine2DToVector(t *testing.T) {
+	l, v := &Line2D{Vector2D{1, 2}, Vector2D{3, 4}}, &Vector2D{}
+	if !l.ToVector(v).Equal(&Vector2D{2, 2}) {
+		t.Error("Line2D.ToVector")
+	}
+}
+
+func Benchmark_Vector2D_FromLine(b *testing.B) {
+	l, v := &Line2D{Vector2D{1, 2}, Vector2D{3, 4}}, &Vector2D{}
+	for i := 0; i < b.N; i++ {
+		l.ToVector(v)
 	}
 }

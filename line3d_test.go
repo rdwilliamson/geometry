@@ -467,3 +467,19 @@ func Benchmark_Line3D_SegmentPointDistanceSquared(b *testing.B) {
 		l.SegmentPointDistanceSquared(p)
 	}
 }
+
+func TestLine3DToVector(t *testing.T) {
+	l := &Line3D{Vector3D{1, 2, 3}, Vector3D{1, 1, 1}}
+	v := &Vector3D{}
+	if !l.ToVector(v).Equal(&Vector3D{0, -1, -2}) {
+		t.Error("Line3D.ToVector")
+	}
+}
+
+func Benchmark_Line3D_ToVector(b *testing.B) {
+	l := &Line3D{Vector3D{1, 2, 3}, Vector3D{1, 1, 1}}
+	v := &Vector3D{}
+	for i := 0; i < b.N; i++ {
+		l.ToVector(v)
+	}
+}

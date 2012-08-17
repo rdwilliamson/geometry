@@ -108,22 +108,6 @@ func (a *Vector3D) Equal(b *Vector3D) bool {
 	return *a == *b
 }
 
-// FromLine sets z to the vector from l.P1 to l.P2 and returns z.
-func (z *Vector3D) FromLine(x *Line3D) *Vector3D {
-	z.X = x.P2.X - x.P1.X
-	z.Y = x.P2.Y - x.P1.Y
-	z.Z = x.P2.Z - x.P1.Z
-	return z
-}
-
-// FromPlaneNormal sets z to x's normal then returns z.
-func (z *Vector3D) FromPlaneNormal(x *Plane) *Vector3D {
-	z.X = x.A
-	z.Y = x.B
-	z.Z = x.C
-	return z
-}
-
 // FromPlanesIntersection sets z to the intersection of planes a, b, and c,
 // then returns z.
 func (z *Vector3D) FromPlanesIntersection(a, b, c *Plane) *Vector3D {

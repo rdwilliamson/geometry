@@ -74,6 +74,14 @@ func (a *Plane) LineIntersection(b *Line3D, z *Vector3D) *Vector3D {
 	return z
 }
 
+// Normal sets z to x's normal then returns z.
+func (x *Plane) Normal(z *Vector3D) *Vector3D {
+	z.X = x.A
+	z.Y = x.B
+	z.Z = x.C
+	return z
+}
+
 // Normalize sets z to the Hessian normal form of x where the normal is a unit
 // vector and D is the distance from the origin, then returns z.
 func (x *Plane) Normalize(z *Plane) *Plane {

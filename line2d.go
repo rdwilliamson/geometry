@@ -60,6 +60,14 @@ func (x *Line2D) Midpoint(z *Vector2D) *Vector2D {
 	return z
 }
 
+// Normal sets vector z to the normal of line x with a length equal to x's as
+// if it were a line segment, then returns z.
+func (x *Line2D) Normal(z *Vector2D) *Vector2D {
+	z.X = x.P2.Y - x.P1.Y
+	z.Y = x.P1.X - x.P2.X
+	return z
+}
+
 // PointAngularDistance returns the angle the line segment a would have to
 // rotate about its midpoint to pass through point b.
 func (a *Line2D) PointAngularDistance(b *Vector2D) float64 {
@@ -154,4 +162,11 @@ func (a *Line2D) SegmentPointDistanceSquared(b *Vector2D) float64 {
 // Slope returns the slope of x.
 func (x *Line2D) Slope() float64 {
 	return (x.P2.Y - x.P1.Y) / (x.P2.X - x.P1.X)
+}
+
+// ToVector sets z to the vector from x.P1 to x.P2, then returns z.
+func (x *Line2D) ToVector(z *Vector2D) *Vector2D {
+	z.X = x.P2.X - x.P1.X
+	z.Y = x.P2.Y - x.P1.Y
+	return z
 }

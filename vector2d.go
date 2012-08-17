@@ -96,13 +96,6 @@ func (a *Vector2D) Equal(b *Vector2D) bool {
 	return *a == *b
 }
 
-// FromLine sets z to the vector from l.P1 to l.P2 and returns z.
-func (z *Vector2D) FromLine(x *Line2D) *Vector2D {
-	z.X = x.P2.X - x.P1.X
-	z.Y = x.P2.Y - x.P1.Y
-	return z
-}
-
 // FromLineIntersection sets point z to the intersection of a and b, then
 // returns z.
 func (z *Vector2D) FromLineIntersection(a, b *Line2D) *Vector2D {
@@ -113,14 +106,6 @@ func (z *Vector2D) FromLineIntersection(a, b *Line2D) *Vector2D {
 		(l2dy*l1dx - l2dx*l1dy)
 	z.X = a.P1.X + ua*l1dx
 	z.Y = a.P1.Y + ua*l1dy
-	return z
-}
-
-// FromLineNormal sets vector z to the normal of line x with a length equal to
-// x's as if it were a line segment, then returns z.
-func (z *Vector2D) FromLineNormal(x *Line2D) *Vector2D {
-	z.X = x.P2.Y - x.P1.Y
-	z.Y = x.P1.X - x.P2.X
 	return z
 }
 

@@ -114,20 +114,6 @@ func Benchmark_Vector2D_DirectionEqual(b *testing.B) {
 	}
 }
 
-func TestVector2DFromLine(t *testing.T) {
-	l, v := &Line2D{Vector2D{1, 2}, Vector2D{3, 4}}, &Vector2D{}
-	if !v.FromLine(l).Equal(&Vector2D{2, 2}) {
-		t.Error("Vector2D.FromLine")
-	}
-}
-
-func Benchmark_Vector2D_FromLine(b *testing.B) {
-	l, v := &Line2D{Vector2D{1, 2}, Vector2D{3, 4}}, &Vector2D{}
-	for i := 0; i < b.N; i++ {
-		v.FromLine(l)
-	}
-}
-
 type vector2DFromLineIntersectionData struct {
 	l1, l2 Line2D
 	p      Vector2D
@@ -175,20 +161,6 @@ func Benchmark_Vector2D_FromLineIntersection(b *testing.B) {
 	p := &Vector2D{}
 	for i := 0; i < b.N; i++ {
 		p.FromLineIntersection(l1, l2)
-	}
-}
-
-func TestVector2DFromLineNormal(t *testing.T) {
-	l, v := &Line2D{Vector2D{1, 1}, Vector2D{3, 1}}, &Vector2D{}
-	if !v.FromLineNormal(l).Equal(&Vector2D{0, -2}) {
-		t.Error("Vector2D.FromLineNormal", v)
-	}
-}
-
-func Benchmark_Vector2D_FromLineNormal(b *testing.B) {
-	l, v := &Line2D{Vector2D{1, 1}, Vector2D{3, 1}}, &Vector2D{}
-	for i := 0; i < b.N; i++ {
-		v.FromLineNormal(l)
 	}
 }
 
