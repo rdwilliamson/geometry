@@ -167,46 +167,6 @@ func (x *Line3D) Midpoint(z *Vector3D) *Vector3D {
 	return z
 }
 
-// PointAngularDistance returns the angle the line segment a would have to
-// rotate about its midpoint to pass through point b.
-func (a *Line3D) PointAngularDistance(b *Vector3D) float64 {
-	mpx, mpy, mpz := (a.P1.X+a.P2.X)*0.5, (a.P1.Y+a.P2.Y)*0.5, (a.P1.Z+a.P2.Z)*0.5
-	l1dx, l1dy, l1dz := a.P1.X-mpx, a.P1.Y-mpy, a.P1.Z-mpz
-	l2dx, l2dy, l2dz := b.X-mpx, b.Y-mpy, b.Z-mpz
-	return math.Abs(math.Acos((l1dx*l2dx+l1dy*l2dy+l1dz*l2dz)/
-		math.Sqrt((l1dx*l1dx+l1dy*l1dy+l1dz*l1dz)*(l2dx*l2dx+l2dy*l2dy+l2dz*l2dz))) - math.Pi/2)
-}
-
-// PointAngularDistanceCosSquared returns the cos of the squared angle the line
-// segment a would have to rotate about its midpoint to pass through point b.
-func (a *Line3D) PointAngularDistanceCosSquared(b *Vector3D) float64 {
-	mpx, mpy, mpz := (a.P1.X+a.P2.X)*0.5, (a.P1.Y+a.P2.Y)*0.5, (a.P1.Z+a.P2.Z)*0.5
-	l1dx, l1dy, l1dz := a.P1.X-mpx, a.P1.Y-mpy, a.P1.Z-mpz
-	l2dx, l2dy, l2dz := b.X-mpx, b.Y-mpy, b.Z-mpz
-	dot := l1dx*l2dx + l1dy*l2dy + l1dz*l2dz
-	return dot * dot / ((l1dx*l1dx + l1dy*l1dy + l1dz*l1dz) * (l2dx*l2dx + l2dy*l2dy + l2dz*l2dz))
-}
-
-// PointDistance returns the distance point b is from line a.
-func (a *Line3D) PointDistance(b *Vector3D) float64 {
-	// http://local.wasp.uwa.edu.au/~pbourke/geometry/pointline/
-	ldx, ldy, ldz := a.P2.X-a.P1.X, a.P2.Y-a.P1.Y, a.P2.Z-a.P1.Z
-	u := (ldx*(b.X-a.P1.X) + ldy*(b.Y-a.P1.Y) + ldz*(b.Z-a.P1.Z)) /
-		(ldx*ldx + ldy*ldy + ldz*ldz)
-	x, y, z := b.X-(a.P1.X+ldx*u), b.Y-(a.P1.Y+ldy*u), b.Z-(a.P1.Z+ldz*u)
-	return math.Sqrt(x*x + y*y + z*z)
-}
-
-// PointDistanceSquared returns the squared distance point b is from line a.
-func (a *Line3D) PointDistanceSquared(b *Vector3D) float64 {
-	// http://local.wasp.uwa.edu.au/~pbourke/geometry/pointline/
-	ldx, ldy, ldz := a.P2.X-a.P1.X, a.P2.Y-a.P1.Y, a.P2.Z-a.P1.Z
-	u := (ldx*(b.X-a.P1.X) + ldy*(b.Y-a.P1.Y) + ldz*(b.Z-a.P1.Z)) /
-		(ldx*ldx + ldy*ldy + ldz*ldz)
-	x, y, z := b.X-(a.P1.X+ldx*u), b.Y-(a.P1.Y+ldy*u), b.Z-(a.P1.Z+ldz*u)
-	return x*x + y*y + z*z
-}
-
 // SegmentEqual compares line segments a and b and returns true if they are
 // exactly equal or false otherwise.
 func (a *Line3D) SegmentEqual(b *Line3D) bool {
@@ -218,40 +178,6 @@ func (a *Line3D) SegmentEqual(b *Line3D) bool {
 func (a *Line3D) SegmentFuzzyEqual(b *Line3D) bool {
 	return (a.P1.FuzzyEqual(&b.P1) && a.P2.FuzzyEqual(&b.P2)) ||
 		(a.P1.FuzzyEqual(&b.P2) && a.P2.FuzzyEqual(&b.P1))
-}
-
-// SegmentPointDistance returns the distance between line segment a and point
-// b.
-func (a *Line3D) SegmentPointDistance(b *Vector3D) float64 {
-	adx, ady, adz := a.P2.X-a.P1.X, a.P2.Y-a.P1.Y, a.P2.Z-a.P1.Z
-	b1dx, b1dy, b1dz := b.X-a.P1.X, b.Y-a.P1.Y, b.Z-a.P1.Z
-	u := (adx*b1dx + ady*b1dy + adz*b1dz) / (adx*adx + ady*ady + adz*adz)
-	var x, y, z float64
-	if u < 0 {
-		x, y, z = b1dx, b1dy, b1dz
-	} else if u > 1 {
-		x, y, z = b.X-a.P2.X, b.Y-a.P2.Y, b.Z-a.P2.Z
-	} else {
-		x, y, z = b.X-(a.P1.X+adx*u), b.Y-(a.P1.Y+ady*u), b.Z-(a.P1.Z+adz*u)
-	}
-	return math.Sqrt(x*x + y*y + z*z)
-}
-
-// SegmentPointDistanceSquared returns the squared distance between line
-// segment a and point b.
-func (a *Line3D) SegmentPointDistanceSquared(b *Vector3D) float64 {
-	adx, ady, adz := a.P2.X-a.P1.X, a.P2.Y-a.P1.Y, a.P2.Z-a.P1.Z
-	b1dx, b1dy, b1dz := b.X-a.P1.X, b.Y-a.P1.Y, b.Z-a.P1.Z
-	u := (adx*b1dx + ady*b1dy + adz*b1dz) / (adx*adx + ady*ady + adz*adz)
-	var x, y, z float64
-	if u < 0 {
-		x, y, z = b1dx, b1dy, b1dz
-	} else if u > 1 {
-		x, y, z = b.X-a.P2.X, b.Y-a.P2.Y, b.Z-a.P2.Z
-	} else {
-		x, y, z = b.X-(a.P1.X+adx*u), b.Y-(a.P1.Y+ady*u), b.Z-(a.P1.Z+adz*u)
-	}
-	return x*x + y*y + z*z
 }
 
 // ToVector sets z to the vector from a.P1 to a.P2, then returns z.
