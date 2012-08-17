@@ -140,7 +140,7 @@ func TestDistance2DPointPointSquared(t *testing.T) {
 	}
 }
 
-func Benchmark_Distance2DPointPointSquared(b *testing.B) {
+func Benchmark_Distance2D_PointPointSquared(b *testing.B) {
 	p1, p2 := &Vector2D{}, &Vector2D{1, 0}
 	for i := 0; i < b.N; i++ {
 		Distance2DPointPointSquared(p1, p2)
