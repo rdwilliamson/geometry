@@ -153,72 +153,6 @@ func Benchmark_Line2D_Normal(b *testing.B) {
 	}
 }
 
-func TestLine2DPointAngularDistance(t *testing.T) {
-	l := &Line2D{Vector2D{}, Vector2D{1, 1}}
-	p := &Vector2D{1, 0.5}
-	if l.PointAngularDistance(p) != math.Pi/4 {
-		t.Error("Line2D.PointAngularDistance")
-	}
-	l.P1, l.P2 = l.P2, l.P1
-	if !FuzzyEqual(l.PointAngularDistance(p), math.Pi/4) {
-		t.Error("Line2D.PointAngularDistance")
-	}
-}
-
-func Benchmark_Line2D_PointAngularDistance(b *testing.B) {
-	l, p := &Line2D{Vector2D{1, 1}, Vector2D{}}, &Vector2D{1, 0.5}
-	for i := 0; i < b.N; i++ {
-		l.PointAngularDistance(p)
-	}
-}
-
-func TestLine2DPointAngularDistanceCosSquared(t *testing.T) {
-	l := &Line2D{Vector2D{}, Vector2D{1, 1}}
-	p := &Vector2D{1, 0.5}
-	if l.PointAngularDistanceCosSquared(p) != 0.5 {
-		t.Error("Line2D.PointAngularDistanceCosSquared")
-	}
-	l.P1, l.P2 = l.P2, l.P1
-	if l.PointAngularDistanceCosSquared(p) != 0.5 {
-		t.Error("Line2D.PointAngularDistanceCosSquared")
-	}
-}
-
-func Benchmark_Line2D_PointAngularDistanceCosSquared(b *testing.B) {
-	l, p := &Line2D{Vector2D{1, 1}, Vector2D{}}, &Vector2D{1, 0.5}
-	for i := 0; i < b.N; i++ {
-		l.PointAngularDistanceCosSquared(p)
-	}
-}
-
-func TestLine2DPointDistance(t *testing.T) {
-	l, p := &Line2D{Vector2D{0, 0}, Vector2D{1, 0}}, &Vector2D{0, 1}
-	if l.PointDistance(p) != 1 {
-		t.Error("Line2D.PointDistance")
-	}
-}
-
-func Benchmark_Line2D_PointDistance(b *testing.B) {
-	l, p := &Line2D{Vector2D{0, 0}, Vector2D{1, 0}}, &Vector2D{0, 1}
-	for i := 0; i < b.N; i++ {
-		l.PointDistance(p)
-	}
-}
-
-func TestLine2DPointDistanceSquared(t *testing.T) {
-	l, p := &Line2D{Vector2D{0, 0}, Vector2D{1, 0}}, &Vector2D{0, 1}
-	if l.PointDistanceSquared(p) != 1 {
-		t.Error("Line2D.PointDistanceSquared")
-	}
-}
-
-func Benchmark_Line2D_PointDistanceSquared(b *testing.B) {
-	l, p := &Line2D{Vector2D{0, 0}, Vector2D{1, 0}}, &Vector2D{0, 1}
-	for i := 0; i < b.N; i++ {
-		l.PointDistanceSquared(p)
-	}
-}
-
 func TestLine2DSegmentEqual(t *testing.T) {
 	l1 := &Line2D{Vector2D{1, 2}, Vector2D{3, 4}}
 	l2 := &Line2D{Vector2D{3, 4}, Vector2D{1, 2}}
@@ -280,54 +214,6 @@ func Benchmark_Line2D_SegmentFuzzyEqual(b *testing.B) {
 	l2 := &Line2D{Vector2D{1, 2}, Vector2D{3, 4}}
 	for i := 0; i < b.N; i++ {
 		l1.SegmentFuzzyEqual(l2)
-	}
-}
-
-func TestLine2DSegmentPointDistance(t *testing.T) {
-	l := &Line2D{Vector2D{0, 1}, Vector2D{1, 1}}
-	p := &Vector2D{-1, 0}
-	if l.SegmentPointDistance(p) != math.Sqrt2 {
-		t.Error("Line2D.SegmentPointDistance")
-	}
-	p.X = 0.5
-	if l.SegmentPointDistance(p) != 1 {
-		t.Error("Line2D.SegmentPointDistance")
-	}
-	p.X = 2
-	if l.SegmentPointDistance(p) != math.Sqrt2 {
-		t.Error("Line2D.SegmentPointDistance")
-	}
-}
-
-func Benchmark_Line2D_SegmentPointDistance(b *testing.B) {
-	l := &Line2D{Vector2D{0, 1}, Vector2D{1, 1}}
-	p := &Vector2D{0.5, 0}
-	for i := 0; i < b.N; i++ {
-		l.SegmentPointDistance(p)
-	}
-}
-
-func TestLine2DSegmentPointDistanceSquared(t *testing.T) {
-	l := &Line2D{Vector2D{0, 1}, Vector2D{1, 1}}
-	p := &Vector2D{-1, 0}
-	if l.SegmentPointDistanceSquared(p) != 2 {
-		t.Error("Line2D.SegmentPointDistanceSquared")
-	}
-	p.X = 0.5
-	if l.SegmentPointDistanceSquared(p) != 1 {
-		t.Error("Line2D.SegmentPointDistanceSquared")
-	}
-	p.X = 2
-	if l.SegmentPointDistanceSquared(p) != 2 {
-		t.Error("Line2D.SegmentPointDistanceSquared")
-	}
-}
-
-func Benchmark_Line2D_SegmentPointDistanceSquared(b *testing.B) {
-	l := &Line2D{Vector2D{0, 1}, Vector2D{1, 1}}
-	p := &Vector2D{0.5, 0}
-	for i := 0; i < b.N; i++ {
-		l.SegmentPointDistanceSquared(p)
 	}
 }
 
