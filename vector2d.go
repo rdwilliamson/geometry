@@ -1,6 +1,8 @@
 package geometry
 
-import "math"
+import (
+	"math"
+)
 
 // A Vector2D is a 2D vector or 2D point depending on how it's used.
 type Vector2D struct {
