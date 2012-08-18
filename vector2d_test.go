@@ -1,26 +1,8 @@
 package geometry
 
 import (
-	"math"
 	"testing"
 )
-
-// Treats converts -inf to +inf to simplify test code.
-func (a *Vector2D) infEqual(b *Vector2D) bool {
-	if math.IsInf(a.X, -1) {
-		a.X = math.Inf(1)
-	}
-	if math.IsInf(a.Y, -1) {
-		a.Y = math.Inf(1)
-	}
-	if math.IsInf(b.X, -1) {
-		b.X = math.Inf(1)
-	}
-	if math.IsInf(b.Y, -1) {
-		b.Y = math.Inf(1)
-	}
-	return a.Equal(b)
-}
 
 func TestNewVector2D(t *testing.T) {
 	if !NewVector2D(1, 2).Equal(&Vector2D{1, 2}) {
@@ -83,107 +65,6 @@ func Benchmark_Vector2D_DirectionEqual(b *testing.B) {
 	v1, v2 := &Vector2D{1, 1}, &Vector2D{2, 2}
 	for i := 0; i < b.N; i++ {
 		v1.DirectionEqual(v2)
-	}
-}
-
-type vector2DFromLineIntersectionData struct {
-	l1, l2 Line2D
-	p      Vector2D
-}
-
-var vector2DFromLineIntersectionValues = []vector2DFromLineIntersectionData{
-	{Line2D{Vector2D{0, 0}, Vector2D{1, 1}}, Line2D{Vector2D{0, 1}, Vector2D{1, 0}}, Vector2D{0.5, 0.5}},
-	{Line2D{Vector2D{0, 0}, Vector2D{1, 1}}, Line2D{Vector2D{1, 0}, Vector2D{2, 1}}, Vector2D{math.Inf(1), math.Inf(1)}},
-	{Line2D{Vector2D{0, 0}, Vector2D{-1, -1}}, Line2D{Vector2D{0, 1}, Vector2D{1, 0}}, Vector2D{0.5, 0.5}},
-}
-
-func testVector2DFromLineIntersection(d vector2DFromLineIntersectionData, t *testing.T) {
-	var p Vector2D
-	if !p.FromLineIntersection(&d.l1, &d.l2).infEqual(&d.p) {
-		t.Error("Vector2D.FromLineIntersection", d.l1, d.l2, "want", d.p, "got", p)
-	}
-	if !p.FromLineIntersection(&d.l2, &d.l1).infEqual(&d.p) {
-		t.Error("Vector2D.FromLineIntersection", d.l2, d.l1, "want", d.p, "got", p)
-	}
-	d.l1.P1, d.l1.P2 = d.l1.P2, d.l1.P1
-	if !p.FromLineIntersection(&d.l1, &d.l2).infEqual(&d.p) {
-		t.Error("Vector2D.FromLineIntersection", d.l1, d.l2, "want", d.p, "got", p)
-	}
-	if !p.FromLineIntersection(&d.l2, &d.l1).infEqual(&d.p) {
-		t.Error("Vector2D.FromLineIntersection", d.l2, d.l1, "want", d.p, "got", p)
-	}
-	d.l2.P1, d.l2.P2 = d.l2.P2, d.l2.P1
-	if !p.FromLineIntersection(&d.l1, &d.l2).infEqual(&d.p) {
-		t.Error("Vector2D.FromLineIntersection", d.l1, d.l2, "want", d.p, "got", p)
-	}
-	if !p.FromLineIntersection(&d.l2, &d.l1).infEqual(&d.p) {
-		t.Error("Vector2D.FromLineIntersection", d.l2, d.l1, "want", d.p, "got", p)
-	}
-}
-
-func TestVector2DFromLineIntersection(t *testing.T) {
-	for _, v := range vector2DFromLineIntersectionValues {
-		testVector2DFromLineIntersection(v, t)
-	}
-}
-
-func Benchmark_Vector2D_FromLineIntersection(b *testing.B) {
-	l1 := &Line2D{Vector2D{0, 0}, Vector2D{1, 1}}
-	l2 := &Line2D{Vector2D{0, 1}, Vector2D{1, 0}}
-	p := &Vector2D{}
-	for i := 0; i < b.N; i++ {
-		p.FromLineIntersection(l1, l2)
-	}
-}
-
-type vector2DFromLineSegmentIntersection struct {
-	l1, l2 Line2D
-	p      Vector2D
-	onBoth bool
-}
-
-var vector2DFromLineSegmentIntersectionValue = []vector2DFromLineSegmentIntersection{
-	{Line2D{Vector2D{0, 0}, Vector2D{1, 1}}, Line2D{Vector2D{0, 1}, Vector2D{1, 0}}, Vector2D{0.5, 0.5}, true},
-	{Line2D{Vector2D{0, 0}, Vector2D{1, 1}}, Line2D{Vector2D{1, 0}, Vector2D{2, 1}}, Vector2D{math.Inf(1), math.Inf(1)}, false},
-	{Line2D{Vector2D{0, 0}, Vector2D{-1, -1}}, Line2D{Vector2D{0, 1}, Vector2D{1, 0}}, Vector2D{0.5, 0.5}, false},
-}
-
-func testVector2DFromLineSegmentIntersection(d vector2DFromLineSegmentIntersection, t *testing.T) {
-	p := &Vector2D{}
-	if b := p.FromLineSegmentIntersection(&d.l1, &d.l2); b != d.onBoth || !d.p.infEqual(p) {
-		t.Error("Vector2D.FromLineSegmentIntersection", d.l1, d.l2, "want", d.p, "got", *p, "want", d.onBoth, "got", b)
-	}
-	if b := p.FromLineSegmentIntersection(&d.l2, &d.l1); b != d.onBoth || !d.p.infEqual(p) {
-		t.Error("Vector2D.FromLineSegmentIntersection", d.l2, d.l1, "want", d.p, "got", *p, "want", d.onBoth, "got", b)
-	}
-	d.l1.P1, d.l1.P2 = d.l1.P2, d.l1.P1
-	if b := p.FromLineSegmentIntersection(&d.l1, &d.l2); b != d.onBoth || !d.p.infEqual(p) {
-		t.Error("Vector2D.FromLineSegmentIntersection", d.l1, d.l2, "want", d.p, "got", *p, "want", d.onBoth, "got", b)
-	}
-	if b := p.FromLineSegmentIntersection(&d.l2, &d.l1); b != d.onBoth || !d.p.infEqual(p) {
-		t.Error("Vector2D.FromLineSegmentIntersection", d.l2, d.l1, "want", d.p, "got", *p, "want", d.onBoth, "got", b)
-	}
-	d.l2.P1, d.l2.P2 = d.l2.P2, d.l2.P1
-	if b := p.FromLineSegmentIntersection(&d.l1, &d.l2); b != d.onBoth || !d.p.infEqual(p) {
-		t.Error("Vector2D.FromLineSegmentIntersection", d.l1, d.l2, "want", d.p, "got", *p, "want", d.onBoth, "got", b)
-	}
-	if b := p.FromLineSegmentIntersection(&d.l2, &d.l1); b != d.onBoth || !d.p.infEqual(p) {
-		t.Error("Vector2D.FromLineSegmentIntersection", d.l2, d.l1, "want", d.p, "got", *p, "want", d.onBoth, "got", b)
-	}
-}
-
-func TestLine2DSegmentIntersection(t *testing.T) {
-	for _, v := range vector2DFromLineSegmentIntersectionValue {
-		testVector2DFromLineSegmentIntersection(v, t)
-	}
-}
-
-func Benchmark_Line2D_SegmentIntersection_Set(b *testing.B) {
-	l1 := &Line2D{Vector2D{-1, -1}, Vector2D{0, 0}}
-	l2 := &Line2D{Vector2D{0, 1}, Vector2D{1, 0}}
-	p := &Vector2D{}
-	for i := 0; i < b.N; i++ {
-		p.FromLineSegmentIntersection(l1, l2)
 	}
 }
 
