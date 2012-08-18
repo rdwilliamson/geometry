@@ -82,14 +82,14 @@ func Intersection2DFuzzyLineSegmentLineSegment(a, b *Line2D, z *Vector2D) int {
 	return 0
 }
 
-// Intersection2DLineLine sets point z to the intersection of a and b then
-// returns z.
-func Intersection2DLineLine(a, b *Line2D, z *Vector2D) *Vector2D {
+// Intersection2DLineLine sets point z to the intersection of a and b and
+// returns 1.
+func Intersection2DLineLine(a, b *Line2D, z *Vector2D) int {
 	// http://local.wasp.uwa.edu.au/~pbourke/geometry/lineline2d/
 	adx, ady := a.P2.X-a.P1.X, a.P2.Y-a.P1.Y
 	bdx, bdy := b.P2.X-b.P1.X, b.P2.Y-b.P1.Y
 	ua := (bdx*(a.P1.Y-b.P1.Y) - bdy*(a.P1.X-b.P1.X)) / (bdy*adx - bdx*ady)
 	z.X = a.P1.X + ua*adx
 	z.Y = a.P1.Y + ua*ady
-	return z
+	return 1
 }

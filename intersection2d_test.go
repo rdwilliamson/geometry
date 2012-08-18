@@ -221,10 +221,10 @@ var intersection2DLineLineValues = []intersection2DLineLineData{
 
 func testIntersection2DLineLine(d intersection2DLineLineData, t *testing.T) {
 	var p Vector2D
-	if !Intersection2DLineLine(&d.l1, &d.l2, &p).toPositiveInf().nanEqual(&d.p) {
+	if Intersection2DLineLine(&d.l1, &d.l2, &p); !p.toPositiveInf().nanEqual(&d.p) {
 		t.Error("Intersection2D.LineLine", d.l1, d.l2, "want", d.p, "got", p)
 	}
-	if !Intersection2DLineLine(&d.l2, &d.l1, &p).toPositiveInf().nanEqual(&d.p) {
+	if Intersection2DLineLine(&d.l2, &d.l1, &p); !p.toPositiveInf().nanEqual(&d.p) {
 		t.Error("Intersection2D.LineLine", d.l2, d.l1, "want", d.p, "got", p)
 	}
 }
