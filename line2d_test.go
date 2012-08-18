@@ -244,6 +244,13 @@ func TestLine2DSlope(t *testing.T) {
 	}
 }
 
+func Benchmark_Line2D_Slope(b *testing.B) {
+	l := &Line2D{Vector2D{1, 2}, Vector2D{3, 4}}
+	for i := 0; i < b.N; i++ {
+		l.Slope()
+	}
+}
+
 func TestLine2DToVector(t *testing.T) {
 	l, v := &Line2D{Vector2D{1, 2}, Vector2D{3, 4}}, &Vector2D{}
 	if !l.ToVector(v).Equal(&Vector2D{2, 2}) {
@@ -251,7 +258,7 @@ func TestLine2DToVector(t *testing.T) {
 	}
 }
 
-func Benchmark_Vector2D_FromLine(b *testing.B) {
+func Benchmark_Vector2D_ToVector(b *testing.B) {
 	l, v := &Line2D{Vector2D{1, 2}, Vector2D{3, 4}}, &Vector2D{}
 	for i := 0; i < b.N; i++ {
 		l.ToVector(v)
