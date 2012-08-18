@@ -55,24 +55,20 @@ func testIntersection2DFuzzyLineLine(d intersection2DFuzzyLineLineData, t *testi
 				"got", n)
 		}
 	}
-	if n := Intersection2DFuzzyLineLine(&d.l2, &d.l1, &p); n != d.n ||
-		(d.n == 1 && !p.Equal(&d.p)) {
-		if d.n == 1 {
-			t.Error("Intersection2D.FuzzyLineLine", d.l2, d.l1, "want", d.n,
-				d.p, "got", n, p)
-		} else {
-			t.Error("Intersection2D.FuzzyLineLine", d.l2, d.l1, "want", d.n,
-				"got", n)
-		}
-	}
 }
 
 func TestIntersection2DFuzzyLineLine(t *testing.T) {
 	for _, v := range intersection2DFuzzyLineLineValues {
 		testIntersection2DFuzzyLineLine(v, t)
+		v.l1, v.l2 = v.l2, v.l1
+		testIntersection2DFuzzyLineLine(v, t)
 		v.l1.P1, v.l1.P2 = v.l1.P2, v.l1.P1
 		testIntersection2DFuzzyLineLine(v, t)
-		v.l2.P1, v.l2.P2 = v.l2.P2, v.l2.P1
+		v.l1, v.l2 = v.l2, v.l1
+		testIntersection2DFuzzyLineLine(v, t)
+		v.l1.P1, v.l1.P2 = v.l1.P2, v.l1.P1
+		testIntersection2DFuzzyLineLine(v, t)
+		v.l1, v.l2 = v.l2, v.l1
 		testIntersection2DFuzzyLineLine(v, t)
 	}
 }
