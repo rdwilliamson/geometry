@@ -31,34 +31,6 @@ func Benchmark_Vector3D_Add(b *testing.B) {
 	}
 }
 
-func TestVector3DAngularDifference(t *testing.T) {
-	v1, v2 := &Vector3D{1, 0, 0}, &Vector3D{0, 0, 1}
-	if v1.AngularDifference(v2) != math.Pi/2 {
-		t.Error("Vector3D.AngularDifference")
-	}
-}
-
-func Benchmark_Vector3D_AngularDifference(b *testing.B) {
-	v1, v2 := &Vector3D{1, 2, 5}, &Vector3D{3, 4, 6}
-	for i := 0; i < b.N; i++ {
-		v1.AngularDifference(v2)
-	}
-}
-
-func TestVector3DAngularDifferenceCosSquared(t *testing.T) {
-	v1, v2 := &Vector3D{1, 0, 0}, &Vector3D{0, 0, 1}
-	if FuzzyEqual(v1.AngularDifferenceCosSquared(v2), math.Sqrt2/2) {
-		t.Error("Vector3D.AngularDifferenceCosSquared")
-	}
-}
-
-func Benchmark_Vector3D_AngularDifferenceCosSquared(b *testing.B) {
-	v1, v2 := &Vector3D{1, 2, 5}, &Vector3D{3, 4, 6}
-	for i := 0; i < b.N; i++ {
-		v1.AngularDifferenceCosSquared(v2)
-	}
-}
-
 func TestVector3DCopy(t *testing.T) {
 	v1, v2 := &Vector3D{}, &Vector3D{1, 2, 3}
 	if !v1.Copy(v2).Equal(v2) {
@@ -162,34 +134,6 @@ func Benchmark_Vector3D_DirectionFuzzyEqual(b *testing.B) {
 	v1, v2 := &Vector3D{1, 1, 1}, &Vector3D{2, 2, 2}
 	for i := 0; i < b.N; i++ {
 		v1.DirectionFuzzyEqual(v2)
-	}
-}
-
-func TestVector3DDistance(t *testing.T) {
-	v1, v2 := &Vector3D{}, &Vector3D{1, 0, 0}
-	if v1.Distance(v2) != 1 {
-		t.Error("Vector3D.Distance")
-	}
-}
-
-func Benchmark_Vector3D_Distance(b *testing.B) {
-	v1, v2 := &Vector3D{}, &Vector3D{1, 2, 3}
-	for i := 0; i < b.N; i++ {
-		v1.Distance(v2)
-	}
-}
-
-func TestVector3DDistanceSquared(t *testing.T) {
-	v1, v2 := &Vector3D{}, &Vector3D{1, 0, 0}
-	if v1.DistanceSquared(v2) != 1 {
-		t.Error("Vector3D.DistanceSquared")
-	}
-}
-
-func Benchmark_Vector3D_DistanceSquared(b *testing.B) {
-	v1, v2 := &Vector3D{}, &Vector3D{1, 2, 3}
-	for i := 0; i < b.N; i++ {
-		v1.DistanceSquared(v2)
 	}
 }
 

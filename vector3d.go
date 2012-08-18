@@ -22,20 +22,6 @@ func (z *Vector3D) Add(a, b *Vector3D) *Vector3D {
 	return z
 }
 
-// AngularDifference returns the angle between a and b.
-func (a *Vector3D) AngularDifference(b *Vector3D) float64 {
-	return math.Acos((a.X*b.X + a.Y*b.Y + a.Z*b.Z) /
-		math.Sqrt((a.X*a.X+a.Y*a.Y+a.Z*a.Z)*(b.X*b.X+b.Y*b.Y+b.Z*b.Z)))
-}
-
-// AngularDifferenceCosSquared returns the cos of the squared angle between a
-// and b.
-func (a *Vector3D) AngularDifferenceCosSquared(b *Vector3D) float64 {
-	dot := (a.X*b.X + a.Y*b.Y + a.Z*b.Z)
-	return dot * dot /
-		((a.X*a.X + a.Y*a.Y + a.Z*a.Z) * (b.X*b.X + b.Y*b.Y + b.Z*b.Z))
-}
-
 // Copy sets z to x then returns z.
 func (z *Vector3D) Copy(x *Vector3D) *Vector3D {
 	z.X = x.X
@@ -77,18 +63,6 @@ func (a *Vector3D) DirectionFuzzyEqual(b *Vector3D) bool {
 		return false
 	}
 	return FuzzyEqual(s*a.Y, b.Y) && FuzzyEqual(s*a.Z, b.Z)
-}
-
-// Distance returns the distance between points a and b.
-func (a *Vector3D) Distance(b *Vector3D) float64 {
-	dx, dy, dz := b.X-a.X, b.Y-a.Y, b.Z-a.Z
-	return math.Sqrt(dx*dx + dy*dy + dz*dz)
-}
-
-// DistanceSquared returns the squared distance between points a and b.
-func (a *Vector3D) DistanceSquared(b *Vector3D) float64 {
-	dx, dy, dz := b.X-a.X, b.Y-a.Y, b.Z-a.Z
-	return dx*dx + dy*dy + dz*dz
 }
 
 // Divide sets z to the piecewise quotient a/b then returns z.

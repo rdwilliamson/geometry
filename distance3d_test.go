@@ -167,10 +167,66 @@ func TestDistance3DPlanePointSquared(t *testing.T) {
 	}
 }
 
-func Benchmark_Distance3DPlanePointSquared(b *testing.B) {
+func Benchmark_Distance3D_PlanePointSquared(b *testing.B) {
 	pl := &Plane{1, 2, 3, 4}
 	pt := &Vector3D{5, 6, 7}
 	for i := 0; i < b.N; i++ {
 		Distance3DPlanePointSquared(pl, pt)
+	}
+}
+
+func TestDistance3DPointPoint(t *testing.T) {
+	p1, p2 := &Vector3D{}, &Vector3D{1, 0, 0}
+	if Distance3DPointPoint(p1, p2) != 1 {
+		t.Error("Distance3D.Distance3DPointPoint")
+	}
+}
+
+func Benchmark_Vector3D_Distance(b *testing.B) {
+	p1, p2 := &Vector3D{}, &Vector3D{1, 2, 3}
+	for i := 0; i < b.N; i++ {
+		Distance3DPointPoint(p1, p2)
+	}
+}
+
+func TestDistance3DPointPointSquared(t *testing.T) {
+	p1, p2 := &Vector3D{}, &Vector3D{1, 0, 0}
+	if Distance3DPointPointSquared(p1, p2) != 1 {
+		t.Error("Distance3D.Distance3DPointPointSquared")
+	}
+}
+
+func Benchmark_Vector3D_DistanceSquared(b *testing.B) {
+	p1, p2 := &Vector3D{}, &Vector3D{1, 2, 3}
+	for i := 0; i < b.N; i++ {
+		Distance3DPointPointSquared(p1, p2)
+	}
+}
+
+func TestDistance3DVectorVectorAngular(t *testing.T) {
+	v1, v2 := &Vector3D{1, 0, 0}, &Vector3D{0, 0, 1}
+	if Distance3DVectorVectorAngular(v1, v2) != math.Pi/2 {
+		t.Error("Distance3D.VectorVectorAngular")
+	}
+}
+
+func Benchmark_Distance3D_VectorVectorAngular(b *testing.B) {
+	v1, v2 := &Vector3D{1, 2, 5}, &Vector3D{3, 4, 6}
+	for i := 0; i < b.N; i++ {
+		Distance3DVectorVectorAngular(v1, v2)
+	}
+}
+
+func TestDistance3DVectorVectorAngularCosSquared(t *testing.T) {
+	v1, v2 := &Vector3D{1, 0, 0}, &Vector3D{0, 0, 1}
+	if FuzzyEqual(Distance3DVectorVectorAngularCosSquared(v1, v2), math.Sqrt2/2) {
+		t.Error("Vector3D.AngularDifferenceCosSquared")
+	}
+}
+
+func Benchmark_Distance3D_VectorVectorAngularCosSquared(b *testing.B) {
+	v1, v2 := &Vector3D{1, 2, 5}, &Vector3D{3, 4, 6}
+	for i := 0; i < b.N; i++ {
+		Distance3DVectorVectorAngularCosSquared(v1, v2)
 	}
 }

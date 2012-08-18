@@ -103,3 +103,30 @@ func Distance3DPlanePointSquared(a *Plane, b *Vector3D) float64 {
 	n := a.A*b.X + a.B*b.Y + a.C*b.Z + a.D
 	return (n * n) / (a.A*a.A + a.B*a.B + a.C*a.C)
 }
+
+// Distance3DPointPoint returns the distance between points a and b.
+func Distance3DPointPoint(a, b *Vector3D) float64 {
+	dx, dy, dz := b.X-a.X, b.Y-a.Y, b.Z-a.Z
+	return math.Sqrt(dx*dx + dy*dy + dz*dz)
+}
+
+// Distance3DPointPointSquared returns the squared distance between points a
+// and b.
+func Distance3DPointPointSquared(a, b *Vector3D) float64 {
+	dx, dy, dz := b.X-a.X, b.Y-a.Y, b.Z-a.Z
+	return dx*dx + dy*dy + dz*dz
+}
+
+// Distance3DVectorVectorAngular returns the angle between a and b.
+func Distance3DVectorVectorAngular(a, b *Vector3D) float64 {
+	return math.Acos((a.X*b.X + a.Y*b.Y + a.Z*b.Z) /
+		math.Sqrt((a.X*a.X+a.Y*a.Y+a.Z*a.Z)*(b.X*b.X+b.Y*b.Y+b.Z*b.Z)))
+}
+
+// Distance3DVectorVectorAngularCosSquared returns the cos of the squared angle
+// between a and b.
+func Distance3DVectorVectorAngularCosSquared(a, b *Vector3D) float64 {
+	dot := (a.X*b.X + a.Y*b.Y + a.Z*b.Z)
+	return dot * dot /
+		((a.X*a.X + a.Y*a.Y + a.Z*a.Z) * (b.X*b.X + b.Y*b.Y + b.Z*b.Z))
+}
