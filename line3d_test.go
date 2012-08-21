@@ -37,67 +37,6 @@ func Benchmark_Line3D_Equal(b *testing.B) {
 	}
 }
 
-type line3DFromLineSegmentBetweenData struct {
-	l1, l2, lb Line3D
-}
-
-var line3DFromLineSegmentBetweenValues = []line3DFromLineSegmentBetweenData{
-	{Line3D{Vector3D{-1, 1, -1}, Vector3D{3, 3, 3}},
-		Line3D{Vector3D{1, 2, -1}, Vector3D{1, 2, 3}},
-		Line3D{Vector3D{1, 2, 1}, Vector3D{1, 2, 1}}},
-	{Line3D{Vector3D{-1, 1, -1}, Vector3D{-3, 0, -3}},
-		Line3D{Vector3D{1, 2, -1}, Vector3D{1, 2, 3}},
-		Line3D{Vector3D{-1, 1, -1}, Vector3D{1, 2, 1}}},
-	{Line3D{Vector3D{-1, 1, -1}, Vector3D{3, 3, 3}},
-		Line3D{Vector3D{1, 2, -1}, Vector3D{1, 2, -3}},
-		Line3D{Vector3D{1, 2, 1}, Vector3D{1, 2, -1}}},
-	{Line3D{Vector3D{-1, 1, -1}, Vector3D{-3, 0, -3}},
-		Line3D{Vector3D{1, 2, -1}, Vector3D{1, 2, -3}},
-		Line3D{Vector3D{-1, 1, -1}, Vector3D{1, 2, -1}}},
-	{Line3D{Vector3D{1, 2, 1}, Vector3D{5, 4, 5}},
-		Line3D{Vector3D{5, 6, 1}, Vector3D{1, 4, 5}},
-		Line3D{Vector3D{3.4, 3.2, 3.4}, Vector3D{2.6, 4.8, 3.4}}},
-}
-
-func testLine3DFromLineSegmentBetween(d line3DFromLineSegmentBetweenData, t *testing.T) {
-	var l Line3D
-	if !d.l1.FromLineSegmentBetween(&d.l2, &l).SegmentFuzzyEqual(&d.lb) {
-		t.Error("Line3D.FromLineSegmentBetween", d.l1, d.l2, "want", d.lb, "got", l)
-	}
-	if !d.l2.FromLineSegmentBetween(&d.l1, &l).SegmentFuzzyEqual(&d.lb) {
-		t.Error("Line3D.FromLineSegmentBetween", d.l2, d.l1, "want", d.lb, "got", l)
-	}
-	d.l1.P1, d.l1.P2 = d.l1.P2, d.l1.P1
-	if !d.l1.FromLineSegmentBetween(&d.l2, &l).SegmentFuzzyEqual(&d.lb) {
-		t.Error("Line3D.FromLineSegmentBetween", d.l1, d.l2, "want", d.lb, "got", l)
-	}
-	if !d.l2.FromLineSegmentBetween(&d.l1, &l).SegmentFuzzyEqual(&d.lb) {
-		t.Error("Line3D.FromLineSegmentBetween", d.l2, d.l1, "want", d.lb, "got", l)
-	}
-	d.l2.P1, d.l2.P2 = d.l2.P2, d.l2.P1
-	if !d.l1.FromLineSegmentBetween(&d.l2, &l).SegmentFuzzyEqual(&d.lb) {
-		t.Error("Line3D.FromLineSegmentBetween", d.l1, d.l2, "want", d.lb, "got", l)
-	}
-	if !d.l2.FromLineSegmentBetween(&d.l1, &l).SegmentFuzzyEqual(&d.lb) {
-		t.Error("Line3D.FromLineSegmentBetween", d.l2, d.l1, "want", d.lb, "got", l)
-	}
-}
-
-func TestLine3DFromLineSegmentBetween(t *testing.T) {
-	for _, v := range line3DFromLineSegmentBetweenValues {
-		testLine3DFromLineSegmentBetween(v, t)
-	}
-}
-
-func Benchmark_Line3D_FromLineSegmentBetween(b *testing.B) {
-	l1 := &Line3D{Vector3D{1, 2, 1}, Vector3D{5, 4, 5}}
-	l2 := &Line3D{Vector3D{5, 6, 1}, Vector3D{1, 4, 5}}
-	r := &Line3D{}
-	for i := 0; i < b.N; i++ {
-		r.FromLineSegmentBetween(l1, l2)
-	}
-}
-
 func TestLine3DFromPlanesIntersection(t *testing.T) {
 	p1, p2 := &Plane{1, 1, 1, 1}, &Plane{1, 2, 3, 4}
 	got, want := &Line3D{}, &Line3D{Vector3D{3, -5, 1}, Vector3D{4, -7, 2}}
