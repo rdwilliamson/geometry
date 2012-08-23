@@ -123,24 +123,6 @@ func Benchmark_Plane_FuzzyEqual(b *testing.B) {
 	}
 }
 
-func TestPlaneLineIntersection(t *testing.T) {
-	p := &Plane{1, -2, 1, -7}
-	l := &Line3D{Vector3D{5, -1, -1}, Vector3D{8, -2, 0}}
-	want, got := &Vector3D{11.0 / 2.0, -7.0 / 6.0, -5.0 / 6.0}, &Vector3D{}
-	if !p.LineIntersection(l, got).Equal(want) {
-		t.Error("Plane.LineIntersection", *p, *l, "want", want, "got", got)
-	}
-}
-
-func Benchmark_Plane_LineIntersection(b *testing.B) {
-	p := &Plane{1, -2, 1, -7}
-	l := &Line3D{Vector3D{5, -1, -1}, Vector3D{8, -2, 0}}
-	r := &Vector3D{}
-	for i := 0; i < b.N; i++ {
-		p.LineIntersection(l, r)
-	}
-}
-
 func TestPlaneNormal(t *testing.T) {
 	p := &Plane{1, 2, 3, 4}
 	v := &Vector3D{}

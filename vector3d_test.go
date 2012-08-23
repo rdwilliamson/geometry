@@ -83,22 +83,6 @@ func Benchmark_Vector3D_DirectionEqual(b *testing.B) {
 	}
 }
 
-func TestVector3DFromPlanesIntersection(t *testing.T) {
-	p1, p2, p3 := &Plane{1, -3, 3, 4}, &Plane{2, 3, -1, -15}, &Plane{4, -3, -1, -19}
-	got, want := &Vector3D{}, &Vector3D{5, 1, -2}
-	if !got.FromPlanesIntersection(p1, p2, p3).FuzzyEqual(want) {
-		t.Error("Vector3D.FromPlanesIntersection", *p1, *p2, *p3, "want", want, "got", got)
-	}
-}
-
-func Benchmark_Vector3D_FromPlanesIntersection(b *testing.B) {
-	p1, p2, p3 := &Plane{1, -3, 3, 4}, &Plane{2, 3, -1, -15}, &Plane{4, -3, -1, -19}
-	pt := &Vector3D{}
-	for i := 0; i < b.N; i++ {
-		pt.FromPlanesIntersection(p1, p2, p3)
-	}
-}
-
 type vector3DDirectionFuzzyEqualData struct {
 	v1, v2 Vector3D
 	equal  bool

@@ -40,25 +40,6 @@ func (a *Line3D) Equal(b *Line3D) bool {
 		adz*iadx == (b.P2.Z-b.P1.Z)*ibdx
 }
 
-// FromPlanesIntersection sets z to the intersection of planes a and b, then
-// returns z.
-func (z *Line3D) FromPlanesIntersection(a, b *Plane) *Line3D {
-	// http://paulbourke.net/geometry/planeplane/
-	n1n1 := a.A*a.A + a.B*a.B + a.C*a.C
-	n2n2 := b.A*b.A + b.B*b.B + b.C*b.C
-	n1n2 := a.A*b.A + a.B*b.B + a.C*b.C
-	d := 1 / (n1n1*n2n2 - n1n2*n1n2)
-	c1 := (b.D*n1n2 - a.D*n2n2) * d
-	c2 := (a.D*n1n2 - b.D*n1n1) * d
-	z.P1.X = c1*a.A + c2*b.A
-	z.P1.Y = c1*a.B + c2*b.B
-	z.P1.Z = c1*a.C + c2*b.C
-	z.P2.X = z.P1.X + (a.B*b.C - a.C*b.B)
-	z.P2.Y = z.P1.Y + (a.C*b.A - a.A*b.C)
-	z.P2.Z = z.P1.Z + (a.A*b.B - a.B*b.A)
-	return z
-}
-
 // FuzzyEqual compares a and b and returns true if they are very close or false
 // otherwise.
 func (a *Line3D) FuzzyEqual(b *Line3D) bool {
