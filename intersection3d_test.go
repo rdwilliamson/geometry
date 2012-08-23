@@ -106,22 +106,6 @@ func Benchmark_Intersection3D_LineSegmentLineSegment(b *testing.B) {
 	}
 }
 
-func TestIntersection3DPlanesPlane(t *testing.T) {
-	p1, p2 := &Plane{1, 1, 1, 1}, &Plane{1, 2, 3, 4}
-	got, want := &Line3D{}, &Line3D{Vector3D{3, -5, 1}, Vector3D{4, -7, 2}}
-	if Intersection3DPlanePlane(p1, p2, got); !got.FuzzyEqual(want) {
-		t.Error("Intersection3D.PlanePlane", *p1, *p2, "want", want, "got", got)
-	}
-}
-
-func Benchmark_Intersection3D_PlanePlane(b *testing.B) {
-	p1, p2 := &Plane{1, 1, 1, 1}, &Plane{1, 2, 3, 4}
-	l := &Line3D{}
-	for i := 0; i < b.N; i++ {
-		Intersection3DPlanePlane(p1, p2, l)
-	}
-}
-
 func TestIntersection3DPlaneLine(t *testing.T) {
 	p := &Plane{1, -2, 1, -7}
 	l := &Line3D{Vector3D{5, -1, -1}, Vector3D{8, -2, 0}}
@@ -137,6 +121,22 @@ func Benchmark_Intersection3D_PlaneLine(b *testing.B) {
 	r := &Vector3D{}
 	for i := 0; i < b.N; i++ {
 		Intersection3DPlaneLine(p, l, r)
+	}
+}
+
+func TestIntersection3DPlanePlane(t *testing.T) {
+	p1, p2 := &Plane{1, 1, 1, 1}, &Plane{1, 2, 3, 4}
+	got, want := &Line3D{}, &Line3D{Vector3D{3, -5, 1}, Vector3D{4, -7, 2}}
+	if Intersection3DPlanePlane(p1, p2, got); !got.FuzzyEqual(want) {
+		t.Error("Intersection3D.PlanePlane", *p1, *p2, "want", want, "got", got)
+	}
+}
+
+func Benchmark_Intersection3D_PlanePlane(b *testing.B) {
+	p1, p2 := &Plane{1, 1, 1, 1}, &Plane{1, 2, 3, 4}
+	l := &Line3D{}
+	for i := 0; i < b.N; i++ {
+		Intersection3DPlanePlane(p1, p2, l)
 	}
 }
 

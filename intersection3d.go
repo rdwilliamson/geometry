@@ -66,6 +66,19 @@ func Intersection3DLineSegmentLineSegment(a, b, z *Line3D) int {
 	return 1
 }
 
+// Intersection3DPlaneLine sets z to the intersecion of plane a and line b,
+// then returns 1.
+func Intersection3DPlaneLine(a *Plane, b *Line3D, z *Vector3D) int {
+	// http://paulbourke.net/geometry/planeline/
+	bdx, bdy, bdz := b.P1.X-b.P2.X, b.P1.Y-b.P2.Y, b.P1.Z-b.P2.Z
+	u := (a.A*b.P1.X + a.B*b.P1.Y + a.C*b.P1.Z + a.D) /
+		(a.A*bdx + a.B*bdy + a.C*bdz)
+	z.X = b.P1.X - u*bdx
+	z.Y = b.P1.Y - u*bdy
+	z.Z = b.P1.Z - u*bdz
+	return 1
+}
+
 // Intersection3DPlanePlane sets z to the intersection of planes a and b, then
 // returns 1.
 func Intersection3DPlanePlane(a, b *Plane, z *Line3D) int {
@@ -82,19 +95,6 @@ func Intersection3DPlanePlane(a, b *Plane, z *Line3D) int {
 	z.P2.X = z.P1.X + (a.B*b.C - a.C*b.B)
 	z.P2.Y = z.P1.Y + (a.C*b.A - a.A*b.C)
 	z.P2.Z = z.P1.Z + (a.A*b.B - a.B*b.A)
-	return 1
-}
-
-// Intersection3DPlaneLine sets z to the intersecion of plane a and line b,
-// then returns 1.
-func Intersection3DPlaneLine(a *Plane, b *Line3D, z *Vector3D) int {
-	// http://paulbourke.net/geometry/planeline/
-	bdx, bdy, bdz := b.P1.X-b.P2.X, b.P1.Y-b.P2.Y, b.P1.Z-b.P2.Z
-	u := (a.A*b.P1.X + a.B*b.P1.Y + a.C*b.P1.Z + a.D) /
-		(a.A*bdx + a.B*bdy + a.C*bdz)
-	z.X = b.P1.X - u*bdx
-	z.Y = b.P1.Y - u*bdy
-	z.Z = b.P1.Z - u*bdz
 	return 1
 }
 
