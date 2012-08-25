@@ -170,6 +170,8 @@ var intersection3DFuzzyPlanePlaneValue = []intersection3DFuzzyPlanePlaneData{
 	{Plane{1, 0, 0, 1}, Plane{1, 0, 0, 2}, Line3D{Vector3D{}, Vector3D{}}, 0},
 	{Plane{1, 1, 1, 1}, Plane{1, 2, 3, 4},
 		Line3D{Vector3D{3, -5, 1}, Vector3D{4, -7, 2}}, 1},
+	{Plane{1 + 1e-13, 0, 0, 1}, Plane{1, 0, 0, 1},
+		Line3D{Vector3D{}, Vector3D{}}, -1},
 }
 
 func testIntersection3DFuzzyPlanePlane(d intersection3DFuzzyPlanePlaneData, t *testing.T) {
@@ -190,6 +192,14 @@ func TestIntersection3DFuzzyPlanePlane(t *testing.T) {
 
 func Benchmark_Intersection3D_FuzzyPlanePlane(b *testing.B) {
 	p1, p2 := &Plane{1, 2, 3, 4}, &Plane{5, 6, 7, 8}
+	var l Line3D
+	for i := 0; i < b.N; i++ {
+		Intersection3DFuzzyPlanePlane(p1, p2, &l)
+	}
+}
+
+func Benchmark_Intersection3D_FuzzyPlanePlane_Coincident(b *testing.B) {
+	p1, p2 := &Plane{1, 0, 0, 1}, &Plane{1, 0, 0, 1}
 	var l Line3D
 	for i := 0; i < b.N; i++ {
 		Intersection3DFuzzyPlanePlane(p1, p2, &l)

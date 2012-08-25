@@ -126,25 +126,27 @@ func Intersection3DPlanePlanePlane(a, b, c *Plane, z *Vector3D) int {
 // 1 if an intersection occurs, z is set to the intersection line.
 func Intersection3DFuzzyPlanePlane(a, b *Plane, z *Line3D) int {
 	// http://paulbourke.net/geometry/planeplane/
-	var cp, n1, n2 Vector3D
-	cp.CrossProduct(a.Normal(&n1), b.Normal(&n2))
-	if FuzzyEqual(cp.Magnitude(), 0) {
-		if a.FuzzyEqual(b) {
-			return -1
-		}
-		return 0
-	}
-	n1n2 := a.A*b.A + a.B*b.B + a.C*b.C
+	cpx, cpy, cpz := a.B*b.C-a.C*b.B, a.C*b.A-a.A*b.C, a.A*b.B-a.B*b.A
 	n1n1 := a.A*a.A + a.B*a.B + a.C*a.C
 	n2n2 := b.A*b.A + b.B*b.B + b.C*b.C
+	if FuzzyEqual(cpx*cpx+cpy*cpy+cpz*cpz, 0) {
+		s := a.A / b.A
+		if s*a.D*b.D < 0 || !FuzzyEqual(a.B, s*b.B) ||
+			!FuzzyEqual(a.C, s*b.C) ||
+			!FuzzyEqual(b.D*b.D*n1n1, a.D*a.D*n2n2) {
+			return 0
+		}
+		return -1
+	}
+	n1n2 := a.A*b.A + a.B*b.B + a.C*b.C
 	d := 1 / (n1n1*n2n2 - n1n2*n1n2)
 	c1 := (b.D*n1n2 - a.D*n2n2) * d
 	c2 := (a.D*n1n2 - b.D*n1n1) * d
 	z.P1.X = c1*a.A + c2*b.A
 	z.P1.Y = c1*a.B + c2*b.B
 	z.P1.Z = c1*a.C + c2*b.C
-	z.P2.X = z.P1.X + (a.B*b.C - a.C*b.B)
-	z.P2.Y = z.P1.Y + (a.C*b.A - a.A*b.C)
-	z.P2.Z = z.P1.Z + (a.A*b.B - a.B*b.A)
+	z.P2.X = z.P1.X + cpx
+	z.P2.Y = z.P1.Y + cpy
+	z.P2.Z = z.P1.Z + cpz
 	return 1
 }
