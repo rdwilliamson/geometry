@@ -159,6 +159,19 @@ func Benchmark_Intersection3D_PlanePlanePlane(b *testing.B) {
 	}
 }
 
+func TestIntersection3DFuzzyPlaneLine(t *testing.T) {
+	t.Error("not implemented")
+}
+
+func Benchmark_Intersection3D_FuzzyPlaneLine(b *testing.B) {
+	p := &Plane{1, 2, 3, 4}
+	l := &Line3D{Vector3D{1, 2, 3}, Vector3D{4, 5, 6}}
+	pt := &Vector3D{}
+	for i := 0; i < b.N; i++ {
+		Intersection3DFuzzyPlaneLine(p, l, pt)
+	}
+}
+
 type intersection3DFuzzyPlanePlaneData struct {
 	p1, p2 Plane
 	l      Line3D

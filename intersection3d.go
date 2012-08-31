@@ -118,7 +118,32 @@ func Intersection3DPlanePlanePlane(a, b, c *Plane, z *Vector3D) int {
 	return 1
 }
 
-// Intersection3DFuzzyPlanePlane sets z to the intersection of planes a and b.
+// Intersection3DFuzzyPlaneLine sets z to the intersection of a plane and line,
+// then returns the number of intersections.
+//
+// Possible return values are:
+// -1 if the plane and line are coincident, z in untouched.
+// 0 if the plane and line are parallel, z is untouched.
+// 1 if an intersection occurs, z is set to the intersection point.
+func Intersection3DFuzzyPlaneLine(a *Plane, b *Line3D, z *Vector3D) int {
+	bdx, bdy, bdz := b.P1.X-b.P2.X, b.P1.Y-b.P2.Y, b.P1.Z-b.P2.Z
+	cpx, cpy, cpz := a.B*bdz-a.C*bdy, a.C*bdx-a.A*bdz, a.A*bdy-a.B*bdx
+	dot := a.A*b.P1.X + a.B*b.P1.Y + a.C*b.P1.Z
+	if FuzzyEqual(cpx*cpx+cpy*cpy+cpz*cpz, 0) {
+		if FuzzyEqual(dot, 0) {
+			return -1
+		}
+		return 0
+	}
+	u := (dot + a.D) / (a.A*bdx + a.B*bdy + a.C*bdz)
+	z.X = b.P1.X - u*bdx
+	z.Y = b.P1.Y - u*bdy
+	z.Z = b.P1.Z - u*bdz
+	return 1
+}
+
+// Intersection3DFuzzyPlanePlane sets z to the intersection of planes a and b,
+// then returns the number of intersections.
 //
 // Possible return values are:
 // -1 if the planes are coincident, z is untouched.
@@ -149,4 +174,17 @@ func Intersection3DFuzzyPlanePlane(a, b *Plane, z *Line3D) int {
 	z.P2.Y = z.P1.Y + cpy
 	z.P2.Z = z.P1.Z + cpz
 	return 1
+}
+
+// Intersection3DFuzzyPlanePlanePlane sets z to the intersecion of 3 planes,
+// then returns the number of intersections.
+//
+// Possible return values are:
+// -1 if all three planes are coincident.
+// -2 if all three planes intersect at a line.
+// -3 if two planes are parallel and the third intersects at two lines.
+// 0 if all planes are parallel, z is untouched.
+// 1 if the planes intersect at a point, z is set to the intersection point.
+func Intersection3DFuzzyPlanePlanePlane(a, b, c *Plane, z *Vector3D) int {
+	return 0
 }
