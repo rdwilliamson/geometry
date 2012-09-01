@@ -159,8 +159,47 @@ func Benchmark_Intersection3D_PlanePlanePlane(b *testing.B) {
 	}
 }
 
+type intersection3DFuzzyPlaneLineData struct {
+	pl Plane
+	l  Line3D
+	pt Vector3D
+	n  int
+}
+
+var intersection3DFuzzyPlaneLineValues = []intersection3DFuzzyPlaneLineData{
+	{Plane{1, -2, 1, -7}, Line3D{Vector3D{5, -1, -1}, Vector3D{8, -2, 0}},
+		Vector3D{11.0 / 2.0, -7.0 / 6.0, -5.0 / 6.0}, 1},
+	{Plane{1, 0, 0, 0}, Line3D{Vector3D{1, 0, 0}, Vector3D{1, 1, 0}},
+		Vector3D{}, 0},
+	{Plane{1, 0, 0, 0}, Line3D{Vector3D{0, 0, 0}, Vector3D{0, 1, 0}},
+		Vector3D{}, -1},
+}
+
+func testIntersection3DFuzzyPlaneLine(d intersection3DFuzzyPlaneLineData, t *testing.T) {
+	pt := &Vector3D{}
+	got := Intersection3DFuzzyPlaneLine(&d.pl, &d.l, pt)
+	if got != d.n {
+		t.Error("Intersection3D.FuzzyPlaneLine", d.pl, d.l, "want", d.n, "got",
+			got)
+	} else if !d.pt.FuzzyEqual(pt) {
+		t.Error("Intersection3D.FuzzyPlaneLine", d.pl, d.l, "want", d.pt,
+			"got", *pt)
+	}
+	d.l.P1, d.l.P2 = d.l.P2, d.l.P1
+	got = Intersection3DFuzzyPlaneLine(&d.pl, &d.l, pt)
+	if got != d.n {
+		t.Error("Intersection3D.FuzzyPlaneLine", d.pl, d.l, "want", d.n, "got",
+			got)
+	} else if !d.pt.FuzzyEqual(pt) {
+		t.Error("Intersection3D.FuzzyPlaneLine", d.pl, d.l, "want", d.pt,
+			"got", *pt)
+	}
+}
+
 func TestIntersection3DFuzzyPlaneLine(t *testing.T) {
-	t.Error("not implemented")
+	for _, v := range intersection3DFuzzyPlaneLineValues {
+		testIntersection3DFuzzyPlaneLine(v, t)
+	}
 }
 
 func Benchmark_Intersection3D_FuzzyPlaneLine(b *testing.B) {

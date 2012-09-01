@@ -126,16 +126,17 @@ func Intersection3DPlanePlanePlane(a, b, c *Plane, z *Vector3D) int {
 // 0 if the plane and line are parallel, z is untouched.
 // 1 if an intersection occurs, z is set to the intersection point.
 func Intersection3DFuzzyPlaneLine(a *Plane, b *Line3D, z *Vector3D) int {
+	// http://paulbourke.net/geometry/planeline/
 	bdx, bdy, bdz := b.P1.X-b.P2.X, b.P1.Y-b.P2.Y, b.P1.Z-b.P2.Z
-	cpx, cpy, cpz := a.B*bdz-a.C*bdy, a.C*bdx-a.A*bdz, a.A*bdy-a.B*bdx
-	dot := a.A*b.P1.X + a.B*b.P1.Y + a.C*b.P1.Z
-	if FuzzyEqual(cpx*cpx+cpy*cpy+cpz*cpz, 0) {
-		if FuzzyEqual(dot, 0) {
+	dot2 := a.A*bdx + a.B*bdy + a.C*bdz
+	dot1 := a.A*b.P1.X + a.B*b.P1.Y + a.C*b.P1.Z
+	if FuzzyEqual(dot2, 0) {
+		if FuzzyEqual(dot1, 0) {
 			return -1
 		}
 		return 0
 	}
-	u := (dot + a.D) / (a.A*bdx + a.B*bdy + a.C*bdz)
+	u := (dot1 + a.D) / dot2
 	z.X = b.P1.X - u*bdx
 	z.Y = b.P1.Y - u*bdy
 	z.Z = b.P1.Z - u*bdz
