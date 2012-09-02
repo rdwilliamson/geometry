@@ -1,5 +1,9 @@
 package geometry
 
+import (
+	"math"
+)
+
 // Intersection3DLineLine, sets z to the shortest line between a and b then
 // returns 1.
 func Intersection3DLineLine(a, b, z *Line3D) int {
@@ -190,16 +194,32 @@ func Intersection3DFuzzyPlanePlanePlane(a, b, c *Plane, z *Vector3D) int {
 	if a.FuzzyEqual(b) && a.FuzzyEqual(c) {
 		return -1
 	}
-	var l1, l2 Line3D
-	Intersection3DPlanePlane(a, b, &l1)
-	Intersection3DPlanePlane(b, c, &l2)
-	if l1.FuzzyEqual(&l2) {
-		return -2
-	}
 	var n1, n2, n3 Vector3D
 	a.Normal(&n1)
 	b.Normal(&n2)
 	c.Normal(&n3)
+	var l1d, l2d Vector3D
+	l1d.CrossProduct(&n1, &n2)
+	l2d.CrossProduct(&n2, &n3)
+	if vectorDirectionEqual(&l1d, &l2d) {
+		n1n1 := n1.DotProduct(&n1)
+		n1n2 := n1.DotProduct(&n2)
+		n2n2 := n2.DotProduct(&n2)
+		n2n3 := n2.DotProduct(&n3)
+		n3n3 := n3.DotProduct(&n3)
+		d1 := 1 / (n1n1*n2n2 - n1n2*n1n2)
+		d2 := 2 / (n2n2*n3n3 - n2n3*n2n3)
+		c1 := (b.D*n1n2 - a.D*n2n2) * d1
+		c2 := (a.D*n1n2 - b.D*n1n1) * d1
+		c3 := (c.D*n2n3 - b.D*n3n3) * d2
+		c4 := (b.D*n2n3 - c.D*n2n2) * d2
+		p1 := Vector3D{c1*a.A + c2*b.A, c1*a.B + c2*b.B, c1*a.C + c2*b.C}
+		p2 := Vector3D{c3*b.A + c3*c.A, c3*b.B + c4*c.B, c3*b.C + c4*c.C}
+		if FuzzyEqual(p1.X*c.A+p1.Y*c.B+p1.Z*c.C+c.D, 0) &&
+			FuzzyEqual(p2.X*a.A+p2.Y*a.B+p2.Z*a.C+a.D, 0) {
+			return -2
+		}
+	}
 	if n1.FuzzyEqual(&n2) && n2.FuzzyEqual(&n3) {
 		return 0
 	}
@@ -217,4 +237,25 @@ func vectorAsLineEqual(a, b *Vector3D) bool {
 		return false
 	}
 	return a.Z == s*b.Z
+}
+
+func vectorDirectionEqual(a, b *Vector3D) bool {
+	if FuzzyEqual(math.Abs(a.X)+math.Abs(b.X), 0) {
+		if FuzzyEqual(math.Abs(a.Y)+math.Abs(b.Y), 0) {
+			return true
+		} else {
+			if a.Y > b.Y {
+				s := math.Abs(a.Y / b.Y)
+				return FuzzyEqual(a.Z, s*b.Z)
+			}
+			s := math.Abs(b.Y / a.Y)
+			return FuzzyEqual(s*a.Z, b.Z)
+		}
+	}
+	if a.X > b.X {
+		s := math.Abs(a.X / b.X)
+		return FuzzyEqual(a.Y, s*b.Y) && FuzzyEqual(a.Z, s*b.Z)
+	}
+	s := math.Abs(b.X / a.X)
+	return FuzzyEqual(s*a.Y, b.Y) && FuzzyEqual(s*a.Z, b.Z)
 }
