@@ -196,12 +196,6 @@ func Intersection3DFuzzyPlanePlanePlane(a, b, c *Plane, z *Vector3D) int {
 	if l1.FuzzyEqual(&l2) {
 		return -2
 	}
-	if a.FuzzyEqual(b) && Intersection3DPlanePlane(b, c, &l1) == 1 {
-		return -3
-	}
-	if b.FuzzyEqual(c) && Intersection3DPlanePlane(a, b, &l2) == 1 {
-		return -3
-	}
 	var n1, n2, n3 Vector3D
 	a.Normal(&n1)
 	b.Normal(&n2)
@@ -209,6 +203,18 @@ func Intersection3DFuzzyPlanePlanePlane(a, b, c *Plane, z *Vector3D) int {
 	if n1.FuzzyEqual(&n2) && n2.FuzzyEqual(&n3) {
 		return 0
 	}
+	if vectorAsLineEqual(&n1, &n2) || vectorAsLineEqual(&n2, &n3) ||
+		vectorAsLineEqual(&n1, &n3) {
+		return -3
+	}
 	Intersection3DPlanePlanePlane(a, b, c, z)
 	return 1
+}
+
+func vectorAsLineEqual(a, b *Vector3D) bool {
+	s := a.X / b.X
+	if a.Y != s*b.Y {
+		return false
+	}
+	return a.Z == s*b.Z
 }

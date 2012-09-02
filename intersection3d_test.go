@@ -267,6 +267,11 @@ type intersection3DFuzzyPlanePlanePlaneData struct {
 var intersection3DFuzzyPlanePlanePlaneValues = []intersection3DFuzzyPlanePlanePlaneData{
 	{Plane{1, -3, 3, 4}, Plane{2, 3, -1, -15}, Plane{4, -3, -1, -19},
 		Vector3D{5, 1, -2}, 1},
+	{Plane{1, 0, 0, 0}, Plane{1, 0, 0, 1}, Plane{1, 0, 0, 2}, Vector3D{}, 0},
+	{Plane{1, 0, 0, 0}, Plane{1, 0, 0, 0}, Plane{1, 0, 0, 0}, Vector3D{}, -1},
+	{Plane{1, 0, 0, 0}, Plane{0, 1, 0, 0}, Plane{1, 1, 0, 0}, Vector3D{}, -2},
+	{Plane{1, 0, 0, 0}, Plane{1, 0, 0, 1}, Plane{1, 1, 0, 0}, Vector3D{}, -3},
+	{Plane{-1, 0, 0, 0}, Plane{1, 0, 0, 1}, Plane{1, 1, 0, 0}, Vector3D{}, -3},
 }
 
 func testIntersection3DFuzzyPlanePlanePlane(d intersection3DFuzzyPlanePlanePlaneData, t *testing.T) {
