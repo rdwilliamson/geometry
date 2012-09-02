@@ -181,11 +181,34 @@ func Intersection3DFuzzyPlanePlane(a, b *Plane, z *Line3D) int {
 // then returns the number of intersections.
 //
 // Possible return values are:
-// -1 if all three planes are coincident.
-// -2 if all three planes intersect at a line.
 // -3 if two planes are parallel and the third intersects at two lines.
+// -2 if all three planes intersect at a line.
+// -1 if all three planes are coincident.
 // 0 if all planes are parallel, z is untouched.
 // 1 if the planes intersect at a point, z is set to the intersection point.
 func Intersection3DFuzzyPlanePlanePlane(a, b, c *Plane, z *Vector3D) int {
-	return 0
+	if a.FuzzyEqual(b) && a.FuzzyEqual(c) {
+		return -1
+	}
+	var l1, l2 Line3D
+	Intersection3DPlanePlane(a, b, &l1)
+	Intersection3DPlanePlane(b, c, &l2)
+	if l1.FuzzyEqual(&l2) {
+		return -2
+	}
+	if a.FuzzyEqual(b) && Intersection3DPlanePlane(b, c, &l1) == 1 {
+		return -3
+	}
+	if b.FuzzyEqual(c) && Intersection3DPlanePlane(a, b, &l2) == 1 {
+		return -3
+	}
+	var n1, n2, n3 Vector3D
+	a.Normal(&n1)
+	b.Normal(&n2)
+	c.Normal(&n3)
+	if n1.FuzzyEqual(&n2) && n2.FuzzyEqual(&n3) {
+		return 0
+	}
+	Intersection3DPlanePlanePlane(a, b, c, z)
+	return 1
 }

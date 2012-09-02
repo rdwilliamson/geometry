@@ -257,3 +257,51 @@ func Benchmark_Intersection3D_FuzzyPlanePlane_Coincident(b *testing.B) {
 		Intersection3DFuzzyPlanePlane(p1, p2, &l)
 	}
 }
+
+type intersection3DFuzzyPlanePlanePlaneData struct {
+	p1, p2, p3 Plane
+	p          Vector3D
+	n          int
+}
+
+var intersection3DFuzzyPlanePlanePlaneValues = []intersection3DFuzzyPlanePlanePlaneData{
+	{Plane{1, -3, 3, 4}, Plane{2, 3, -1, -15}, Plane{4, -3, -1, -19},
+		Vector3D{5, 1, -2}, 1},
+}
+
+func testIntersection3DFuzzyPlanePlanePlane(d intersection3DFuzzyPlanePlanePlaneData, t *testing.T) {
+	var p Vector3D
+	n := Intersection3DFuzzyPlanePlanePlane(&d.p1, &d.p2, &d.p3, &p)
+	if n != d.n {
+		t.Error("Intersection3DFuzzyPlanePlanePlane", d.p1, d.p2, d.p3, "want",
+			d.n, "got", n)
+	} else if !p.FuzzyEqual(&d.p) {
+		t.Error("Intersection3DFuzzyPlanePlanePlane", d.p1, d.p2, d.p3, "want",
+			d.p, "got", p)
+	}
+}
+
+func TestIntersection3DFuzzyPlanePlanePlane(t *testing.T) {
+	for _, v := range intersection3DFuzzyPlanePlanePlaneValues {
+		testIntersection3DFuzzyPlanePlanePlane(v, t)
+		v.p2, v.p3 = v.p3, v.p2
+		testIntersection3DFuzzyPlanePlanePlane(v, t)
+		v.p1, v.p3 = v.p3, v.p1
+		testIntersection3DFuzzyPlanePlanePlane(v, t)
+		v.p2, v.p3 = v.p3, v.p2
+		testIntersection3DFuzzyPlanePlanePlane(v, t)
+		v.p1, v.p3 = v.p3, v.p1
+		testIntersection3DFuzzyPlanePlanePlane(v, t)
+		v.p2, v.p3 = v.p3, v.p2
+		testIntersection3DFuzzyPlanePlanePlane(v, t)
+	}
+}
+
+func Benchmark_Intersection3D_FuzzyPlanePlanePlane(b *testing.B) {
+	p1, p2, p3 := &Plane{1, -3, 3, 4}, &Plane{2, 3, -1, -15},
+		&Plane{4, -3, -1, -19}
+	pt := &Vector3D{}
+	for i := 0; i < b.N; i++ {
+		Intersection3DFuzzyPlanePlanePlane(p1, p2, p3, pt)
+	}
+}
