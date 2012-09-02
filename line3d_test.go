@@ -5,14 +5,6 @@ import (
 	"testing"
 )
 
-func TestLine3DEqual(t *testing.T) {
-	l1 := &Line3D{Vector3D{1, 2, 3}, Vector3D{4, 5, 6}}
-	l2 := &Line3D{Vector3D{5, 6, 7}, Vector3D{0, 1, 2}}
-	if !l1.Equal(l2) {
-		t.Error("Line3D.Equal")
-	}
-}
-
 func TestLine3DCopy(t *testing.T) {
 	l1 := &Line3D{Vector3D{1, 2, 3}, Vector3D{1, 1, 1}}
 	l2 := &Line3D{Vector3D{}, Vector3D{}}
@@ -26,6 +18,39 @@ func Benchmark_Line3D_Copy(b *testing.B) {
 	l2 := &Line3D{Vector3D{}, Vector3D{}}
 	for i := 0; i < b.N; i++ {
 		l2.Copy(l1)
+	}
+}
+
+type line3DEqualData struct {
+	l1, l2 Line3D
+	equal  bool
+}
+
+var line3DEqualValues = []line3DEqualData{
+	{Line3D{Vector3D{1, 2, 3}, Vector3D{4, 5, 6}},
+		Line3D{Vector3D{5, 6, 7}, Vector3D{0, 1, 2}}, true},
+	{Line3D{Vector3D{}, Vector3D{0, 0, 1}},
+		Line3D{Vector3D{}, Vector3D{0, 0, -1}}, true},
+}
+
+func testLine3DEqual(d line3DEqualData, t *testing.T) {
+	if d.l1.Equal(&d.l2) != d.equal {
+		t.Fatal("Line3D.Equal", d.l1, d.l2, "want", d.equal)
+	}
+	if d.l2.Equal(&d.l1) != d.equal {
+		t.Fatal("Line3D.Equal", d.l2, d.l1, "want", d.equal)
+	}
+}
+
+func TestLine3DEqual(t *testing.T) {
+	for _, v := range line3DEqualValues {
+		testLine3DEqual(v, t)
+		v.l1.P1, v.l1.P2 = v.l1.P2, v.l1.P1
+		testLine3DEqual(v, t)
+		v.l2.P1, v.l2.P2 = v.l2.P2, v.l2.P1
+		testLine3DEqual(v, t)
+		v.l1.P1, v.l1.P2 = v.l1.P2, v.l1.P1
+		testLine3DEqual(v, t)
 	}
 }
 
@@ -57,23 +82,11 @@ var line3DFuzzyEqualValues = []line3DFuzzyEqualData{
 		Line3D{Vector3D{}, Vector3D{1 + 1e-13, 1, 1}}, true},
 	{Line3D{Vector3D{1, 0, 0}, Vector3D{2, 1, 1}},
 		Line3D{Vector3D{}, Vector3D{1, 1, 1}}, false},
+	{Line3D{Vector3D{}, Vector3D{0, 0, 1}},
+		Line3D{Vector3D{}, Vector3D{0, 0, -1}}, true},
 }
 
 func testLine3DFuzzyEqual(d line3DFuzzyEqualData, t *testing.T) {
-	if d.l1.FuzzyEqual(&d.l2) != d.equal {
-		t.Error("Line3D.FuzzyEqual", d.l1, d.l2, d.equal)
-	}
-	if d.l2.FuzzyEqual(&d.l1) != d.equal {
-		t.Error("Line3D.FuzzyEqual", d.l2, d.l1, d.equal)
-	}
-	d.l1.P1, d.l1.P2 = d.l1.P2, d.l1.P1
-	if d.l1.FuzzyEqual(&d.l2) != d.equal {
-		t.Error("Line3D.FuzzyEqual", d.l1, d.l2, d.equal)
-	}
-	if d.l2.FuzzyEqual(&d.l1) != d.equal {
-		t.Error("Line3D.FuzzyEqual", d.l2, d.l1, d.equal)
-	}
-	d.l2.P1, d.l2.P2 = d.l2.P2, d.l2.P1
 	if d.l1.FuzzyEqual(&d.l2) != d.equal {
 		t.Error("Line3D.FuzzyEqual", d.l1, d.l2, d.equal)
 	}
@@ -84,6 +97,12 @@ func testLine3DFuzzyEqual(d line3DFuzzyEqualData, t *testing.T) {
 
 func TestLine3DFuzzyEqual(t *testing.T) {
 	for _, v := range line3DFuzzyEqualValues {
+		testLine3DFuzzyEqual(v, t)
+		v.l1.P1, v.l1.P2 = v.l1.P2, v.l1.P1
+		testLine3DFuzzyEqual(v, t)
+		v.l2.P1, v.l2.P2 = v.l2.P2, v.l2.P1
+		testLine3DFuzzyEqual(v, t)
+		v.l1.P1, v.l1.P2 = v.l1.P2, v.l1.P1
 		testLine3DFuzzyEqual(v, t)
 	}
 }

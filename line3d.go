@@ -30,12 +30,15 @@ func (a *Line3D) Equal(b *Line3D) bool {
 	adx, ady, adz := a.P2.X-a.P1.X, a.P2.Y-a.P1.Y, a.P2.Z-a.P1.Z
 	u := (adx*(b.P1.X-a.P1.X) + ady*(b.P1.Y-a.P1.Y) + adz*(b.P1.Z-a.P1.Z)) /
 		(adx*adx + ady*ady + adz*adz)
-	if b.P1.X != (a.P1.X+adx*u) || b.P1.Y != (a.P1.Y+adx*u) ||
-		b.P1.Z != (a.P1.Z+adx*u) {
+	if b.P1.X != (a.P1.X+adx*u) || b.P1.Y != (a.P1.Y+ady*u) ||
+		b.P1.Z != (a.P1.Z+adz*u) {
 		return false
 	}
 	// check if the direction of the two lines is equal
-	iadx, ibdx := 1/adx, 1/(b.P2.X-b.P1.X)
+	var iadx, ibdx float64
+	if adx != 0 {
+		iadx, ibdx = 1/adx, 1/(b.P2.X-b.P1.X)
+	}
 	return ady*iadx == (b.P2.Y-b.P1.Y)*ibdx &&
 		adz*iadx == (b.P2.Z-b.P1.Z)*ibdx
 }
@@ -54,7 +57,10 @@ func (a *Line3D) FuzzyEqual(b *Line3D) bool {
 		return false
 	}
 	// check if the direction of the two lines is equal
-	iadx, ibdx := 1/adx, 1/(b.P2.X-b.P1.X)
+	var iadx, ibdx float64
+	if adx != 0 {
+		iadx, ibdx = 1/adx, 1/(b.P2.X-b.P1.X)
+	}
 	dyr := ady*iadx - (b.P2.Y-b.P1.Y)*ibdx
 	dzr := adz*iadx - (b.P2.Z-b.P1.Z)*ibdx
 	return FuzzyEqual(dyr, 0) && FuzzyEqual(dzr, 0)
