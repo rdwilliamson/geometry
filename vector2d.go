@@ -31,28 +31,25 @@ func (z *Vector2D) Copy(x *Vector2D) *Vector2D {
 // DirectionEqual compares the direction of a and b then returns true if they
 // are exactly equal or false otherwise.
 func (a *Vector2D) DirectionEqual(b *Vector2D) bool {
-	s := a.X / b.X
-	if s < 0 {
-		return false
+	if a.X == 0 && b.X == 0 {
+		return a.Y*b.Y > 0
 	}
-	return a.Y == s*b.Y
+	s := a.X / b.X
+	return s > 0 && a.Y == s*b.Y
 }
 
 // DirectionFuzzyEqual compares the direction of a and b then returns true if
 // they are very close or false otherwise.
 func (a *Vector2D) DirectionFuzzyEqual(b *Vector2D) bool {
+	if FuzzyEqual(math.Abs(a.X)+math.Abs(b.X), 0) {
+		return a.Y*b.Y > 0
+	}
 	if a.X > b.X {
 		s := a.X / b.X
-		if s < 0 {
-			return false
-		}
-		return FuzzyEqual(a.Y, s*b.Y)
+		return s > 0 && FuzzyEqual(a.Y, s*b.Y)
 	}
 	s := b.X / a.X
-	if s < 0 {
-		return false
-	}
-	return FuzzyEqual(s*a.Y, b.Y)
+	return s > 0 && FuzzyEqual(s*a.Y, b.Y)
 }
 
 // Divide sets z to the piecewise quotient a/b then returns z.

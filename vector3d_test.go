@@ -59,25 +59,40 @@ func Benchmark_Vector3D_CrossProduct(b *testing.B) {
 	}
 }
 
+type vector3DDirectionEqualData struct {
+	v1, v2 Vector3D
+	equal  bool
+}
+
+var vector3DDirectionEqualValues = []vector3DDirectionEqualData{
+	{Vector3D{1, 1, 1}, Vector3D{2, 2, 2}, true},
+	{Vector3D{1, 1, 1}, Vector3D{-2, -2, -2}, false},
+	{Vector3D{1, 0, 0}, Vector3D{2, 0, 0}, true},
+	{Vector3D{1, 0, 0}, Vector3D{-2, 0, 0}, false},
+	{Vector3D{0, 1, 0}, Vector3D{0, 2, 0}, true},
+	{Vector3D{0, 1, 0}, Vector3D{0, -2, 0}, false},
+	{Vector3D{0, 0, 1}, Vector3D{0, 0, 2}, true},
+	{Vector3D{0, 0, 1}, Vector3D{0, 0, -2}, false},
+}
+
+func testVector3DDirectionEqual(d vector3DDirectionEqualData, t *testing.T) {
+	if d.v1.DirectionEqual(&d.v2) != d.equal {
+		t.Error("Vector3D.DirectionEqual", d.v1, d.v2, "want", d.equal)
+	}
+	if d.v2.DirectionEqual(&d.v1) != d.equal {
+		t.Error("Vector3D.DirectionEqual", d.v2, d.v1, "want", d.equal)
+	}
+}
+
 func TestVector3DDirectionEqual(t *testing.T) {
-	v1, v2 := &Vector3D{1, 1, 1}, &Vector3D{2, 2, 2}
-	if !v1.DirectionEqual(v2) {
-		t.Error("Vector3D.DirectionEqual")
-	}
-	if !v2.DirectionEqual(v1) {
-		t.Error("Vector3D.DirectionEqual")
-	}
-	*v2 = Vector3D{-2, -2, -2}
-	if v1.DirectionEqual(v2) {
-		t.Error("Vector3D.DirectionEqual")
-	}
-	if v2.DirectionEqual(v1) {
-		t.Error("Vector3D.DirectionEqual")
+	for _, v := range vector3DDirectionEqualValues {
+		testVector3DDirectionEqual(v, t)
 	}
 }
 
 func Benchmark_Vector3D_DirectionEqual(b *testing.B) {
 	v1, v2 := &Vector3D{1, 1, 1}, &Vector3D{2, 2, 2}
+	// v1, v2 := &Vector3D{0, 0, 1}, &Vector3D{0, 0, 2}
 	for i := 0; i < b.N; i++ {
 		v1.DirectionEqual(v2)
 	}
@@ -97,14 +112,20 @@ var vector3DDirectionFuzzyEqualValues = []vector3DDirectionFuzzyEqualData{
 	{Vector3D{1, 1, 1}, Vector3D{2 + 1e-12, 2, 2}, true},
 	{Vector3D{1, 1, 1}, Vector3D{1 + 1e-12, 1, 1}, false},
 	{Vector3D{1, 1, 1}, Vector3D{1 + 1e-13, 1, 1}, true},
+	{Vector3D{1, 0, 0}, Vector3D{2, 0, 0}, true},
+	{Vector3D{1, 0, 0}, Vector3D{-2, 0, 0}, false},
+	{Vector3D{0, 1, 0}, Vector3D{0, 2, 0}, true},
+	{Vector3D{0, 1, 0}, Vector3D{0, -2, 0}, false},
+	{Vector3D{0, 0, 1}, Vector3D{0, 0, 2}, true},
+	{Vector3D{0, 0, 1}, Vector3D{0, 0, -2}, false},
 }
 
 func testVector3DDirectionFuzzyEqual(d vector3DDirectionFuzzyEqualData, t *testing.T) {
 	if d.v1.DirectionFuzzyEqual(&d.v2) != d.equal {
-		t.Error("Vector3D.DirectionFuzzyEqual", d.v1, d.v2, "want", d.equal, "got", !d.equal)
+		t.Error("Vector3D.DirectionFuzzyEqual", d.v1, d.v2, "want", d.equal)
 	}
 	if d.v2.DirectionFuzzyEqual(&d.v1) != d.equal {
-		t.Error("Vector3D.DirectionFuzzyEqual", d.v2, d.v1, "want", d.equal, "got", !d.equal)
+		t.Error("Vector3D.DirectionFuzzyEqual", d.v2, d.v1, "want", d.equal)
 	}
 }
 
@@ -116,6 +137,7 @@ func TestVector3DDirectionFuzzyEqual(t *testing.T) {
 
 func Benchmark_Vector3D_DirectionFuzzyEqual(b *testing.B) {
 	v1, v2 := &Vector3D{1, 1, 1}, &Vector3D{2, 2, 2}
+	// v1, v2 := &Vector3D{0, 0, 1}, &Vector3D{0, 0, 2}
 	for i := 0; i < b.N; i++ {
 		v1.DirectionFuzzyEqual(v2)
 	}

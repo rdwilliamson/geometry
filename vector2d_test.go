@@ -44,20 +44,32 @@ func Benchmark_Vector2D_Copy(b *testing.B) {
 	}
 }
 
+type vector2DDirectionEqualData struct {
+	v1, v2 Vector2D
+	equal  bool
+}
+
+var vector2DDirectionEqualValues = []vector2DDirectionEqualData{
+	{Vector2D{1, 1}, Vector2D{2, 2}, true},
+	{Vector2D{1, 1}, Vector2D{-2, -2}, false},
+	{Vector2D{0, 1}, Vector2D{0, 2}, true},
+	{Vector2D{0, 1}, Vector2D{0, -2}, false},
+	{Vector2D{1, 0}, Vector2D{2, 0}, true},
+	{Vector2D{1, 0}, Vector2D{-2, 0}, false},
+}
+
+func testVector2DDirectionEqual(d vector2DDirectionEqualData, t *testing.T) {
+	if d.v1.DirectionEqual(&d.v2) != d.equal {
+		t.Error("Vector2D.DirectionEqual", d.v1, d.v2, "want", d.equal)
+	}
+	if d.v2.DirectionEqual(&d.v1) != d.equal {
+		t.Error("Vector2D.DirectionEqual", d.v2, d.v1, "want", d.equal)
+	}
+}
+
 func TestVector2DDirectionEqual(t *testing.T) {
-	v1, v2 := &Vector2D{1, 1}, &Vector2D{2, 2}
-	if !v1.DirectionEqual(v2) {
-		t.Error("Vector2D.DirectionEqual")
-	}
-	if !v2.DirectionEqual(v1) {
-		t.Error("Vector2D.DirectionEqual")
-	}
-	*v2 = Vector2D{-2, -2}
-	if v1.DirectionEqual(v2) {
-		t.Error("Vector2D.DirectionEqual")
-	}
-	if v2.DirectionEqual(v1) {
-		t.Error("Vector2D.DirectionEqual")
+	for _, v := range vector2DDirectionEqualValues {
+		testVector2DDirectionEqual(v, t)
 	}
 }
 
@@ -78,6 +90,10 @@ var vector2DDirectionFuzzyEqualValues = []vector2DDirectionFuzzyEqualData{
 	{Vector2D{1, 1}, Vector2D{2 + 2e-12, 2}, false},
 	{Vector2D{1, 1}, Vector2D{2, 2 + 2e-13}, true},
 	{Vector2D{1, 1}, Vector2D{2 + 2e-13, 2}, true},
+	{Vector2D{0, 1}, Vector2D{0, 2}, true},
+	{Vector2D{0, 1}, Vector2D{0, -2}, false},
+	{Vector2D{1, 0}, Vector2D{2, 0}, true},
+	{Vector2D{1, 0}, Vector2D{-2, 0}, false},
 }
 
 func testVector2DDirectionFuzzyEqual(d vector2DDirectionFuzzyEqualData, t *testing.T) {

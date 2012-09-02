@@ -41,6 +41,14 @@ func (z *Vector3D) CrossProduct(a, b *Vector3D) *Vector3D {
 // DirectionEqual compares the direction of a and b then returns true if they
 // are exactly equal or false otherwise.
 func (a *Vector3D) DirectionEqual(b *Vector3D) bool {
+	if a.X == 0 && b.X == 0 {
+		if a.Y == 0 && b.Y == 0 {
+			return a.Z*b.Z > 0
+		} else {
+			s := a.Y / b.Y
+			return s > 0 && a.Z == s*b.Z
+		}
+	}
 	s := a.X / b.X
 	if s < 0 || a.Y != s*b.Y {
 		return false
@@ -51,18 +59,24 @@ func (a *Vector3D) DirectionEqual(b *Vector3D) bool {
 // DirectionFuzzyEqual compares the direction of a and b then returns true if
 //they are very close or false otherwise.
 func (a *Vector3D) DirectionFuzzyEqual(b *Vector3D) bool {
+	if FuzzyEqual(math.Abs(a.X)+math.Abs(b.X), 0) {
+		if FuzzyEqual(math.Abs(a.Y)+math.Abs(b.Y), 0) {
+			return a.Z*b.Z > 0
+		} else {
+			if a.Y > b.Y {
+				s := a.Y / b.Y
+				return s > 0 && FuzzyEqual(a.Z, s*b.Z)
+			}
+			s := b.Y / a.Y
+			return s > 0 && FuzzyEqual(s*a.Z, b.Z)
+		}
+	}
 	if a.X > b.X {
 		s := a.X / b.X
-		if s < 0 {
-			return false
-		}
-		return FuzzyEqual(a.Y, s*b.Y) && FuzzyEqual(a.Z, s*b.Z)
+		return s > 0 && FuzzyEqual(a.Y, s*b.Y) && FuzzyEqual(a.Z, s*b.Z)
 	}
 	s := b.X / a.X
-	if s < 0 {
-		return false
-	}
-	return FuzzyEqual(s*a.Y, b.Y) && FuzzyEqual(s*a.Z, b.Z)
+	return s > 0 && FuzzyEqual(s*a.Y, b.Y) && FuzzyEqual(s*a.Z, b.Z)
 }
 
 // Divide sets z to the piecewise quotient a/b then returns z.
