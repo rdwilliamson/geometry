@@ -1,9 +1,5 @@
 package geometry
 
-import (
-	"math"
-)
-
 // Intersection3DLineLine, sets z to the shortest line between a and b then
 // returns 1.
 func Intersection3DLineLine(a, b, z *Line3D) int {
@@ -189,30 +185,55 @@ func Intersection3DFuzzyPlanePlane(a, b *Plane, z *Line3D) int {
 // -3 if two planes are parallel and the third intersects at two lines.
 // -2 if all three planes intersect at a line.
 // -1 if all three planes are coincident.
-// 0 if all planes are parallel, z is untouched.
+// 0 if all planes are parallel (two could be coincident), z is untouched.
 // 1 if the planes intersect at a point, z is set to the intersection point.
 func Intersection3DFuzzyPlanePlanePlane(a, b, c *Plane, z *Vector3D) int {
 	var n1, n2, n3 Vector3D
 	a.Normal(&n1)
 	b.Normal(&n2)
 	c.Normal(&n3)
-	if vectorDirectionEqual(&n1, &n2) && vectorDirectionEqual(&n1, &n3) {
-		if FuzzyEqual(b.D*b.D*(a.A*a.A+a.B*a.B+a.C*a.C),
-			a.D*a.D*(b.A*b.A+b.B*b.B+b.C*b.C)) &&
-			FuzzyEqual(c.D*c.D*(a.A*a.A+a.B*a.B+a.C*a.C),
-				a.D*a.D*(c.A*c.A+c.B*c.B+c.C*c.C)) {
-			return -1
-		}
-	}
-	var l1d, l2d Vector3D
+
+	var l1d, l2d, l3d Vector3D
 	l1d.CrossProduct(&n1, &n2)
 	l2d.CrossProduct(&n2, &n3)
-	if vectorDirectionEqual(&l1d, &l2d) {
-		n1n1 := n1.DotProduct(&n1)
+	l3d.CrossProduct(&n1, &n3)
+
+	// cpabx, cpaby, cpabz := a.B*b.C-a.C*b.B, a.C*b.A-a.A*b.C, a.A*b.B-a.B*b.A
+
+	// n1n1 := a.A*a.A + a.B*a.B + a.C*a.C
+	// n2n2 := b.A*b.A + b.B*b.B + b.C*b.C
+	// n3n3 := c.A*c.A + c.B*c.B + c.C*c.C
+	n1n1 := n1.DotProduct(&n1)
+	n2n2 := n2.DotProduct(&n2)
+	n3n3 := n3.DotProduct(&n3)
+	// n1n2d := vectorDirectionEqual(&n1, &n2)
+	// n1n3d := vectorDirectionEqual(&n1, &n3)
+
+	n1n2d := FuzzyEqual(l1d.X*l1d.X+l1d.Y*l1d.Y+l1d.Z*l1d.Z, 0)
+	n2n3d := FuzzyEqual(l2d.X*l2d.X+l2d.Y*l2d.Y+l2d.Z*l2d.Z, 0)
+	n1n3d := FuzzyEqual(l3d.X*l3d.X+l3d.Y*l3d.Y+l3d.Z*l3d.Z, 0)
+
+	// check if the planes all have the same normal (are parallel)
+	if n1n2d && n1n3d {
+		// check if the planes are all equal
+		if FuzzyEqual(b.D*b.D*n1n1, a.D*a.D*n2n2) &&
+			FuzzyEqual(c.D*c.D*n1n1, a.D*a.D*n3n3) {
+			// all planes are equal
+			return -1
+		} else {
+			// all planes are parallel
+			return 0
+		}
+	}
+
+	var ld Vector3D
+	ld.CrossProduct(&l1d, &l2d)
+	// check if pair of plane intersection's line point in the same direction
+	// if vectorDirectionEqual(&l1d, &l2d) {
+	if FuzzyEqual(ld.X*ld.X+ld.Y*ld.Y+ld.Z*ld.Z, 0) {
+		// get point on each line
 		n1n2 := n1.DotProduct(&n2)
-		n2n2 := n2.DotProduct(&n2)
 		n2n3 := n2.DotProduct(&n3)
-		n3n3 := n3.DotProduct(&n3)
 		d1 := 1 / (n1n1*n2n2 - n1n2*n1n2)
 		d2 := 1 / (n2n2*n3n3 - n2n3*n2n3)
 		c1 := (b.D*n1n2 - a.D*n2n2) * d1
@@ -221,39 +242,21 @@ func Intersection3DFuzzyPlanePlanePlane(a, b, c *Plane, z *Vector3D) int {
 		c4 := (b.D*n2n3 - c.D*n2n2) * d2
 		p1 := Vector3D{c1*a.A + c2*b.A, c1*a.B + c2*b.B, c1*a.C + c2*b.C}
 		p2 := Vector3D{c3*b.A + c4*c.A, c3*b.B + c4*c.B, c3*b.C + c4*c.C}
+
 		if FuzzyEqual(p1.X*c.A+p1.Y*c.B+p1.Z*c.C+c.D, 0) &&
 			FuzzyEqual(p2.X*a.A+p2.Y*a.B+p2.Z*a.C+a.D, 0) {
+			// point on each pair of plane's intersection lies on third plane
 			return -2
 		}
 	}
-	if n1.FuzzyEqual(&n2) && n2.FuzzyEqual(&n3) {
-		return 0
-	}
-	if vectorDirectionEqual(&n1, &n2) || vectorDirectionEqual(&n2, &n3) ||
-		vectorDirectionEqual(&n1, &n3) {
+
+	// check for a pair of parallel planes resulting in 2 lines, all 3 parallel
+	// and 2 coincident
+	if n1n2d || n1n3d || n2n3d {
 		return -3
 	}
+
+	// having ruled out all degenerate cases calculate intersection
 	Intersection3DPlanePlanePlane(a, b, c, z)
 	return 1
-}
-
-func vectorDirectionEqual(a, b *Vector3D) bool {
-	if FuzzyEqual(math.Abs(a.X)+math.Abs(b.X), 0) {
-		if FuzzyEqual(math.Abs(a.Y)+math.Abs(b.Y), 0) {
-			return true
-		} else {
-			if a.Y > b.Y {
-				s := math.Abs(a.Y / b.Y)
-				return FuzzyEqual(a.Z, s*b.Z)
-			}
-			s := math.Abs(b.Y / a.Y)
-			return FuzzyEqual(s*a.Z, b.Z)
-		}
-	}
-	if a.X > b.X {
-		s := math.Abs(a.X / b.X)
-		return FuzzyEqual(a.Y, s*b.Y) && FuzzyEqual(a.Z, s*b.Z)
-	}
-	s := math.Abs(b.X / a.X)
-	return FuzzyEqual(s*a.Y, b.Y) && FuzzyEqual(s*a.Z, b.Z)
 }
