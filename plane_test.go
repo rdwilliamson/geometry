@@ -42,6 +42,11 @@ var planeEqualValues = []planeEqualData{
 	{Plane{-1, -2, -3, -4}, Plane{1, -2, 3, 4}, false},
 	{Plane{-1, -2, -3, -4}, Plane{1, 2, 3, -4}, false},
 	{Plane{2, 4, 6, 8}, Plane{1, 2, 3, 4}, true},
+	{Plane{2, 4, 6, 8}, Plane{1, 2, 3, 4}, true},
+	{Plane{0, 4, 6, 8}, Plane{0, 2, 3, 4}, true},
+	{Plane{2, 0, 6, 8}, Plane{1, 0, 3, 4}, true},
+	{Plane{2, 4, 0, 8}, Plane{1, 2, 0, 4}, true},
+	{Plane{0, 0, 6, 8}, Plane{0, 0, 3, 4}, true},
 }
 
 func testPlaneEqual(d planeEqualData, t *testing.T) {
@@ -99,6 +104,10 @@ var planeFuzzyEqualValues = []planeFuzzyEqualData{
 	{Plane{-1, -2, -3, -4}, Plane{1, -2, 3, 4}, false},
 	{Plane{-1, -2, -3, -4}, Plane{1, 2, 3, -4}, false},
 	{Plane{2, 4, 6, 8}, Plane{1, 2, 3, 4}, true},
+	{Plane{0, 4, 6, 8}, Plane{0, 2, 3, 4}, true},
+	{Plane{2, 0, 6, 8}, Plane{1, 0, 3, 4}, true},
+	{Plane{2, 4, 0, 8}, Plane{1, 2, 0, 4}, true},
+	{Plane{0, 0, 6, 8}, Plane{0, 0, 3, 4}, true},
 }
 
 func testPlaneFuzzyEqual(d planeFuzzyEqualData, t *testing.T) {

@@ -31,9 +31,18 @@ func (z *Plane) Copy(x *Plane) *Plane {
 // Equal returns true if the two planes are exactly equal or false otherwise.
 func (a *Plane) Equal(b *Plane) bool {
 	// check normal and distance from origin direction
-	s := a.A / b.A
-	if a.B != s*b.B || a.C != s*b.C || s*a.D*b.D < 0 {
-		return false
+	if a.A == 0 && b.A == 0 {
+		if a.B != 0 || b.B != 0 {
+			s := a.B / b.B
+			if s*a.D*b.D < 0 || a.C != s*b.C {
+				return false
+			}
+		}
+	} else {
+		s := a.A / b.A
+		if s*a.D*b.D < 0 || a.B != s*b.B || a.C != s*b.C {
+			return false
+		}
 	}
 	// check distance (squared) from origin
 	return b.D*b.D*(a.A*a.A+a.B*a.B+a.C*a.C) ==
@@ -53,9 +62,18 @@ func (z *Plane) FromPoints(p1, p2, p3 *Vector3D) *Plane {
 
 // FuzzyEqual returns true if the two planes are very close or false otherwise.
 func (a *Plane) FuzzyEqual(b *Plane) bool {
-	s := a.A / b.A
-	if s*a.D*b.D < 0 || !FuzzyEqual(a.B, s*b.B) || !FuzzyEqual(a.C, s*b.C) {
-		return false
+	if FuzzyEqual(math.Abs(a.A)+math.Abs(b.A), 0) {
+		if !FuzzyEqual(math.Abs(a.B)+math.Abs(b.B), 0) {
+			s := a.B / b.B
+			if s*a.D*b.D < 0 || !FuzzyEqual(a.C, s*b.C) {
+				return false
+			}
+		}
+	} else {
+		s := a.A / b.A
+		if s*a.D*b.D < 0 || !FuzzyEqual(a.B, s*b.B) || !FuzzyEqual(a.C, s*b.C) {
+			return false
+		}
 	}
 	return FuzzyEqual(b.D*b.D*(a.A*a.A+a.B*a.B+a.C*a.C),
 		a.D*a.D*(b.A*b.A+b.B*b.B+b.C*b.C))
