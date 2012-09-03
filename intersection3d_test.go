@@ -310,3 +310,11 @@ func Benchmark_Intersection3D_FuzzyPlanePlanePlane(b *testing.B) {
 		Intersection3DFuzzyPlanePlanePlane(p1, p2, p3, pt)
 	}
 }
+
+func Benchmark_Intersection3D_FuzzyPlanePlanePlane_Line(b *testing.B) {
+	p1, p2, p3 := &Plane{1, 0, 0, 0}, &Plane{0, 1, 0, 0}, &Plane{1, 1, 0, 0}
+	pt := &Vector3D{}
+	for i := 0; i < b.N; i++ {
+		Intersection3DFuzzyPlanePlanePlane(p1, p2, p3, pt)
+	}
+}

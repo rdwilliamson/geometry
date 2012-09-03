@@ -188,75 +188,61 @@ func Intersection3DFuzzyPlanePlane(a, b *Plane, z *Line3D) int {
 // 0 if all planes are parallel (two could be coincident), z is untouched.
 // 1 if the planes intersect at a point, z is set to the intersection point.
 func Intersection3DFuzzyPlanePlanePlane(a, b, c *Plane, z *Vector3D) int {
-	var n1, n2, n3 Vector3D
-	a.Normal(&n1)
-	b.Normal(&n2)
-	c.Normal(&n3)
+	n1n1 := a.A*a.A + a.B*a.B + a.C*a.C
+	n2n2 := b.A*b.A + b.B*b.B + b.C*b.C
+	n3n3 := c.A*c.A + c.B*c.B + c.C*c.C
 
-	var l1d, l2d, l3d Vector3D
-	l1d.CrossProduct(&n1, &n2)
-	l2d.CrossProduct(&n2, &n3)
-	l3d.CrossProduct(&n1, &n3)
+	// use cross products to check if plane normals are equal
+	cpabx, cpaby, cpabz := a.B*b.C-a.C*b.B, a.C*b.A-a.A*b.C, a.A*b.B-a.B*b.A
+	n1n2d := FuzzyEqual(cpabx*cpabx+cpaby*cpaby+cpabz*cpabz, 0)
+	cpcax, cpcay, cpcaz := c.B*a.C-c.C*a.B, c.C*a.A-c.A*a.C, c.A*a.B-c.B*a.A
+	n3n1d := FuzzyEqual(cpcax*cpcax+cpcay*cpcay+cpcaz*cpcaz, 0)
 
-	// cpabx, cpaby, cpabz := a.B*b.C-a.C*b.B, a.C*b.A-a.A*b.C, a.A*b.B-a.B*b.A
-
-	// n1n1 := a.A*a.A + a.B*a.B + a.C*a.C
-	// n2n2 := b.A*b.A + b.B*b.B + b.C*b.C
-	// n3n3 := c.A*c.A + c.B*c.B + c.C*c.C
-	n1n1 := n1.DotProduct(&n1)
-	n2n2 := n2.DotProduct(&n2)
-	n3n3 := n3.DotProduct(&n3)
-	// n1n2d := vectorDirectionEqual(&n1, &n2)
-	// n1n3d := vectorDirectionEqual(&n1, &n3)
-
-	n1n2d := FuzzyEqual(l1d.X*l1d.X+l1d.Y*l1d.Y+l1d.Z*l1d.Z, 0)
-	n2n3d := FuzzyEqual(l2d.X*l2d.X+l2d.Y*l2d.Y+l2d.Z*l2d.Z, 0)
-	n1n3d := FuzzyEqual(l3d.X*l3d.X+l3d.Y*l3d.Y+l3d.Z*l3d.Z, 0)
-
-	// check if the planes all have the same normal (are parallel)
-	if n1n2d && n1n3d {
-		// check if the planes are all equal
+	// check if all planes are parallel
+	if n1n2d && n3n1d {
+		// check if all planes are coincident
 		if FuzzyEqual(b.D*b.D*n1n1, a.D*a.D*n2n2) &&
 			FuzzyEqual(c.D*c.D*n1n1, a.D*a.D*n3n3) {
-			// all planes are equal
 			return -1
 		} else {
-			// all planes are parallel
 			return 0
 		}
 	}
 
-	var ld Vector3D
-	ld.CrossProduct(&l1d, &l2d)
-	// check if pair of plane intersection's line point in the same direction
-	// if vectorDirectionEqual(&l1d, &l2d) {
-	if FuzzyEqual(ld.X*ld.X+ld.Y*ld.Y+ld.Z*ld.Z, 0) {
+	cpbcx, cpbcy, cpbcz := b.B*c.C-b.C*c.B, b.C*c.A-b.A*c.C, b.A*c.B-b.B*c.A
+
+	// check if lines from pair of plane intersections have the same direction
+	if ldx, ldy, ldz := cpaby*cpbcz-cpabz*cpbcy, cpabz*cpbcx-cpabx*cpbcz,
+		cpabx*cpbcy-cpaby*cpbcx; FuzzyEqual(ldx*ldx+ldy*ldy+ldz*ldz, 0) {
 		// get point on each line
-		n1n2 := n1.DotProduct(&n2)
-		n2n3 := n2.DotProduct(&n3)
+		n1n2 := a.A*b.A + a.B*b.B + a.C*b.C
+		n2n3 := b.A*c.A + b.B*c.B + b.C*c.C
 		d1 := 1 / (n1n1*n2n2 - n1n2*n1n2)
 		d2 := 1 / (n2n2*n3n3 - n2n3*n2n3)
 		c1 := (b.D*n1n2 - a.D*n2n2) * d1
 		c2 := (a.D*n1n2 - b.D*n1n1) * d1
 		c3 := (c.D*n2n3 - b.D*n3n3) * d2
 		c4 := (b.D*n2n3 - c.D*n2n2) * d2
-		p1 := Vector3D{c1*a.A + c2*b.A, c1*a.B + c2*b.B, c1*a.C + c2*b.C}
-		p2 := Vector3D{c3*b.A + c4*c.A, c3*b.B + c4*c.B, c3*b.C + c4*c.C}
+		p1x, p1y, p1z := c1*a.A+c2*b.A, c1*a.B+c2*b.B, c1*a.C+c2*b.C
+		p2x, p2y, p2z := c3*b.A+c4*c.A, c3*b.B+c4*c.B, c3*b.C+c4*c.C
 
-		if FuzzyEqual(p1.X*c.A+p1.Y*c.B+p1.Z*c.C+c.D, 0) &&
-			FuzzyEqual(p2.X*a.A+p2.Y*a.B+p2.Z*a.C+a.D, 0) {
-			// point on each pair of plane's intersection lies on third plane
+		// check if points lie on the third plane
+		if FuzzyEqual(p1x*c.A+p1y*c.B+p1z*c.C+c.D, 0) &&
+			FuzzyEqual(p2x*a.A+p2y*a.B+p2z*a.C+a.D, 0) {
 			return -2
 		}
 	}
 
 	// check for a pair of parallel planes resulting in 2 lines, all 3 parallel
-	// and 2 coincident
-	if n1n2d || n1n3d || n2n3d {
+	// and 2 coincident have been caught already
+	if n1n2d || n3n1d || FuzzyEqual(cpbcx*cpbcx+cpbcy*cpbcy+cpbcz*cpbcz, 0) {
 		return -3
 	}
 
 	// having ruled out all degenerate cases calculate intersection
-	Intersection3DPlanePlanePlane(a, b, c, z)
+	d := -1 / (a.A*cpbcx + a.B*cpbcy + a.C*cpbcz)
+	z.X = (a.D*cpbcx + b.D*cpcax + c.D*cpabx) * d
+	z.Y = (a.D*cpbcy + b.D*cpcay + c.D*cpaby) * d
+	z.Z = (a.D*cpbcz + b.D*cpcaz + c.D*cpabz) * d
 	return 1
 }
