@@ -9,19 +9,17 @@ package geometry
 // 1 otherwise, z is set to the intersection of the two lines.
 func Intersection2DFuzzyLineLine(a, b *Line2D, z *Vector2D) int {
 	// http://local.wasp.uwa.edu.au/~pbourke/geometry/lineline2d/
-	adx, ady := a.P2.X-a.P1.X, a.P2.Y-a.P1.Y
-	bdx, bdy := b.P2.X-b.P1.X, b.P2.Y-b.P1.Y
-	d := bdy*adx - bdx*ady
+	d := b.V.Y*a.V.X - b.V.X*a.V.Y
 	if FuzzyEqual(d, 0) {
-		am, bm := ady/adx, bdy/bdx
-		if FuzzyEqual(a.P1.Y-am*a.P1.X, b.P1.Y-bm*b.P1.X) {
+		am, bm := a.V.Y/a.V.X, b.V.Y/b.V.X
+		if FuzzyEqual(a.P.Y-am*a.P.X, b.P.Y-bm*b.P.X) {
 			return -1
 		}
 		return 0
 	}
-	ua := (bdx*(a.P1.Y-b.P1.Y) - bdy*(a.P1.X-b.P1.X)) / d
-	z.X = a.P1.X + ua*adx
-	z.Y = a.P1.Y + ua*ady
+	ua := (b.V.X*(a.P.Y-b.P.Y) - b.V.Y*(a.P.X-b.P.X)) / d
+	z.X = a.P.X + ua*a.V.X
+	z.Y = a.P.Y + ua*a.V.Y
 	return 1
 }
 
@@ -34,49 +32,49 @@ func Intersection2DFuzzyLineLine(a, b *Line2D, z *Vector2D) int {
 // 1 if the intersection occures on both line segments, z is set to the
 // intersection.
 func Intersection2DFuzzyLineSegmentLineSegment(a, b *Line2D, z *Vector2D) int {
-	adx, ady := a.P2.X-a.P1.X, a.P2.Y-a.P1.Y
-	bdx, bdy := b.P2.X-b.P1.X, b.P2.Y-b.P1.Y
-	d := (bdy*adx - bdx*ady)
+	d := (b.V.Y*a.V.X - b.V.X*a.V.Y)
 	if FuzzyEqual(d, 0) {
 		// slopes are the same, parallel or coincident
-		am, bm := ady/adx, bdy/bdx
-		if !FuzzyEqual(a.P1.Y-am*a.P1.X, b.P1.Y-bm*b.P1.X) {
+		am, bm := a.V.Y/a.V.X, b.V.Y/b.V.X
+		if !FuzzyEqual(a.P.Y-am*a.P.X, b.P.Y-bm*b.P.X) {
 			// parallel
 			return 0
 		}
 		// check if endpoints are equal
-		if (FuzzyEqual(a.P1.X, b.P1.X) && FuzzyEqual(a.P1.Y, b.P1.Y)) ||
-			(FuzzyEqual(a.P1.X, b.P2.X) && FuzzyEqual(a.P1.Y, b.P2.Y)) {
-			z.X = a.P1.X
-			z.Y = a.P1.Y
+		bp2x, bp2y := b.P.X+b.V.X, b.P.Y+b.V.Y
+		if (FuzzyEqual(a.P.X, b.P.X) && FuzzyEqual(a.P.Y, b.P.Y)) ||
+			(FuzzyEqual(a.P.X, bp2x) && FuzzyEqual(a.P.Y, bp2y)) {
+			z.X = a.P.X
+			z.Y = a.P.Y
 			return 1
 		}
-		if (FuzzyEqual(a.P2.X, b.P1.X) && FuzzyEqual(a.P2.Y, b.P1.Y)) ||
-			(FuzzyEqual(a.P2.X, b.P2.X) && FuzzyEqual(a.P2.Y, b.P2.Y)) {
-			z.X = a.P2.X
-			z.Y = a.P2.Y
+		ap2x, ap2y := a.P.X+a.V.X, a.P.Y+a.V.Y
+		if (FuzzyEqual(ap2x, b.P.X) && FuzzyEqual(ap2y, b.P.Y)) ||
+			(FuzzyEqual(ap2x, bp2x) && FuzzyEqual(ap2y, bp2y)) {
+			z.X = ap2x
+			z.Y = ap2y
 			return 1
 		}
 		// check for overlap
 		var x1, x2 float64
-		if a.P1.X < a.P2.X {
-			x1, x2 = a.P1.X, a.P2.X
+		if a.P.X < ap2x {
+			x1, x2 = a.P.X, ap2x
 		} else {
-			x1, x2 = a.P2.X, a.P1.X
+			x1, x2 = ap2x, a.P.X
 		}
-		if (x1 < b.P1.X && b.P1.X < x2) || (x1 < b.P2.X && b.P2.X < x2) {
+		if (x1 < b.P.X && b.P.X < x2) || (x1 < bp2x && bp2x < x2) {
 			return -1
 		}
 		// coincident if they were lines
 		return 0
 	}
-	dx, dy := a.P1.X-b.P1.X, a.P1.Y-b.P1.Y
+	dx, dy := a.P.X-b.P.X, a.P.Y-b.P.Y
 	d = 1 / d
-	ua := (bdx*dy - bdy*dx) * d
-	ub := (adx*dy - ady*dx) * d
+	ua := (b.V.X*dy - b.V.Y*dx) * d
+	ub := (a.V.X*dy - a.V.Y*dx) * d
 	if 0 <= ua && ua <= 1 && 0 <= ub && ub <= 1 {
-		z.X = a.P1.X + ua*adx
-		z.Y = a.P1.Y + ua*ady
+		z.X = a.P.X + ua*a.V.X
+		z.Y = a.P.Y + ua*a.V.Y
 		return 1
 	}
 	return 0
@@ -86,10 +84,8 @@ func Intersection2DFuzzyLineSegmentLineSegment(a, b *Line2D, z *Vector2D) int {
 // returns 1.
 func Intersection2DLineLine(a, b *Line2D, z *Vector2D) int {
 	// http://local.wasp.uwa.edu.au/~pbourke/geometry/lineline2d/
-	adx, ady := a.P2.X-a.P1.X, a.P2.Y-a.P1.Y
-	bdx, bdy := b.P2.X-b.P1.X, b.P2.Y-b.P1.Y
-	ua := (bdx*(a.P1.Y-b.P1.Y) - bdy*(a.P1.X-b.P1.X)) / (bdy*adx - bdx*ady)
-	z.X = a.P1.X + ua*adx
-	z.Y = a.P1.Y + ua*ady
+	ua := (b.V.X*(a.P.Y-b.P.Y) - b.V.Y*(a.P.X-b.P.X)) / (b.V.Y*a.V.X - b.V.X*a.V.Y)
+	z.X = a.P.X + ua*a.V.X
+	z.Y = a.P.Y + ua*a.V.Y
 	return 1
 }

@@ -32,8 +32,8 @@ func Benchmark_Line2D_Copy(b *testing.B) {
 }
 
 func TestLine2DEqual(t *testing.T) {
-	l1 := &Line2D{Vector2D{1, 2}, Vector2D{3, 4}}
-	l2 := &Line2D{Vector2D{-3, -2}, Vector2D{5, 6}}
+	l1 := &Line2D{Vector2D{1, 2}, Vector2D{2, 2}}
+	l2 := &Line2D{Vector2D{-3, -2}, Vector2D{8, 8}}
 	if !l1.Equal(l2) {
 		t.Error("Line2D.Equal")
 	}
@@ -53,11 +53,13 @@ type line2DFuzzyEqualData struct {
 }
 
 var line2DFuzzyEqualValues = []line2DFuzzyEqualData{
-	{Line2D{Vector2D{1, 2}, Vector2D{3, 4}}, Line2D{Vector2D{-3, -2}, Vector2D{5, 6 + 1e-11}}, false},
-	{Line2D{Vector2D{1, 2}, Vector2D{3, 4}}, Line2D{Vector2D{-3, -2}, Vector2D{5, 6 + 1e-12}}, true},
-	{Line2D{Vector2D{1, 2}, Vector2D{3, 4}}, Line2D{Vector2D{-3, -2}, Vector2D{5 + 1e-11, 6}}, false},
-	{Line2D{Vector2D{1, 2}, Vector2D{3, 4}}, Line2D{Vector2D{-3, -2}, Vector2D{5 + 1e-12, 6}}, true},
-	{Line2D{Vector2D{1, 2}, Vector2D{3, 4}}, Line2D{Vector2D{2, 2}, Vector2D{4, 4}}, false},
+	{Line2D{Vector2D{1, 1}, Vector2D{1, 1}}, Line2D{Vector2D{-3, -3}, Vector2D{1, 1 + 1e-12}}, false},
+	{Line2D{Vector2D{1, 1}, Vector2D{1, 1}}, Line2D{Vector2D{-3, -3}, Vector2D{1, 1 + 1e-13}}, true},
+	{Line2D{Vector2D{1, 1}, Vector2D{1, 0}}, Line2D{Vector2D{-3, -3}, Vector2D{1, 1e-12}}, false},
+	{Line2D{Vector2D{1, 1}, Vector2D{1, 0}}, Line2D{Vector2D{-3, -3}, Vector2D{1, 1e-13}}, true},
+	{Line2D{Vector2D{1, 1}, Vector2D{0, 1}}, Line2D{Vector2D{1, -3}, Vector2D{1e-12, 1}}, false},
+	{Line2D{Vector2D{1, 1}, Vector2D{0, 1}}, Line2D{Vector2D{1, -3}, Vector2D{1e-13, 1}}, true},
+	{Line2D{Vector2D{2, 1}, Vector2D{0, 1}}, Line2D{Vector2D{1, -3}, Vector2D{0, 1}}, false},
 }
 
 func testLine2DFuzzyEqual(d line2DFuzzyEqualData, t *testing.T) {
@@ -67,14 +69,16 @@ func testLine2DFuzzyEqual(d line2DFuzzyEqualData, t *testing.T) {
 	if d.l2.FuzzyEqual(&d.l1) != d.equal {
 		t.Error("Line2D.FuzzyEqual", d.l2, d.l1, d.equal)
 	}
-	d.l1.P1, d.l1.P2 = d.l1.P2, d.l1.P1
+	d.l1.P.X, d.l1.P.Y = d.l1.P.X+d.l1.V.X, d.l1.P.Y+d.l1.V.Y
+	d.l1.V.X, d.l1.V.Y = -d.l1.V.X, -d.l1.V.Y
 	if d.l1.FuzzyEqual(&d.l2) != d.equal {
 		t.Error("Line2D.FuzzyEqual", d.l1, d.l2, d.equal)
 	}
 	if d.l2.FuzzyEqual(&d.l1) != d.equal {
 		t.Error("Line2D.FuzzyEqual", d.l2, d.l1, d.equal)
 	}
-	d.l2.P1, d.l2.P2 = d.l2.P2, d.l2.P1
+	d.l2.P.X, d.l2.P.Y = d.l2.P.X+d.l2.V.X, d.l2.P.Y+d.l2.V.Y
+	d.l2.V.X, d.l2.V.Y = -d.l2.V.X, -d.l2.V.Y
 	if d.l1.FuzzyEqual(&d.l2) != d.equal {
 		t.Error("Line2D.FuzzyEqual", d.l1, d.l2, d.equal)
 	}
@@ -98,7 +102,7 @@ func Benchmark_Line2D_FuzzyEqual(b *testing.B) {
 }
 
 func TestLine2DLength(t *testing.T) {
-	l := &Line2D{Vector2D{1, 2}, Vector2D{4, 6}}
+	l := &Line2D{Vector2D{1, 2}, Vector2D{3, 4}}
 	if l.Length() != 5 {
 		t.Error("Line2D.Length")
 	}
@@ -112,7 +116,7 @@ func Benchmark_Line2D_Length(b *testing.B) {
 }
 
 func TestLine2DLengthSquared(t *testing.T) {
-	l := &Line2D{Vector2D{1, 2}, Vector2D{4, 6}}
+	l := &Line2D{Vector2D{1, 2}, Vector2D{3, 4}}
 	if l.LengthSquared() != 25 {
 		t.Error("Line2D.LengthSquared")
 	}
@@ -126,7 +130,7 @@ func Benchmark_Line2D_LengthSquared(b *testing.B) {
 }
 
 func TestLine2DMidpoint(t *testing.T) {
-	l, v := &Line2D{Vector2D{1, 2}, Vector2D{3, 4}}, &Vector2D{}
+	l, v := &Line2D{Vector2D{1, 2}, Vector2D{2, 2}}, &Vector2D{}
 	if !l.Midpoint(v).Equal(&Vector2D{2, 3}) {
 		t.Error("Line2D.Midpoint")
 	}
@@ -140,7 +144,7 @@ func Benchmark_Line2D_Midpoint(b *testing.B) {
 }
 
 func TestLine2DNormal(t *testing.T) {
-	l, v := &Line2D{Vector2D{1, 1}, Vector2D{3, 1}}, &Vector2D{}
+	l, v := &Line2D{Vector2D{1, 1}, Vector2D{2, 0}}, &Vector2D{}
 	if !l.Normal(v).Equal(&Vector2D{0, -2}) {
 		t.Error("Line2D.Normal", v)
 	}
@@ -175,8 +179,8 @@ type line2DSegmentFuzzyEqualData struct {
 }
 
 var line2DSegmentFuzzyEqualValues = []line2DSegmentFuzzyEqualData{
-	{Line2D{Vector2D{1, 2}, Vector2D{3, 4}}, Line2D{Vector2D{1, 2}, Vector2D{3, 4 + 1e-11}}, false},
-	{Line2D{Vector2D{1, 2}, Vector2D{3, 4}}, Line2D{Vector2D{1, 2}, Vector2D{3, 4 + 1e-12}}, true},
+	{Line2D{Vector2D{1, 2}, Vector2D{1, 0}}, Line2D{Vector2D{1, 2}, Vector2D{1, 0 + 1e-11}}, false},
+	{Line2D{Vector2D{1, 2}, Vector2D{1, 0}}, Line2D{Vector2D{1, 2}, Vector2D{1, 0 + 1e-13}}, true},
 	{Line2D{Vector2D{1, 2}, Vector2D{3, 4}}, Line2D{Vector2D{2, 3}, Vector2D{4, 5}}, false},
 }
 
@@ -187,14 +191,16 @@ func testLine2DSegmentFuzzyEqual(d line2DSegmentFuzzyEqualData, t *testing.T) {
 	if d.l2.SegmentFuzzyEqual(&d.l1) != d.equal {
 		t.Error("Line2D.SegmentFuzzyEqual", d.l2, d.l1, d.equal)
 	}
-	d.l1.P1, d.l1.P2 = d.l1.P2, d.l1.P1
+	d.l1.P.X, d.l1.P.Y = d.l1.P.X+d.l1.V.X, d.l1.P.Y+d.l1.V.Y
+	d.l1.V.X, d.l1.V.Y = -d.l1.V.X, -d.l1.V.Y
 	if d.l1.SegmentFuzzyEqual(&d.l2) != d.equal {
 		t.Error("Line2D.SegmentFuzzyEqual", d.l1, d.l2, d.equal)
 	}
 	if d.l2.SegmentFuzzyEqual(&d.l1) != d.equal {
 		t.Error("Line2D.SegmentFuzzyEqual", d.l2, d.l1, d.equal)
 	}
-	d.l2.P1, d.l2.P2 = d.l2.P2, d.l2.P1
+	d.l2.P.X, d.l2.P.Y = d.l2.P.X+d.l2.V.X, d.l2.P.Y+d.l2.V.Y
+	d.l2.V.X, d.l2.V.Y = -d.l2.V.X, -d.l2.V.Y
 	if d.l1.SegmentFuzzyEqual(&d.l2) != d.equal {
 		t.Error("Line2D.SegmentFuzzyEqual", d.l1, d.l2, d.equal)
 	}
@@ -248,19 +254,5 @@ func Benchmark_Line2D_Slope(b *testing.B) {
 	l := &Line2D{Vector2D{1, 2}, Vector2D{3, 4}}
 	for i := 0; i < b.N; i++ {
 		l.Slope()
-	}
-}
-
-func TestLine2DToVector(t *testing.T) {
-	l, v := &Line2D{Vector2D{1, 2}, Vector2D{3, 4}}, &Vector2D{}
-	if !l.ToVector(v).Equal(&Vector2D{2, 2}) {
-		t.Error("Line2D.ToVector")
-	}
-}
-
-func Benchmark_Vector2D_ToVector(b *testing.B) {
-	l, v := &Line2D{Vector2D{1, 2}, Vector2D{3, 4}}, &Vector2D{}
-	for i := 0; i < b.N; i++ {
-		l.ToVector(v)
 	}
 }

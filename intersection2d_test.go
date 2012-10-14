@@ -30,16 +30,16 @@ type intersection2DFuzzyLineLineData struct {
 
 var intersection2DFuzzyLineLineValues = []intersection2DFuzzyLineLineData{
 	{Line2D{Vector2D{0, 0}, Vector2D{1, 1}},
-		Line2D{Vector2D{0, 1}, Vector2D{1, 0}},
+		Line2D{Vector2D{0, 1}, Vector2D{1, -1}},
 		Vector2D{0.5, 0.5}, 1},
 	{Line2D{Vector2D{0, 0}, Vector2D{-1, -1}},
-		Line2D{Vector2D{0, 1}, Vector2D{1, 0}},
+		Line2D{Vector2D{0, 1}, Vector2D{1, -1}},
 		Vector2D{0.5, 0.5}, 1},
 	{Line2D{Vector2D{0, 0}, Vector2D{1, 1}},
-		Line2D{Vector2D{1, 0}, Vector2D{2, 1}},
+		Line2D{Vector2D{1, 0}, Vector2D{1, 1}},
 		Vector2D{}, 0},
 	{Line2D{Vector2D{0, 0}, Vector2D{1, 1}},
-		Line2D{Vector2D{-1, -1}, Vector2D{0, 0}},
+		Line2D{Vector2D{-1, -1}, Vector2D{1, 1}},
 		Vector2D{}, -1},
 }
 
@@ -62,11 +62,13 @@ func TestIntersection2DFuzzyLineLine(t *testing.T) {
 		testIntersection2DFuzzyLineLine(v, t)
 		v.l1, v.l2 = v.l2, v.l1
 		testIntersection2DFuzzyLineLine(v, t)
-		v.l1.P1, v.l1.P2 = v.l1.P2, v.l1.P1
+		v.l1.P.X, v.l1.P.Y = v.l1.P.X+v.l1.V.X, v.l1.P.Y+v.l1.V.Y
+		v.l1.V.X, v.l1.V.Y = -v.l1.V.X, -v.l1.V.Y
 		testIntersection2DFuzzyLineLine(v, t)
 		v.l1, v.l2 = v.l2, v.l1
 		testIntersection2DFuzzyLineLine(v, t)
-		v.l1.P1, v.l1.P2 = v.l1.P2, v.l1.P1
+		v.l1.P.X, v.l1.P.Y = v.l1.P.X+v.l1.V.X, v.l1.P.Y+v.l1.V.Y
+		v.l1.V.X, v.l1.V.Y = -v.l1.V.X, -v.l1.V.Y
 		testIntersection2DFuzzyLineLine(v, t)
 		v.l1, v.l2 = v.l2, v.l1
 		testIntersection2DFuzzyLineLine(v, t)
@@ -109,27 +111,27 @@ type intersection2DFuzzyLineSegmentLineSegmentData struct {
 var intersection2DFuzzyLineSegmentLineSegmentValues = []intersection2DFuzzyLineSegmentLineSegmentData{
 	// intersect
 	{Line2D{Vector2D{0, 0}, Vector2D{1, 1}},
-		Line2D{Vector2D{0, 1}, Vector2D{1, 0}},
+		Line2D{Vector2D{0, 1}, Vector2D{1, -1}},
 		Vector2D{0.5, 0.5}, 1},
 	// intersect if they were lines
 	{Line2D{Vector2D{0, 0}, Vector2D{-1, -1}},
-		Line2D{Vector2D{0, 1}, Vector2D{1, 0}},
+		Line2D{Vector2D{0, 1}, Vector2D{1, -1}},
 		Vector2D{}, 0},
 	// parallel but not coincident
 	{Line2D{Vector2D{0, 0}, Vector2D{1, 1}},
-		Line2D{Vector2D{1, 0}, Vector2D{2, 1}},
+		Line2D{Vector2D{1, 0}, Vector2D{1, 1}},
 		Vector2D{}, 0},
 	// coincident
 	{Line2D{Vector2D{0, 0}, Vector2D{1, 1}},
-		Line2D{Vector2D{-0.5, -0.5}, Vector2D{0.5, 0.5}},
+		Line2D{Vector2D{-0.5, -0.5}, Vector2D{1, 1}},
 		Vector2D{}, -1},
 	// coincident if lines
 	{Line2D{Vector2D{0, 0}, Vector2D{1, 1}},
-		Line2D{Vector2D{-2, -2}, Vector2D{-1, -1}},
+		Line2D{Vector2D{-2, -2}, Vector2D{1, 1}},
 		Vector2D{}, 0},
 	// endpoints match
 	{Line2D{Vector2D{0, 0}, Vector2D{1, 1}},
-		Line2D{Vector2D{2, 2}, Vector2D{1, 1}},
+		Line2D{Vector2D{2, 2}, Vector2D{-1, -1}},
 		Vector2D{1, 1}, 1},
 }
 
@@ -152,11 +154,13 @@ func TestIntersection2DFuzzyLineSegmentLineSegment(t *testing.T) {
 		testIntersection2DFuzzyLineSegmentLineSegment(v, t)
 		v.l1, v.l2 = v.l2, v.l1
 		testIntersection2DFuzzyLineSegmentLineSegment(v, t)
-		v.l1.P1, v.l1.P2 = v.l1.P2, v.l1.P1
+		v.l1.P.X, v.l1.P.Y = v.l1.P.X+v.l1.V.X, v.l1.P.Y+v.l1.V.Y
+		v.l1.V.X, v.l1.V.Y = -v.l1.V.X, -v.l1.V.Y
 		testIntersection2DFuzzyLineSegmentLineSegment(v, t)
 		v.l1, v.l2 = v.l2, v.l1
 		testIntersection2DFuzzyLineSegmentLineSegment(v, t)
-		v.l1.P1, v.l1.P2 = v.l1.P2, v.l1.P1
+		v.l1.P.X, v.l1.P.Y = v.l1.P.X+v.l1.V.X, v.l1.P.Y+v.l1.V.Y
+		v.l1.V.X, v.l1.V.Y = -v.l1.V.X, -v.l1.V.Y
 		testIntersection2DFuzzyLineSegmentLineSegment(v, t)
 		v.l1, v.l2 = v.l2, v.l1
 		testIntersection2DFuzzyLineSegmentLineSegment(v, t)
@@ -206,16 +210,16 @@ type intersection2DLineLineData struct {
 
 var intersection2DLineLineValues = []intersection2DLineLineData{
 	{Line2D{Vector2D{0, 0}, Vector2D{1, 1}},
-		Line2D{Vector2D{0, 1}, Vector2D{1, 0}},
+		Line2D{Vector2D{0, 1}, Vector2D{1, -1}},
 		Vector2D{0.5, 0.5}},
 	{Line2D{Vector2D{0, 0}, Vector2D{-1, -1}},
-		Line2D{Vector2D{0, 1}, Vector2D{1, 0}},
+		Line2D{Vector2D{0, 1}, Vector2D{1, -1}},
 		Vector2D{0.5, 0.5}},
 	{Line2D{Vector2D{0, 0}, Vector2D{1, 1}},
-		Line2D{Vector2D{1, 0}, Vector2D{2, 1}},
+		Line2D{Vector2D{1, 0}, Vector2D{1, 1}},
 		Vector2D{math.Inf(1), math.Inf(1)}},
 	{Line2D{Vector2D{0, 0}, Vector2D{1, 1}},
-		Line2D{Vector2D{-2, -2}, Vector2D{-1, -1}},
+		Line2D{Vector2D{-2, -2}, Vector2D{1, 1}},
 		Vector2D{math.NaN(), math.NaN()}},
 }
 
@@ -232,9 +236,11 @@ func testIntersection2DLineLine(d intersection2DLineLineData, t *testing.T) {
 func TestIntersection2DLineLine(t *testing.T) {
 	for _, v := range intersection2DLineLineValues {
 		testIntersection2DLineLine(v, t)
-		v.l1.P1, v.l1.P2 = v.l1.P2, v.l1.P1
+		v.l1.P.X, v.l1.P.Y = v.l1.P.X+v.l1.V.X, v.l1.P.Y+v.l1.V.Y
+		v.l1.V.X, v.l1.V.Y = -v.l1.V.X, -v.l1.V.Y
 		testIntersection2DLineLine(v, t)
-		v.l2.P1, v.l2.P2 = v.l2.P2, v.l2.P1
+		v.l2.P.X, v.l2.P.Y = v.l2.P.X+v.l2.V.X, v.l2.P.Y+v.l2.V.Y
+		v.l2.V.X, v.l2.V.Y = -v.l2.V.X, -v.l2.V.Y
 		testIntersection2DLineLine(v, t)
 	}
 }
