@@ -4,105 +4,97 @@ import (
 	"math"
 )
 
-// A Line3D representes a 3D line by two points P1 and P2 (represented by
-// vectors) on the line. The line is treated as an infinite line unless a
-// method explicitly says otherwise. If treated as a segment then P1 and P2 are
-// the end points of the line segment.
+// A Line3D represents a 3D line, line segment, or ray by a point P and vector
+// V. Methods by default assume a line unless the method states otherwise.
 type Line3D struct {
-	P1, P2 Vector3D
+	P Vector3D // a point on the line
+	// a vector pointing in the line or ray direction (not necessarily
+	// normalized), or a vector pointing to the second end point on a line
+	// segment relative to P
+	V Vector3D
 }
 
 // Copy sets z to x and returns z.
 func (z *Line3D) Copy(x *Line3D) *Line3D {
-	z.P1.X = x.P1.X
-	z.P1.Y = x.P1.Y
-	z.P1.Z = x.P1.Z
-	z.P2.X = x.P2.X
-	z.P2.Y = x.P2.Y
-	z.P2.Z = x.P2.Z
+	z.P.X = x.P.X
+	z.P.Y = x.P.Y
+	z.P.Z = x.P.Z
+	z.V.X = x.V.X
+	z.V.Y = x.V.Y
+	z.V.Z = x.V.Z
 	return z
 }
 
 // Equal compares a and b then returns true if they are exactly equal or false
 // otherwise.
 func (a *Line3D) Equal(b *Line3D) bool {
-	// check if b.P1 lies on a
-	adx, ady, adz := a.P2.X-a.P1.X, a.P2.Y-a.P1.Y, a.P2.Z-a.P1.Z
-	u := (adx*(b.P1.X-a.P1.X) + ady*(b.P1.Y-a.P1.Y) + adz*(b.P1.Z-a.P1.Z)) /
-		(adx*adx + ady*ady + adz*adz)
-	if b.P1.X != (a.P1.X+adx*u) || b.P1.Y != (a.P1.Y+ady*u) ||
-		b.P1.Z != (a.P1.Z+adz*u) {
+	// check if b.P lies on a
+	u := (a.V.X*(b.P.X-a.P.X) + a.V.Y*(b.P.Y-a.P.Y) + a.V.Z*(b.P.Z-a.P.Z)) / (a.V.X*a.V.X + a.V.Y*a.V.Y + a.V.Z*a.V.Z)
+	if b.P.X != (a.P.X+a.V.X*u) || b.P.Y != (a.P.Y+a.V.Y*u) || b.P.Z != (a.P.Z+a.V.Z*u) {
 		return false
 	}
 	// check if the direction of the two lines is equal
-	var iadx, ibdx float64
-	if adx != 0 {
-		iadx, ibdx = 1/adx, 1/(b.P2.X-b.P1.X)
+	if a.V.X == 0 && b.V.X == 0 {
+		if a.V.Y == 0 && b.V.Y == 0 {
+			return true
+		}
+		iady, ibdy := 1/a.V.Y, 1/b.V.Y
+		return a.V.X*iady == b.V.X*ibdy && a.V.Z*iady == b.V.Z*ibdy
 	}
-	return ady*iadx == (b.P2.Y-b.P1.Y)*ibdx &&
-		adz*iadx == (b.P2.Z-b.P1.Z)*ibdx
+	iadx, ibdx := 1/a.V.X, 1/b.V.X
+	return a.V.Y*iadx == b.V.Y*ibdx && a.V.Z*iadx == b.V.Z*ibdx
 }
 
 // FuzzyEqual compares a and b and returns true if they are very close or false
 // otherwise.
 func (a *Line3D) FuzzyEqual(b *Line3D) bool {
-	// check if b.P1 lies on a
-	adx, ady, adz := a.P2.X-a.P1.X, a.P2.Y-a.P1.Y, a.P2.Z-a.P1.Z
-	u := (adx*(b.P1.X-a.P1.X) + ady*(b.P1.Y-a.P1.Y) + adz*(b.P1.Z-a.P1.Z)) /
-		(adx*adx + ady*ady + adz*adz)
-	d := math.Abs(b.P1.X - (a.P1.X + adx*u))
-	d += math.Abs(b.P1.Y - (a.P1.Y + ady*u))
-	d += math.Abs(b.P1.Z - (a.P1.Z + adz*u))
+	// check if b.P lies on a
+	u := (a.V.X*(b.P.X-a.P.X) + a.V.Y*(b.P.Y-a.P.Y) + a.V.Z*(b.P.Z-a.P.Z)) / (a.V.X*a.V.X + a.V.Y*a.V.Y + a.V.Z*a.V.Z)
+	d := math.Abs(b.P.X-(a.P.X+a.V.X*u)) + math.Abs(b.P.Y-(a.P.Y+a.V.Y*u)) + math.Abs(b.P.Z-(a.P.Z+a.V.Z*u))
 	if !FuzzyEqual(d, 0) {
 		return false
 	}
 	// check if the direction of the two lines is equal
-	var iadx, ibdx float64
-	if adx != 0 {
-		iadx, ibdx = 1/adx, 1/(b.P2.X-b.P1.X)
+	if FuzzyEqual(a.V.X, 0) && FuzzyEqual(b.V.X, 0) {
+		if FuzzyEqual(a.V.Y, 0) && FuzzyEqual(b.V.Y, 0) {
+			return true
+		}
+		iady, ibdy := 1/a.V.Y, 1/b.V.Y
+		return FuzzyEqual(a.V.X*iady-b.V.X*ibdy, 0) && FuzzyEqual(a.V.Z*iady-b.V.Z*ibdy, 0)
 	}
-	dyr := ady*iadx - (b.P2.Y-b.P1.Y)*ibdx
-	dzr := adz*iadx - (b.P2.Z-b.P1.Z)*ibdx
-	return FuzzyEqual(dyr, 0) && FuzzyEqual(dzr, 0)
+	iadx, ibdx := 1/a.V.X, 1/b.V.X
+	return FuzzyEqual(a.V.Y*iadx-b.V.Y*ibdx, 0) && FuzzyEqual(a.V.Z*iadx-b.V.Z*ibdx, 0)
 }
 
 // Length returns the length of line segment x.
 func (x *Line3D) Length() float64 {
-	dx, dy, dz := x.P2.X-x.P1.X, x.P2.Y-x.P1.Y, x.P2.Z-x.P1.Z
-	return math.Sqrt(dx*dx + dy*dy + dz*dz)
+	return math.Sqrt(x.V.X*x.V.X + x.V.Y*x.V.Y + x.V.Z*x.V.Z)
 }
 
 // LengthSquared returns the squared length of line segment x.
 func (x *Line3D) LengthSquared() float64 {
-	dx, dy, dz := x.P2.X-x.P1.X, x.P2.Y-x.P1.Y, x.P2.Z-x.P1.Z
-	return dx*dx + dy*dy + dz*dz
+	return x.V.X*x.V.X + x.V.Y*x.V.Y + x.V.Z*x.V.Z
 }
 
 // Midpoint sets point z to the line segment x's midpoint, then returns z.
 func (x *Line3D) Midpoint(z *Vector3D) *Vector3D {
-	z.X = (x.P1.X + x.P2.X) * 0.5
-	z.Y = (x.P1.Y + x.P2.Y) * 0.5
-	z.Z = (x.P1.Z + x.P2.Z) * 0.5
+	z.X = x.P.X + x.V.X*0.5
+	z.Y = x.P.Y + x.V.Y*0.5
+	z.Z = x.P.Z + x.V.Z*0.5
 	return z
 }
 
 // SegmentEqual compares line segments a and b and returns true if they are
 // exactly equal or false otherwise.
 func (a *Line3D) SegmentEqual(b *Line3D) bool {
-	return (a.P1 == b.P1 && a.P2 == b.P2) || (a.P1 == b.P2 && a.P2 == b.P1)
+	return (a.P == b.P && a.V == b.V) || (a.P.X+a.V.X == b.P.X && a.P.Y+a.V.Y == b.P.Y && a.P.Z+a.V.Z == b.P.Z &&
+		-a.V.X == b.V.X && -a.V.Y == b.V.Y && -a.V.Z == b.V.Z)
 }
 
 // SegmentFuzzyEqual compares line segments a and b and returns true if they
 // are very close and false otherwise.
 func (a *Line3D) SegmentFuzzyEqual(b *Line3D) bool {
-	return (a.P1.FuzzyEqual(&b.P1) && a.P2.FuzzyEqual(&b.P2)) ||
-		(a.P1.FuzzyEqual(&b.P2) && a.P2.FuzzyEqual(&b.P1))
-}
-
-// ToVector sets z to the vector from a.P1 to a.P2, then returns z.
-func (x *Line3D) ToVector(z *Vector3D) *Vector3D {
-	z.X = x.P2.X - x.P1.X
-	z.Y = x.P2.Y - x.P1.Y
-	z.Z = x.P2.Z - x.P1.Z
-	return z
+	return (a.P.FuzzyEqual(&b.P) && a.V.FuzzyEqual(&b.V)) || (FuzzyEqual(a.P.X+a.V.X, b.P.X) &&
+		FuzzyEqual(a.P.Y+a.V.Y, b.P.Y) && FuzzyEqual(a.P.Z+a.V.Z, b.P.Z) && FuzzyEqual(-a.V.X, b.V.X) &&
+		FuzzyEqual(-a.V.Y, b.V.Y) && FuzzyEqual(-a.V.Z, b.V.Z))
 }

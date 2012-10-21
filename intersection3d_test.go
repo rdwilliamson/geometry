@@ -9,18 +9,14 @@ type intersection3DLineLineData struct {
 }
 
 var intersection3DLineLineValues = []intersection3DLineLineData{
-	{Line3D{Vector3D{1, 2, 1}, Vector3D{3, 3, 3}},
-		Line3D{Vector3D{1, 2, 1}, Vector3D{1, 2, 3}},
-		Line3D{Vector3D{1, 2, 1}, Vector3D{1, 2, 1}}},
-	{Line3D{Vector3D{1, 2, 1}, Vector3D{5, 4, 5}},
-		Line3D{Vector3D{5, 6, 1}, Vector3D{1, 4, 5}},
-		Line3D{Vector3D{3.4, 3.2, 3.4}, Vector3D{2.6, 4.8, 3.4}}},
-	{Line3D{Vector3D{5, 4, 5}, Vector3D{3, 3, 3}},
-		Line3D{Vector3D{1, 2, 5}, Vector3D{1, 2, 3}},
-		Line3D{Vector3D{1, 2, 1}, Vector3D{1, 2, 1}}},
-	{Line3D{Vector3D{1, 2, 1}, Vector3D{-3, 0, -3}},
-		Line3D{Vector3D{5, 6, 1}, Vector3D{9, 8, -3}},
-		Line3D{Vector3D{3.4, 3.2, 3.4}, Vector3D{2.6, 4.8, 3.4}}},
+	{Line3D{Vector3D{1, 2, 1}, Vector3D{2, 1, 2}}, Line3D{Vector3D{1, 2, 1}, Vector3D{0, 0, 2}},
+		Line3D{Vector3D{1, 2, 1}, Vector3D{0, 0, 0}}},
+	{Line3D{Vector3D{1, 2, 1}, Vector3D{4, 2, 4}}, Line3D{Vector3D{5, 6, 1}, Vector3D{-4, -2, 4}},
+		Line3D{Vector3D{3.4, 3.2, 3.4}, Vector3D{-0.8, 1.6, 0}}},
+	{Line3D{Vector3D{5, 4, 5}, Vector3D{-2, -1, -2}}, Line3D{Vector3D{1, 2, 5}, Vector3D{0, 0, -2}},
+		Line3D{Vector3D{1, 2, 1}, Vector3D{0, 0, 0}}},
+	{Line3D{Vector3D{1, 2, 1}, Vector3D{-4, -2, -4}}, Line3D{Vector3D{5, 6, 1}, Vector3D{4, 2, -4}},
+		Line3D{Vector3D{3.4, 3.2, 3.4}, Vector3D{-0.8, 1.6, 0}}},
 }
 
 func testIntersection3DLineLine(d intersection3DLineLineData, t *testing.T) {
@@ -33,11 +29,13 @@ func testIntersection3DLineLine(d intersection3DLineLineData, t *testing.T) {
 func TestIntersection3DLineLine(t *testing.T) {
 	for _, v := range intersection3DLineLineValues {
 		testIntersection3DLineLine(v, t)
-		v.l1.P1, v.l1.P2 = v.l1.P2, v.l1.P1
+		v.l1.P.X, v.l1.P.Y, v.l1.P.Z = v.l1.P.X+v.l1.V.X, v.l1.P.Y+v.l1.V.Y, v.l1.P.Z+v.l1.V.Z
+		v.l1.V.X, v.l1.V.Y, v.l1.V.Z = -v.l1.V.X, -v.l1.V.Y, -v.l1.V.Z
 		testIntersection3DLineLine(v, t)
 		v.l1, v.l2 = v.l2, v.l1
 		testIntersection3DLineLine(v, t)
-		v.l1.P1, v.l1.P2 = v.l1.P2, v.l1.P1
+		v.l1.P.X, v.l1.P.Y, v.l1.P.Z = v.l1.P.X+v.l1.V.X, v.l1.P.Y+v.l1.V.Y, v.l1.P.Z+v.l1.V.Z
+		v.l1.V.X, v.l1.V.Y, v.l1.V.Z = -v.l1.V.X, -v.l1.V.Y, -v.l1.V.Z
 		testIntersection3DLineLine(v, t)
 		v.l1, v.l2 = v.l2, v.l1
 		testIntersection3DLineLine(v, t)
@@ -58,21 +56,16 @@ type intersection3DLineSegmentLineSegmentData struct {
 }
 
 var intersection3DLineSegmentLineSegmentValues = []intersection3DLineSegmentLineSegmentData{
-	{Line3D{Vector3D{-1, 1, -1}, Vector3D{3, 3, 3}},
-		Line3D{Vector3D{1, 2, -1}, Vector3D{1, 2, 3}},
-		Line3D{Vector3D{1, 2, 1}, Vector3D{1, 2, 1}}},
-	{Line3D{Vector3D{-1, 1, -1}, Vector3D{-3, 0, -3}},
-		Line3D{Vector3D{1, 2, -1}, Vector3D{1, 2, 3}},
-		Line3D{Vector3D{-1, 1, -1}, Vector3D{1, 2, 1}}},
-	{Line3D{Vector3D{-1, 1, -1}, Vector3D{3, 3, 3}},
-		Line3D{Vector3D{1, 2, -1}, Vector3D{1, 2, -3}},
-		Line3D{Vector3D{1, 2, 1}, Vector3D{1, 2, -1}}},
-	{Line3D{Vector3D{-1, 1, -1}, Vector3D{-3, 0, -3}},
-		Line3D{Vector3D{1, 2, -1}, Vector3D{1, 2, -3}},
-		Line3D{Vector3D{-1, 1, -1}, Vector3D{1, 2, -1}}},
-	{Line3D{Vector3D{1, 2, 1}, Vector3D{5, 4, 5}},
-		Line3D{Vector3D{5, 6, 1}, Vector3D{1, 4, 5}},
-		Line3D{Vector3D{3.4, 3.2, 3.4}, Vector3D{2.6, 4.8, 3.4}}},
+	{Line3D{Vector3D{-1, 1, -1}, Vector3D{4, 2, 4}}, Line3D{Vector3D{1, 2, -1}, Vector3D{0, 0, 4}},
+		Line3D{Vector3D{1, 2, 1}, Vector3D{0, 0, 0}}},
+	{Line3D{Vector3D{-1, 1, -1}, Vector3D{-2, -1, -2}}, Line3D{Vector3D{1, 2, -1}, Vector3D{0, 0, 4}},
+		Line3D{Vector3D{-1, 1, -1}, Vector3D{2, 1, 2}}},
+	{Line3D{Vector3D{-1, 1, -1}, Vector3D{4, 2, 4}}, Line3D{Vector3D{1, 2, -1}, Vector3D{0, 0, -2}},
+		Line3D{Vector3D{1, 2, 1}, Vector3D{0, 0, -2}}},
+	{Line3D{Vector3D{-1, 1, -1}, Vector3D{-2, -1, -2}}, Line3D{Vector3D{1, 2, -1}, Vector3D{0, 0, -2}},
+		Line3D{Vector3D{-1, 1, -1}, Vector3D{2, 1, 0}}},
+	{Line3D{Vector3D{1, 2, 1}, Vector3D{4, 2, 4}}, Line3D{Vector3D{5, 6, 1}, Vector3D{-4, -2, 4}},
+		Line3D{Vector3D{3.4, 3.2, 3.4}, Vector3D{-0.8, 1.6, 0}}},
 }
 
 func testIntersection3DLineSegmentLineSegment(d intersection3DLineSegmentLineSegmentData, t *testing.T) {
@@ -86,11 +79,13 @@ func testIntersection3DLineSegmentLineSegment(d intersection3DLineSegmentLineSeg
 func TestIntersection3DLineSegmentLineSegment(t *testing.T) {
 	for _, v := range intersection3DLineSegmentLineSegmentValues {
 		testIntersection3DLineSegmentLineSegment(v, t)
-		v.l1.P1, v.l1.P2 = v.l1.P2, v.l1.P1
+		v.l1.P.X, v.l1.P.Y, v.l1.P.Z = v.l1.P.X+v.l1.V.X, v.l1.P.Y+v.l1.V.Y, v.l1.P.Z+v.l1.V.Z
+		v.l1.V.X, v.l1.V.Y, v.l1.V.Z = -v.l1.V.X, -v.l1.V.Y, -v.l1.V.Z
 		testIntersection3DLineSegmentLineSegment(v, t)
 		v.l1, v.l2 = v.l2, v.l1
 		testIntersection3DLineSegmentLineSegment(v, t)
-		v.l1.P1, v.l1.P2 = v.l1.P2, v.l1.P1
+		v.l1.P.X, v.l1.P.Y, v.l1.P.Z = v.l1.P.X+v.l1.V.X, v.l1.P.Y+v.l1.V.Y, v.l1.P.Z+v.l1.V.Z
+		v.l1.V.X, v.l1.V.Y, v.l1.V.Z = -v.l1.V.X, -v.l1.V.Y, -v.l1.V.Z
 		testIntersection3DLineSegmentLineSegment(v, t)
 		v.l1, v.l2 = v.l2, v.l1
 		testIntersection3DLineSegmentLineSegment(v, t)
@@ -108,7 +103,7 @@ func Benchmark_Intersection3D_LineSegmentLineSegment(b *testing.B) {
 
 func TestIntersection3DPlaneLine(t *testing.T) {
 	p := &Plane{1, -2, 1, -7}
-	l := &Line3D{Vector3D{5, -1, -1}, Vector3D{8, -2, 0}}
+	l := &Line3D{Vector3D{5, -1, -1}, Vector3D{3, -1, 1}}
 	want, got := &Vector3D{11.0 / 2.0, -7.0 / 6.0, -5.0 / 6.0}, &Vector3D{}
 	if Intersection3DPlaneLine(p, l, got); !got.Equal(want) {
 		t.Error("Intersection3D.PlaneLine", *p, *l, "want", want, "got", got)
@@ -126,7 +121,7 @@ func Benchmark_Intersection3D_PlaneLine(b *testing.B) {
 
 func TestIntersection3DPlanePlane(t *testing.T) {
 	p1, p2 := &Plane{1, 1, 1, 1}, &Plane{1, 2, 3, 4}
-	got, want := &Line3D{}, &Line3D{Vector3D{3, -5, 1}, Vector3D{4, -7, 2}}
+	got, want := &Line3D{}, &Line3D{Vector3D{3, -5, 1}, Vector3D{1, -2, 1}}
 	if Intersection3DPlanePlane(p1, p2, got); !got.FuzzyEqual(want) {
 		t.Error("Intersection3D.PlanePlane", *p1, *p2, "want", want, "got", got)
 	}
@@ -167,12 +162,10 @@ type intersection3DFuzzyPlaneLineData struct {
 }
 
 var intersection3DFuzzyPlaneLineValues = []intersection3DFuzzyPlaneLineData{
-	{Plane{1, -2, 1, -7}, Line3D{Vector3D{5, -1, -1}, Vector3D{8, -2, 0}},
+	{Plane{1, -2, 1, -7}, Line3D{Vector3D{5, -1, -1}, Vector3D{3, -1, 1}},
 		Vector3D{11.0 / 2.0, -7.0 / 6.0, -5.0 / 6.0}, 1},
-	{Plane{1, 0, 0, 0}, Line3D{Vector3D{1, 0, 0}, Vector3D{1, 1, 0}},
-		Vector3D{}, 0},
-	{Plane{1, 0, 0, 0}, Line3D{Vector3D{0, 0, 0}, Vector3D{0, 1, 0}},
-		Vector3D{}, -1},
+	{Plane{1, 0, 0, 0}, Line3D{Vector3D{1, 0, 0}, Vector3D{0, 1, 0}}, Vector3D{}, 0},
+	{Plane{1, 0, 0, 0}, Line3D{Vector3D{}, Vector3D{0, 1, 0}}, Vector3D{}, -1},
 }
 
 func testIntersection3DFuzzyPlaneLine(d intersection3DFuzzyPlaneLineData, t *testing.T) {
@@ -185,19 +178,13 @@ func testIntersection3DFuzzyPlaneLine(d intersection3DFuzzyPlaneLineData, t *tes
 		t.Error("Intersection3D.FuzzyPlaneLine", d.pl, d.l, "want", d.pt,
 			"got", *pt)
 	}
-	d.l.P1, d.l.P2 = d.l.P2, d.l.P1
-	got = Intersection3DFuzzyPlaneLine(&d.pl, &d.l, pt)
-	if got != d.n {
-		t.Error("Intersection3D.FuzzyPlaneLine", d.pl, d.l, "want", d.n, "got",
-			got)
-	} else if !d.pt.FuzzyEqual(pt) {
-		t.Error("Intersection3D.FuzzyPlaneLine", d.pl, d.l, "want", d.pt,
-			"got", *pt)
-	}
 }
 
 func TestIntersection3DFuzzyPlaneLine(t *testing.T) {
 	for _, v := range intersection3DFuzzyPlaneLineValues {
+		testIntersection3DFuzzyPlaneLine(v, t)
+		v.l.P.X, v.l.P.Y, v.l.P.Z = v.l.P.X+v.l.V.X, v.l.P.Y+v.l.V.Y, v.l.P.Z+v.l.V.Z
+		v.l.V.X, v.l.V.Y, v.l.V.Z = -v.l.V.X, -v.l.V.Y, -v.l.V.Z
 		testIntersection3DFuzzyPlaneLine(v, t)
 	}
 }

@@ -4,22 +4,20 @@ package geometry
 // returns 1.
 func Intersection3DLineLine(a, b, z *Line3D) int {
 	// http://local.wasp.uwa.edu.au/~pbourke/geometry/lineline3d/
-	adx, ady, adz := a.P2.X-a.P1.X, a.P2.Y-a.P1.Y, a.P2.Z-a.P1.Z
-	bdx, bdy, bdz := b.P2.X-b.P1.X, b.P2.Y-b.P1.Y, b.P2.Z-b.P1.Z
-	p1dx, p1dy, p1dz := a.P1.X-b.P1.X, a.P1.Y-b.P1.Y, a.P1.Z-b.P1.Z
-	d1343 := p1dx*bdx + p1dy*bdy + p1dz*bdz
-	d4321 := bdx*adx + bdy*ady + bdz*adz
-	d1321 := p1dx*adx + p1dy*ady + p1dz*adz
-	d4343 := bdx*bdx + bdy*bdy + bdz*bdz
-	d2121 := adx*adx + ady*ady + adz*adz
+	pdx, pdy, pdz := a.P.X-b.P.X, a.P.Y-b.P.Y, a.P.Z-b.P.Z
+	d1343 := pdx*b.V.X + pdy*b.V.Y + pdz*b.V.Z
+	d4321 := b.V.X*a.V.X + b.V.Y*a.V.Y + b.V.Z*a.V.Z
+	d1321 := pdx*a.V.X + pdy*a.V.Y + pdz*a.V.Z
+	d4343 := b.V.X*b.V.X + b.V.Y*b.V.Y + b.V.Z*b.V.Z
+	d2121 := a.V.X*a.V.X + a.V.Y*a.V.Y + a.V.Z*a.V.Z
 	mua := (d1343*d4321 - d1321*d4343) / (d2121*d4343 - d4321*d4321)
 	mub := (d1343 + mua*d4321) / d4343
-	z.P1.X = adx*mua + a.P1.X
-	z.P1.Y = ady*mua + a.P1.Y
-	z.P1.Z = adz*mua + a.P1.Z
-	z.P2.X = bdx*mub + b.P1.X
-	z.P2.Y = bdy*mub + b.P1.Y
-	z.P2.Z = bdz*mub + b.P1.Z
+	z.P.X = a.V.X*mua + a.P.X
+	z.P.Y = a.V.Y*mua + a.P.Y
+	z.P.Z = a.V.Z*mua + a.P.Z
+	z.V.X = (b.V.X*mub + b.P.X) - z.P.X
+	z.V.Y = (b.V.Y*mub + b.P.Y) - z.P.Y
+	z.V.Z = (b.V.Z*mub + b.P.Z) - z.P.Z
 	return 1
 }
 
@@ -27,41 +25,39 @@ func Intersection3DLineLine(a, b, z *Line3D) int {
 // between a and b, then returns 1.
 func Intersection3DLineSegmentLineSegment(a, b, z *Line3D) int {
 	// http://local.wasp.uwa.edu.au/~pbourke/geometry/lineline3d/
-	adx, ady, adz := a.P2.X-a.P1.X, a.P2.Y-a.P1.Y, a.P2.Z-a.P1.Z
-	bdx, bdy, bdz := b.P2.X-b.P1.X, b.P2.Y-b.P1.Y, b.P2.Z-b.P1.Z
-	p1dx, p1dy, p1dz := a.P1.X-b.P1.X, a.P1.Y-b.P1.Y, a.P1.Z-b.P1.Z
-	d1343 := p1dx*bdx + p1dy*bdy + p1dz*bdz
-	d4321 := bdx*adx + bdy*ady + bdz*adz
-	d1321 := p1dx*adx + p1dy*ady + p1dz*adz
-	d4343 := bdx*bdx + bdy*bdy + bdz*bdz
-	d2121 := adx*adx + ady*ady + adz*adz
+	pdx, pdy, pdz := a.P.X-b.P.X, a.P.Y-b.P.Y, a.P.Z-b.P.Z
+	d1343 := pdx*b.V.X + pdy*b.V.Y + pdz*b.V.Z
+	d4321 := b.V.X*a.V.X + b.V.Y*a.V.Y + b.V.Z*a.V.Z
+	d1321 := pdx*a.V.X + pdy*a.V.Y + pdz*a.V.Z
+	d4343 := b.V.X*b.V.X + b.V.Y*b.V.Y + b.V.Z*b.V.Z
+	d2121 := a.V.X*a.V.X + a.V.Y*a.V.Y + a.V.Z*a.V.Z
 	mua := (d1343*d4321 - d1321*d4343) / (d2121*d4343 - d4321*d4321)
 	mub := (d1343 + mua*d4321) / d4343
 	if mua < 0 {
-		z.P1.X = a.P1.X
-		z.P1.Y = a.P1.Y
-		z.P1.Z = a.P1.Z
+		z.P.X = a.P.X
+		z.P.Y = a.P.Y
+		z.P.Z = a.P.Z
 	} else if mua > 1 {
-		z.P1.X = a.P2.X
-		z.P1.Y = a.P2.Y
-		z.P1.Z = a.P2.Z
+		z.P.X = a.P.X + a.V.X
+		z.P.Y = a.P.Y + a.V.Y
+		z.P.Z = a.P.Z + a.V.Z
 	} else {
-		z.P1.X = adx*mua + a.P1.X
-		z.P1.Y = ady*mua + a.P1.Y
-		z.P1.Z = adz*mua + a.P1.Z
+		z.P.X = a.V.X*mua + a.P.X
+		z.P.Y = a.V.Y*mua + a.P.Y
+		z.P.Z = a.V.Z*mua + a.P.Z
 	}
 	if mub < 0 {
-		z.P2.X = b.P1.X
-		z.P2.Y = b.P1.Y
-		z.P2.Z = b.P1.Z
+		z.V.X = b.P.X - z.P.X
+		z.V.Y = b.P.Y - z.P.Y
+		z.V.Z = b.P.Z - z.P.Z
 	} else if mub > 1 {
-		z.P2.X = b.P2.X
-		z.P2.Y = b.P2.Y
-		z.P2.Z = b.P2.Z
+		z.V.X = (b.P.X + b.V.X) - z.P.X
+		z.V.Y = (b.P.Y + b.V.Y) - z.P.Y
+		z.V.Z = (b.P.Z + b.V.Z) - z.P.Z
 	} else {
-		z.P2.X = bdx*mub + b.P1.X
-		z.P2.Y = bdy*mub + b.P1.Y
-		z.P2.Z = bdz*mub + b.P1.Z
+		z.V.X = (b.V.X*mub + b.P.X) - z.P.X
+		z.V.Y = (b.V.Y*mub + b.P.Y) - z.P.Y
+		z.V.Z = (b.V.Z*mub + b.P.Z) - z.P.Z
 	}
 	return 1
 }
@@ -70,12 +66,10 @@ func Intersection3DLineSegmentLineSegment(a, b, z *Line3D) int {
 // then returns 1.
 func Intersection3DPlaneLine(a *Plane, b *Line3D, z *Vector3D) int {
 	// http://paulbourke.net/geometry/planeline/
-	bdx, bdy, bdz := b.P1.X-b.P2.X, b.P1.Y-b.P2.Y, b.P1.Z-b.P2.Z
-	u := (a.A*b.P1.X + a.B*b.P1.Y + a.C*b.P1.Z + a.D) /
-		(a.A*bdx + a.B*bdy + a.C*bdz)
-	z.X = b.P1.X - u*bdx
-	z.Y = b.P1.Y - u*bdy
-	z.Z = b.P1.Z - u*bdz
+	u := (a.A*b.P.X + a.B*b.P.Y + a.C*b.P.Z + a.D) / (a.A*b.V.X + a.B*b.V.Y + a.C*b.V.Z)
+	z.X = b.P.X - u*b.V.X
+	z.Y = b.P.Y - u*b.V.Y
+	z.Z = b.P.Z - u*b.V.Z
 	return 1
 }
 
@@ -89,12 +83,12 @@ func Intersection3DPlanePlane(a, b *Plane, z *Line3D) int {
 	d := 1 / (n1n1*n2n2 - n1n2*n1n2)
 	c1 := (b.D*n1n2 - a.D*n2n2) * d
 	c2 := (a.D*n1n2 - b.D*n1n1) * d
-	z.P1.X = c1*a.A + c2*b.A
-	z.P1.Y = c1*a.B + c2*b.B
-	z.P1.Z = c1*a.C + c2*b.C
-	z.P2.X = z.P1.X + (a.B*b.C - a.C*b.B)
-	z.P2.Y = z.P1.Y + (a.C*b.A - a.A*b.C)
-	z.P2.Z = z.P1.Z + (a.A*b.B - a.B*b.A)
+	z.P.X = c1*a.A + c2*b.A
+	z.P.Y = c1*a.B + c2*b.B
+	z.P.Z = c1*a.C + c2*b.C
+	z.V.X = a.B*b.C - a.C*b.B
+	z.V.Y = a.C*b.A - a.A*b.C
+	z.V.Z = a.A*b.B - a.B*b.A
 	return 1
 }
 
@@ -127,9 +121,8 @@ func Intersection3DPlanePlanePlane(a, b, c *Plane, z *Vector3D) int {
 // 1 if an intersection occurs, z is set to the intersection point.
 func Intersection3DFuzzyPlaneLine(a *Plane, b *Line3D, z *Vector3D) int {
 	// http://paulbourke.net/geometry/planeline/
-	bdx, bdy, bdz := b.P1.X-b.P2.X, b.P1.Y-b.P2.Y, b.P1.Z-b.P2.Z
-	dot2 := a.A*bdx + a.B*bdy + a.C*bdz
-	dot1 := a.A*b.P1.X + a.B*b.P1.Y + a.C*b.P1.Z
+	dot2 := a.A*b.V.X + a.B*b.V.Y + a.C*b.V.Z
+	dot1 := a.A*b.P.X + a.B*b.P.Y + a.C*b.P.Z
 	if FuzzyEqual(dot2, 0) {
 		if FuzzyEqual(dot1, 0) {
 			return -1
@@ -137,9 +130,9 @@ func Intersection3DFuzzyPlaneLine(a *Plane, b *Line3D, z *Vector3D) int {
 		return 0
 	}
 	u := (dot1 + a.D) / dot2
-	z.X = b.P1.X - u*bdx
-	z.Y = b.P1.Y - u*bdy
-	z.Z = b.P1.Z - u*bdz
+	z.X = b.P.X - u*b.V.X
+	z.Y = b.P.Y - u*b.V.Y
+	z.Z = b.P.Z - u*b.V.Z
 	return 1
 }
 
@@ -158,8 +151,7 @@ func Intersection3DFuzzyPlanePlane(a, b *Plane, z *Line3D) int {
 	if FuzzyEqual(cpx*cpx+cpy*cpy+cpz*cpz, 0) {
 		// TODO a.A or b.A almost zero
 		s := a.A / b.A
-		if s*a.D*b.D < 0 || !FuzzyEqual(a.B, s*b.B) ||
-			!FuzzyEqual(a.C, s*b.C) ||
+		if s*a.D*b.D < 0 || !FuzzyEqual(a.B, s*b.B) || !FuzzyEqual(a.C, s*b.C) ||
 			!FuzzyEqual(b.D*b.D*n1n1, a.D*a.D*n2n2) {
 			return 0
 		}
@@ -169,12 +161,12 @@ func Intersection3DFuzzyPlanePlane(a, b *Plane, z *Line3D) int {
 	d := 1 / (n1n1*n2n2 - n1n2*n1n2)
 	c1 := (b.D*n1n2 - a.D*n2n2) * d
 	c2 := (a.D*n1n2 - b.D*n1n1) * d
-	z.P1.X = c1*a.A + c2*b.A
-	z.P1.Y = c1*a.B + c2*b.B
-	z.P1.Z = c1*a.C + c2*b.C
-	z.P2.X = z.P1.X + cpx
-	z.P2.Y = z.P1.Y + cpy
-	z.P2.Z = z.P1.Z + cpz
+	z.P.X = c1*a.A + c2*b.A
+	z.P.Y = c1*a.B + c2*b.B
+	z.P.Z = c1*a.C + c2*b.C
+	z.V.X = cpx
+	z.V.Y = cpy
+	z.V.Z = cpz
 	return 1
 }
 
