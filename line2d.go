@@ -76,17 +76,15 @@ func (x *Line2D) Normal(z *Vector2D) *Vector2D {
 // SegmentEqual compares a and b and returns true if the line segments are
 // exactly equal and false otherwise.
 func (a *Line2D) SegmentEqual(b *Line2D) bool {
-	return (a.P == b.P && a.V == b.V) || (a.P == b.V && a.V == b.P)
+	return (a.P == b.P && a.V == b.V) || (a.P.X == b.P.X+b.V.X && a.P.Y == b.P.Y+b.V.Y && -a.V.X == b.V.X &&
+		-a.V.Y == b.V.Y)
 }
 
 // SegmentFuzzyEqual compares a and b as line segments and returns true if they
 // are very close and false otherwise.
 func (a *Line2D) SegmentFuzzyEqual(b *Line2D) bool {
-	var ap2, bp2 Vector2D
-	ap2.Add(&a.P, &a.V)
-	bp2.Add(&b.P, &b.V)
-	return (a.P.FuzzyEqual(&b.P) && ap2.FuzzyEqual(&bp2)) ||
-		(a.P.FuzzyEqual(&bp2) && b.P.FuzzyEqual(&ap2))
+	return (a.P.FuzzyEqual(&b.P) && a.V.FuzzyEqual(&b.V)) || (FuzzyEqual(a.P.X, b.P.X+b.V.X) &&
+		FuzzyEqual(a.P.Y, b.P.Y+b.V.Y) && FuzzyEqual(a.P.X+a.V.X, b.P.X) && FuzzyEqual(a.P.Y+a.V.Y, b.P.Y))
 }
 
 // Slope returns the slope of x.

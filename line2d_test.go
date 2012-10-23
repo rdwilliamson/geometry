@@ -158,8 +158,8 @@ func Benchmark_Line2D_Normal(b *testing.B) {
 }
 
 func TestLine2DSegmentEqual(t *testing.T) {
-	l1 := &Line2D{Vector2D{1, 2}, Vector2D{3, 4}}
-	l2 := &Line2D{Vector2D{3, 4}, Vector2D{1, 2}}
+	l1 := &Line2D{Vector2D{1, 2}, Vector2D{2, 2}}
+	l2 := &Line2D{Vector2D{3, 4}, Vector2D{-2, -2}}
 	if !l1.SegmentEqual(l2) {
 		t.Error("Line2D.SegmentEqual")
 	}
