@@ -24,6 +24,13 @@ func (a *Circle) Equal(b *Circle) bool {
 }
 
 func (z *Circle) FromThreePoints(p1, p2, p3 *Vector2D) *Circle {
+	// from paulbourke.net/geometry/circlesphere
+	ma := (p2.Y - p1.Y) / (p2.X - p1.X)
+	mb := (p3.Y - p2.Y) / (p3.X - p2.X)
+	z.C.X = (ma*mb*(p1.Y-p3.Y) + mb*(p1.X+p2.X) - ma*(p2.X+p3.X)) / (2 * (mb - ma))
+	z.C.Y = (-1/ma)*(z.C.X-(p1.X+p2.X)/2) + (p1.Y+p2.Y)/2
+	dx, dy := p1.X-z.C.X, p1.Y-z.C.Y
+	z.R = math.Sqrt(dx*dx + dy*dy)
 	return z
 }
 
