@@ -5,23 +5,6 @@ import (
 	"testing"
 )
 
-func (v *Vector2D) toPositiveInf() *Vector2D {
-	if math.IsInf(v.X, -1) {
-		v.X = math.Inf(1)
-	}
-	if math.IsInf(v.Y, -1) {
-		v.Y = math.Inf(1)
-	}
-	return v
-}
-
-func (a *Vector2D) nanEqual(b *Vector2D) bool {
-	if math.IsNaN(a.X) && math.IsNaN(a.Y) && math.IsNaN(b.X) && math.IsNaN(b.Y) {
-		return true
-	}
-	return a.Equal(b)
-}
-
 type intersection2DFuzzyLineLineData struct {
 	l1, l2 Line2D
 	p      Vector2D

@@ -1,6 +1,31 @@
 package geometry
 
-import "testing"
+import (
+	"math"
+	"testing"
+)
+
+func (v *Vector2D) toPositiveInf() *Vector2D {
+	if math.IsInf(v.X, -1) {
+		v.X = math.Inf(1)
+	}
+	if math.IsInf(v.Y, -1) {
+		v.Y = math.Inf(1)
+	}
+	return v
+}
+
+func nanFuzzyEqual(a, b float64) bool {
+	return (math.IsNaN(a) && math.IsNaN(b)) || FuzzyEqual(a, b)
+}
+
+func (a *Vector2D) nanEqual(b *Vector2D) bool {
+	return (math.IsNaN(a.X) && math.IsNaN(a.Y) && math.IsNaN(b.X) && math.IsNaN(b.Y)) || a.Equal(b)
+}
+
+func (a *Vector2D) nanFuzzyEqual(b *Vector2D) bool {
+	return (math.IsNaN(a.X) && math.IsNaN(a.Y) && math.IsNaN(b.X) && math.IsNaN(b.Y)) || a.FuzzyEqual(b)
+}
 
 type fuzzyEqualTestData struct {
 	a    float64 // any value
