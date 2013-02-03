@@ -5,6 +5,70 @@ import (
 	"testing"
 )
 
+type circleAreaData struct {
+	c    Circle
+	area float64
+}
+
+var circleAreaValues = []circleAreaData{
+	{Circle{Vector2D{}, 1}, math.Pi},
+}
+
+func testCircleArea(d circleAreaData, t *testing.T) {
+	if got := d.c.Area(); got != math.Pi {
+		t.Error("Circle.Area", d.c, "got", got)
+	}
+}
+
+func TestCircleArea(t *testing.T) {
+	for _, v := range circleAreaValues {
+		testCircleArea(v, t)
+	}
+}
+
+type circleCopyData struct {
+	c Circle
+}
+
+var circleCopyValues = []circleCopyData{
+	{Circle{Vector2D{1, 2}, 3}},
+}
+
+func testCircleCopy(d circleCopyData, t *testing.T) {
+	var c Circle
+	if c.Equal(&d.c) || !c.Copy(&d.c).Equal(&d.c) {
+		t.Error("Circle.Copy")
+	}
+}
+
+func TestCircleCopy(t *testing.T) {
+	for _, v := range circleCopyValues {
+		testCircleCopy(v, t)
+	}
+}
+
+type circleEqualData struct {
+	c1, c2 Circle
+	equal  bool
+}
+
+var circleEqualValues = []circleEqualData{
+	{Circle{Vector2D{1, 2}, 3}, Circle{Vector2D{1, 2}, 3}, true},
+	{Circle{Vector2D{1, 2}, 3}, Circle{Vector2D{1, 2}, 4}, false},
+}
+
+func testCircleEqual(d circleEqualData, t *testing.T) {
+	if d.c1.Equal(&d.c2) != d.equal {
+		t.Error("Circle.Equal", d.c1, d.c2, d.equal)
+	}
+}
+
+func TestCircleEqual(t *testing.T) {
+	for _, v := range circleEqualValues {
+		testCircleEqual(v, t)
+	}
+}
+
 type circleFromThreePointsData struct {
 	p1, p2, p3 Vector2D
 	c          Circle
@@ -39,4 +103,12 @@ func Benchmark_Circle_FromThreePoints(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		c.FromThreePoints(&p1, &p2, &p3)
 	}
+}
+
+func TestCircleFuzzyEqual(t *testing.T) {
+
+}
+
+func TestCirclePreimeter(t *testing.T) {
+
 }
