@@ -75,9 +75,12 @@ type circleFromThreePointsData struct {
 }
 
 var circleFromThreePointsValues = []circleFromThreePointsData{
-	// two points form a vertical line (infinite slope)
-	// {Vector2D{0, 1}, Vector2D{1, 1}, Vector2D{1, 0}, Circle{Vector2D{}, 1}},
-	// colinear
+	// two points form a vertical line
+	{Vector2D{0, 1}, Vector2D{0, 0}, Vector2D{1, 0}, Circle{Vector2D{0.5, 0.5}, math.Sqrt2 / 2}},
+	{Vector2D{0, 0}, Vector2D{0, 1}, Vector2D{1, 0}, Circle{Vector2D{0.5, 0.5}, math.Sqrt2 / 2}},
+	{Vector2D{1, 0}, Vector2D{0, 1}, Vector2D{0, 0}, Circle{Vector2D{0.5, 0.5}, math.Sqrt2 / 2}},
+	{Vector2D{1, 0}, Vector2D{0, 0}, Vector2D{0, 1}, Circle{Vector2D{0.5, 0.5}, math.Sqrt2 / 2}},
+	// collinear
 	{Vector2D{0, 1}, Vector2D{0, 2}, Vector2D{0, 3}, Circle{Vector2D{math.NaN(), math.NaN()}, math.NaN()}},
 	// regular
 	{Vector2D{0, 1}, Vector2D{math.Sqrt2 / 2, math.Sqrt2 / 2}, Vector2D{1, 0}, Circle{Vector2D{}, 1}},
