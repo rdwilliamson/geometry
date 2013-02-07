@@ -45,8 +45,7 @@ func (a *Plane) Equal(b *Plane) bool {
 		}
 	}
 	// check distance (squared) from origin
-	return b.D*b.D*(a.A*a.A+a.B*a.B+a.C*a.C) ==
-		a.D*a.D*(b.A*b.A+b.B*b.B+b.C*b.C)
+	return b.D*b.D*(a.A*a.A+a.B*a.B+a.C*a.C) == a.D*a.D*(b.A*b.A+b.B*b.B+b.C*b.C)
 }
 
 // FromPoints set z to the plane through the three points, then returns z.
@@ -55,8 +54,7 @@ func (z *Plane) FromPoints(p1, p2, p3 *Vector3D) *Plane {
 	z.A = p1.Y*(p2.Z-p3.Z) + p2.Y*(p3.Z-p1.Z) + p3.Y*(p1.Z-p2.Z)
 	z.B = p1.Z*(p2.X-p3.X) + p2.Z*(p3.X-p1.X) + p3.Z*(p1.X-p2.X)
 	z.C = p1.X*(p2.Y-p3.Y) + p2.X*(p3.Y-p1.Y) + p3.X*(p1.Y-p2.Y)
-	z.D = -(p1.X*(p2.Y*p3.Z-p3.Y*p2.Z) + p2.X*(p3.Y*p1.Z-p1.Y*p3.Z) +
-		p3.X*(p1.Y*p2.Z-p2.Y*p1.Z))
+	z.D = -(p1.X*(p2.Y*p3.Z-p3.Y*p2.Z) + p2.X*(p3.Y*p1.Z-p1.Y*p3.Z) + p3.X*(p1.Y*p2.Z-p2.Y*p1.Z))
 	return z
 }
 
