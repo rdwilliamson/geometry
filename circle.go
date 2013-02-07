@@ -24,15 +24,11 @@ func (a *Circle) Equal(b *Circle) bool {
 }
 
 func (z *Circle) FromThreePoints(p1, p2, p3 *Vector2D) *Circle {
-	// from paulbourke.net/geometry/circlesphere
+	// http://paulbourke.net/geometry/circlesphere
 	if p1.X == p2.X {
-		tmp := p2
-		p2 = p3
-		p3 = tmp
+		p2, p3 = p3, p2
 	} else if p2.X == p3.X {
-		tmp := p2
-		p2 = p1
-		p1 = tmp
+		p1, p2 = p2, p1
 	}
 	ma := (p2.Y - p1.Y) / (p2.X - p1.X)
 	mb := (p3.Y - p2.Y) / (p3.X - p2.X)

@@ -82,6 +82,7 @@ var circleFromThreePointsValues = []circleFromThreePointsData{
 	{Vector2D{1, 0}, Vector2D{0, 0}, Vector2D{0, 1}, Circle{Vector2D{0.5, 0.5}, math.Sqrt2 / 2}},
 	// collinear
 	{Vector2D{0, 1}, Vector2D{0, 2}, Vector2D{0, 3}, Circle{Vector2D{math.NaN(), math.NaN()}, math.NaN()}},
+	{Vector2D{1, 0}, Vector2D{2, 0}, Vector2D{3, 0}, Circle{Vector2D{math.NaN(), math.NaN()}, math.NaN()}},
 	// regular
 	{Vector2D{0, 1}, Vector2D{math.Sqrt2 / 2, math.Sqrt2 / 2}, Vector2D{1, 0}, Circle{Vector2D{}, 1}},
 }
