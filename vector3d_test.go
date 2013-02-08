@@ -143,6 +143,20 @@ func Benchmark_Vector3D_DirectionFuzzyEqual(b *testing.B) {
 	}
 }
 
+func TestVector3DDivide(t *testing.T) {
+	r, v1, v2 := &Vector3D{}, &Vector3D{2, 4, 6}, &Vector3D{2, 2, 2}
+	if !r.Divide(v1, v2).Equal(&Vector3D{1, 2, 3}) {
+		t.Error("Vector3D.Divide")
+	}
+}
+
+func Benchmark_Vector3D_Divide(b *testing.B) {
+	r, v1, v2 := &Vector3D{}, &Vector3D{2, 4, 6}, &Vector3D{2, 2, 2}
+	for i := 0; i < b.N; i++ {
+		r.Divide(v1, v2)
+	}
+}
+
 func TestVector3DDotProduct(t *testing.T) {
 	v1, v2 := &Vector3D{1, 2, 5}, &Vector3D{3, 4, 6}
 	if v1.DotProduct(v2) != 41 {
