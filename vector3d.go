@@ -114,7 +114,7 @@ func (x *Vector3D) MagnitudeSquared() float64 {
 	return x.X*x.X + x.Y*x.Y + x.Z*x.Z
 }
 
-// Multiply sets z to the piecewise multiplication of a*b then returns z.
+// Multiply sets z to the piecewise multiplication of a*b then returns z
 func (z *Vector3D) Multiply(a, b *Vector3D) *Vector3D {
 	z.X = a.X * b.X
 	z.Y = a.Y * b.Y
@@ -122,8 +122,17 @@ func (z *Vector3D) Multiply(a, b *Vector3D) *Vector3D {
 	return z
 }
 
-// Normalize sets z to a unit vector in the same direction as x then returns z.
-func (z *Vector3D) Normalize(x *Vector3D) *Vector3D {
+// Normalize sets x to a unit vector in the same direction as x then returns x.
+func (x *Vector3D) Normalize() *Vector3D {
+	l := 1 / math.Sqrt(x.X*x.X+x.Y*x.Y+x.Z*x.Z)
+	x.X *= l
+	x.Y *= l
+	x.Z *= l
+	return x
+}
+
+// Normalized sets z to a unit vector in the same direction as x then returns z.
+func (z *Vector3D) Normalized(x *Vector3D) *Vector3D {
 	l := 1 / math.Sqrt(x.X*x.X+x.Y*x.Y+x.Z*x.Z)
 	z.X = x.X * l
 	z.Y = x.Y * l

@@ -253,18 +253,18 @@ func Benchmark_Vector3D_MagnitudeSquared(b *testing.B) {
 	}
 }
 
-func TestVector3DNormalize(t *testing.T) {
+func TestVector3DNormalized(t *testing.T) {
 	s := 1 / math.Sqrt(29)
 	v1, v2 := &Vector3D{2, 3, 4}, &Vector3D{s * 2, s * 3, s * 4}
-	if !v1.Normalize(v1).FuzzyEqual(v2) {
-		t.Error("Vector3D.Normalize")
+	if !v1.Normalized(v1).FuzzyEqual(v2) {
+		t.Error("Vector3D.Normalized")
 	}
 }
 
-func Benchmark_Vector3D_Normalize(b *testing.B) {
+func Benchmark_Vector3D_Normalized(b *testing.B) {
 	v1, v2 := &Vector3D{2, 3, 4}, &Vector3D{}
 	for i := 0; i < b.N; i++ {
-		v1.Normalize(v2)
+		v1.Normalized(v2)
 	}
 }
 

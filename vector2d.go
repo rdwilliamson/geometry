@@ -93,8 +93,16 @@ func (z *Vector2D) Multiply(a, b *Vector2D) *Vector2D {
 	return z
 }
 
-// Normalize sets z to a unit vector in the same direction as x then returns z.
-func (z *Vector2D) Normalize(x *Vector2D) *Vector2D {
+// Normalize sets x to a unit vector in the same direction as x then returns x.
+func (x *Vector2D) Normalize() *Vector2D {
+	l := 1 / math.Sqrt(x.X*x.X+x.Y*x.Y)
+	x.X *= l
+	x.Y *= l
+	return x
+}
+
+// Normalized sets z to a unit vector in the same direction as x then returns z.
+func (z *Vector2D) Normalized(x *Vector2D) *Vector2D {
 	l := 1 / math.Sqrt(x.X*x.X+x.Y*x.Y)
 	z.X = x.X * l
 	z.Y = x.Y * l
