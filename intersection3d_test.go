@@ -60,7 +60,8 @@ type intersection3DLineSphereData struct {
 
 var intersection3DLineSphereValues = []intersection3DLineSphereData{
 	{Line3D{Vector3D{}, Vector3D{1, 0, 0}}, Sphere{Vector3D{}, 1}, Vector3D{1, 0, 0}, Vector3D{-1, 0, 0}, 2},
-	// {Line3D{Vector3D{-2, 0, 0}, Vector3D{1, 0, 0}}, Sphere{Vector3D{}, 1}, Vector3D{1, 0, 0}, Vector3D{-1, 0, 0}, 2},
+	{Line3D{Vector3D{0, 1, 0}, Vector3D{1, 0, 0}}, Sphere{Vector3D{}, 1}, Vector3D{0, 1, 0}, Vector3D{0, 0, 0}, 1},
+	{Line3D{Vector3D{0, 2, 0}, Vector3D{1, 0, 0}}, Sphere{Vector3D{}, 1}, Vector3D{0, 0, 0}, Vector3D{0, 0, 0}, 0},
 }
 
 func testIntersection3DLineSphere(d intersection3DLineSphereData, t *testing.T) {
@@ -74,7 +75,11 @@ func testIntersection3DLineSphere(d intersection3DLineSphereData, t *testing.T) 
 		return
 	}
 	if n == 1 {
-
+		if d.i1.FuzzyEqual(&i1) {
+			return
+		}
+		t.Error("Intersection3D.LineSphere", d.l, d.s, "want", d.i1, "got", i1)
+		return
 	}
 	if d.i1.FuzzyEqual(&i1) && d.i2.FuzzyEqual(&i2) {
 		return
@@ -88,6 +93,15 @@ func testIntersection3DLineSphere(d intersection3DLineSphereData, t *testing.T) 
 func TestIntersction3DLineSphere(t *testing.T) {
 	for _, v := range intersection3DLineSphereValues {
 		testIntersection3DLineSphere(v, t)
+	}
+}
+
+func Benchmark_Intersection3D_LineSphere(b *testing.B) {
+	l := Line3D{Vector3D{}, Vector3D{1, 0, 0}}
+	s := Sphere{Vector3D{}, 1}
+	var i1, i2 Vector3D
+	for i := 0; i < b.N; i++ {
+		Intersection3DLineSphere(&l, &s, &i1, &i2)
 	}
 }
 
@@ -343,5 +357,49 @@ func Benchmark_Intersection3D_FuzzyPlanePlanePlane_Line(b *testing.B) {
 	pt := &Vector3D{}
 	for i := 0; i < b.N; i++ {
 		Intersection3DFuzzyPlanePlanePlane(p1, p2, p3, pt)
+	}
+}
+
+type intersection3DRaySphereData struct {
+	r Line3D
+	s Sphere
+	i Vector3D
+	n int
+}
+
+var intersection3DRaySphereValues = []intersection3DRaySphereData{
+	{Line3D{Vector3D{}, Vector3D{1, 0, 0}}, Sphere{Vector3D{}, 1}, Vector3D{1, 0, 0}, 1},
+	{Line3D{Vector3D{0, 1, 0}, Vector3D{1, 0, 0}}, Sphere{Vector3D{}, 1}, Vector3D{0, 1, 0}, 1},
+	{Line3D{Vector3D{0, 2, 0}, Vector3D{1, 0, 0}}, Sphere{Vector3D{}, 1}, Vector3D{0, 0, 0}, 0},
+}
+
+func testIntersection3DRaySphere(d intersection3DRaySphereData, t *testing.T) {
+	var i Vector3D
+	n := Intersection3DRaySphere(&d.r, &d.s, &i)
+	if n != d.n {
+		t.Error("Intersection3D.RaySphere", d.r, d.s, "want", d.n, "got", n)
+		return
+	}
+	if n == 0 {
+		return
+	}
+	if n == 1 && d.i.FuzzyEqual(&i) {
+		return
+	}
+	t.Error("Intersection3D.RaySphere", d.r, d.s, "want", d.i, "got", i)
+}
+
+func TestIntersction3DRaySphere(t *testing.T) {
+	for _, v := range intersection3DRaySphereValues {
+		testIntersection3DRaySphere(v, t)
+	}
+}
+
+func Benchmark_Intersection3D_RaySphere(b *testing.B) {
+	l := Line3D{Vector3D{}, Vector3D{1, 0, 0}}
+	s := Sphere{Vector3D{}, 1}
+	var p Vector3D
+	for i := 0; i < b.N; i++ {
+		Intersection3DRaySphere(&l, &s, &p)
 	}
 }

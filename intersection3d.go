@@ -25,6 +25,14 @@ func Intersection3DLineLine(a, b, z *Line3D) int {
 	return 1
 }
 
+// Intersection3DLineSphere sets y and z to the possible intersections of line a
+// with sphere b and returns the number of intersections.
+//
+// Possible return values are:
+// 0 for no intersections, y and z are untouched.
+// 1 if the line is a tangent of the sphere, y is set and z is untouched.
+// 2 if the line intersects the sphere, y and z are set to the two intersection
+// points.
 func Intersection3DLineSphere(a *Line3D, b *Sphere, y, z *Vector3D) int {
 	// http://paulbourke.net/geometry/circlesphere/index.html
 	aa := a.V.X*a.V.X + a.V.Y*a.V.Y + a.V.Z*a.V.Z
@@ -43,13 +51,13 @@ func Intersection3DLineSphere(a *Line3D, b *Sphere, y, z *Vector3D) int {
 		y.Z = a.P.Z + u*a.V.Z
 		return 1
 	}
-	sr := math.Sqrt(rr)
+	rr = math.Sqrt(rr)
 	aa = 1 / (2 * aa)
-	u := (-bb + sr) * aa
+	u := (-bb + rr) * aa
 	y.X = a.P.X + u*a.V.X
 	y.Y = a.P.Y + u*a.V.Y
 	y.Z = a.P.Z + u*a.V.Z
-	u = (-bb - sr) * aa
+	u = (-bb - rr) * aa
 	z.X = a.P.X + u*a.V.X
 	z.Y = a.P.Y + u*a.V.Y
 	z.Z = a.P.Z + u*a.V.Z
@@ -272,4 +280,40 @@ func Intersection3DFuzzyPlanePlanePlane(a, b, c *Plane, z *Vector3D) int {
 	z.Y = (a.D*cpbcy + b.D*cpcay + c.D*cpaby) * d
 	z.Z = (a.D*cpbcz + b.D*cpcaz + c.D*cpabz) * d
 	return 1
+}
+
+// Intersection3DRaySphere sets z to the first intersection of ray a with sphere
+// b and returns the number of intersections, either 1 or 0.
+func Intersection3DRaySphere(a *Line3D, b *Sphere, z *Vector3D) int {
+	aa := a.V.X*a.V.X + a.V.Y*a.V.Y + a.V.Z*a.V.Z
+	bb := 2 * (a.V.X*(a.P.X-b.C.X) + a.V.Y*(a.P.Y-b.C.Y) + a.V.Z*(a.P.Z-b.C.Z))
+	cc := b.C.X*b.C.X + b.C.Y*b.C.Y + b.C.Z*b.C.Z + a.P.X*a.P.X + a.P.Y*a.P.Y + a.P.Z*a.P.Z
+	cc -= 2 * (b.C.X*a.P.X + b.C.Y*a.P.Y + b.C.Z*a.P.Z)
+	cc -= b.R * b.R
+	rr := bb*bb - 4*aa*cc
+	if rr < 0 {
+		return 0
+	}
+	if rr == 0 {
+		u := -bb / (2 * aa)
+		z.X = a.P.X + u*a.V.X
+		z.Y = a.P.Y + u*a.V.Y
+		z.Z = a.P.Z + u*a.V.Z
+		return 1
+	}
+	rr = math.Sqrt(rr)
+	aa = 1 / (2 * aa)
+	if u := (-bb + rr) * aa; u > 0 {
+		z.X = a.P.X + u*a.V.X
+		z.Y = a.P.Y + u*a.V.Y
+		z.Z = a.P.Z + u*a.V.Z
+		return 1
+	}
+	if u := (-bb - rr) * aa; u > 0 {
+		z.X = a.P.X + u*a.V.X
+		z.Y = a.P.Y + u*a.V.Y
+		z.Z = a.P.Z + u*a.V.Z
+		return 1
+	}
+	return 0
 }
