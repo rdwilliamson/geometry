@@ -51,6 +51,46 @@ func Benchmark_Intersection3D_LineLine(b *testing.B) {
 	}
 }
 
+type intersection3DLineSphereData struct {
+	l      Line3D
+	s      Sphere
+	i1, i2 Vector3D
+	n      int
+}
+
+var intersection3DLineSphereValues = []intersection3DLineSphereData{
+	{Line3D{Vector3D{}, Vector3D{1, 0, 0}}, Sphere{Vector3D{}, 1}, Vector3D{1, 0, 0}, Vector3D{-1, 0, 0}, 2},
+	// {Line3D{Vector3D{-2, 0, 0}, Vector3D{1, 0, 0}}, Sphere{Vector3D{}, 1}, Vector3D{1, 0, 0}, Vector3D{-1, 0, 0}, 2},
+}
+
+func testIntersection3DLineSphere(d intersection3DLineSphereData, t *testing.T) {
+	var i1, i2 Vector3D
+	n := Intersection3DLineSphere(&d.l, &d.s, &i1, &i2)
+	if n != d.n {
+		t.Error("Intersection3D.LineSphere", d.l, d.s, "want", d.n, "got", n)
+		return
+	}
+	if n == 0 {
+		return
+	}
+	if n == 1 {
+
+	}
+	if d.i1.FuzzyEqual(&i1) && d.i2.FuzzyEqual(&i2) {
+		return
+	}
+	if d.i1.FuzzyEqual(&i2) && d.i2.FuzzyEqual(&i1) {
+		return
+	}
+	t.Error("Intersection3D.LineSphere", d.l, d.s, "want", d.i1, d.i2, "got", i1, i2)
+}
+
+func TestIntersction3DLineSphere(t *testing.T) {
+	for _, v := range intersection3DLineSphereValues {
+		testIntersection3DLineSphere(v, t)
+	}
+}
+
 type intersection3DLineSegmentLineSegmentData struct {
 	l1, l2, lb Line3D
 }

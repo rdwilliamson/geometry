@@ -1,5 +1,9 @@
 package geometry
 
+import (
+	"math"
+)
+
 // Intersection3DLineLine, sets z to the shortest line between a and b then
 // returns 1.
 func Intersection3DLineLine(a, b, z *Line3D) int {
@@ -19,6 +23,37 @@ func Intersection3DLineLine(a, b, z *Line3D) int {
 	z.V.Y = (b.V.Y*mub + b.P.Y) - z.P.Y
 	z.V.Z = (b.V.Z*mub + b.P.Z) - z.P.Z
 	return 1
+}
+
+func Intersection3DLineSphere(a *Line3D, b *Sphere, y, z *Vector3D) int {
+	// http://paulbourke.net/geometry/circlesphere/index.html
+	aa := a.V.X*a.V.X + a.V.Y*a.V.Y + a.V.Z*a.V.Z
+	bb := 2 * (a.V.X*(a.P.X-b.C.X) + a.V.Y*(a.P.Y-b.C.Y) + a.V.Z*(a.P.Z-b.C.Z))
+	cc := b.C.X*b.C.X + b.C.Y*b.C.Y + b.C.Z*b.C.Z + a.P.X*a.P.X + a.P.Y*a.P.Y + a.P.Z*a.P.Z
+	cc -= 2 * (b.C.X*a.P.X + b.C.Y*a.P.Y + b.C.Z*a.P.Z)
+	cc -= b.R * b.R
+	rr := bb*bb - 4*aa*cc
+	if rr < 0 {
+		return 0
+	}
+	if rr == 0 {
+		u := -bb / (2 * aa)
+		y.X = a.P.X + u*a.V.X
+		y.Y = a.P.Y + u*a.V.Y
+		y.Z = a.P.Z + u*a.V.Z
+		return 1
+	}
+	sr := math.Sqrt(rr)
+	aa = 1 / (2 * aa)
+	u := (-bb + sr) * aa
+	y.X = a.P.X + u*a.V.X
+	y.Y = a.P.Y + u*a.V.Y
+	y.Z = a.P.Z + u*a.V.Z
+	u = (-bb - sr) * aa
+	z.X = a.P.X + u*a.V.X
+	z.Y = a.P.Y + u*a.V.Y
+	z.Z = a.P.Z + u*a.V.Z
+	return 2
 }
 
 // Intersection3DLineSegmentLineSegment determines the shortest line segment
