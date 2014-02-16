@@ -105,7 +105,7 @@ func Intersection3DLineSegmentLineSegment(a, b, z *Line3D) int {
 	return 1
 }
 
-// Intersection3DPlaneLine sets z to the intersecion of plane a and line b,
+// Intersection3DPlaneLine sets z to the intersection of plane a and line b,
 // then returns 1.
 func Intersection3DPlaneLine(a *Plane, b *Line3D, z *Vector3D) int {
 	// http://paulbourke.net/geometry/planeline/
@@ -159,7 +159,7 @@ func Intersection3DPlanePlanePlane(a, b, c *Plane, z *Vector3D) int {
 // then returns the number of intersections.
 //
 // Possible return values are:
-// -1 if the plane and line are coincident, z in untouched.
+// -1 if the plane and line are coincident, z is untouched.
 // 0 if the plane and line are parallel, z is untouched.
 // 1 if an intersection occurs, z is set to the intersection point.
 func Intersection3DFuzzyPlaneLine(a *Plane, b *Line3D, z *Vector3D) int {
@@ -213,7 +213,7 @@ func Intersection3DFuzzyPlanePlane(a, b *Plane, z *Line3D) int {
 	return 1
 }
 
-// Intersection3DFuzzyPlanePlanePlane sets z to the intersecion of 3 planes,
+// Intersection3DFuzzyPlanePlanePlane sets z to the intersection of 3 planes,
 // then returns the number of intersections.
 //
 // Possible return values are:

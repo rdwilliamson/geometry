@@ -92,13 +92,13 @@ func (a *Vector3D) DotProduct(b *Vector3D) float64 {
 	return a.X*b.X + a.Y*b.Y + a.Z*b.Z
 }
 
-// Equal compares a and b then returns true if they are exactly equal or flase
+// Equal compares a and b then returns true if they are exactly equal or false
 // otherwise.
 func (a *Vector3D) Equal(b *Vector3D) bool {
 	return *a == *b
 }
 
-// FuzzyEqual compares a and b and returns true if they are very cose or false
+// FuzzyEqual compares a and b and returns true if they are very close or false
 // otherwise.
 func (a *Vector3D) FuzzyEqual(b *Vector3D) bool {
 	return FuzzyEqual(a.X, b.X) && FuzzyEqual(a.Y, b.Y) && FuzzyEqual(a.Z, b.Z)
